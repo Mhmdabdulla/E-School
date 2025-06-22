@@ -1,9 +1,12 @@
+// import { refreshedUser, verifiedUer } from "../../types/userTypes";
 
 export interface IAuthService {
-  register(name: string, email: string, password: string): Promise<void>;
-  sendOTP(email: string): Promise<void>;
-  verifyOTP(userId: string, otp: string): Promise<{ accessToken: string; refreshToken: string }>;
-  login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string }>;
-  refreshToken(oldToken: string): Promise<{ accessToken: string; refreshToken: string }>;
-  logout(userId: string): Promise<void>;
+  register(name: string, email: string, hashedPassword: string): Promise<void>;
+  verifyOtp(email: string, otp: string): Promise<any>;
+  // resendOtp(email: string): Promise<void>;
+  // adminLogin(email: string, password: string): Promise<void>;
+  // login(email: string, password: string): Promise<void>;
+  // refreshAccessToken(refreshToken: string, role: string): Promise<void>;
+  // sendMagicLink(email: string): Promise<void>;
+  // resetPassword(token: string, newPassword: string): Promise<void>;
 }

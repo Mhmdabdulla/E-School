@@ -1,36 +1,29 @@
 import { IAuthRepository } from "./interfaces/IAuthRepository";
 import { User, IUser } from "../models/user.model";
+import { Admin,IAdmin } from "../models/Admin.model";
 
 export class AuthRepository implements IAuthRepository {
-  async findByEmail(email: string): Promise<IUser | null> {
+  async findUserByEmail(email: string):Promise<IUser|null> {
     return User.findOne({ email });
   }
 
-  async findById(id: string): Promise<IUser | null> {
-    return User.findById(id);
+  async findAdminByEmail(email:string):Promise<IAdmin|null>{
+    return Admin.findOne({email})
   }
 
-  async createUser(name: string, email: string, password: string): Promise<IUser> {
-    return User.create({ name, email, password });
+  async createUser(name: string, email: string, hashedPassword: string):Promise<IUser|null> {
+    return User.create({ name, email, password: hashedPassword });
   }
 
-  async saveRefreshToken(id: string, token: string): Promise<IUser | null> {
-    return User.findByIdAndUpdate(id, { refreshToken: token }, { new: true });
+  async findUserById(id:string):Promise<IUser|null>{
+    return User.findOne({ _id: id, status: 'active' })
   }
 
-  async removeRefreshToken(id: string): Promise<IUser | null> {
-    return User.findByIdAndUpdate(id, { $unset: { refreshToken: "" } }, { new: true });
+  async findAdminById(id:string):Promise<IAdmin|null>{
+    return Admin.findById(id)
   }
 
-  async saveOTP(id: string, otp: string, expires: Date): Promise<IUser | null> {
-    return User.findByIdAndUpdate(id, { otp, otpExpires: expires }, { new: true });
-  }
-
-  async verifyOTP(id: string, otp: string): Promise<IUser | null> {
-    return User.findOne({
-      _id: id,
-      otp,
-      otpExpires: { $gt: new Date() },
-    });
+  async updateUserPassword(id:string, password:string):Promise<IUser|null>{
+    return User.findByIdAndUpdate(id,{password}, {new:true})
   }
 }

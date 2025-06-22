@@ -13,9 +13,6 @@ export interface IUser extends Document {
   title?: string;
   createdAt: Date;
   updatedAt: Date;
-  refreshToken?: string;
-  otp?: string;
-  otpExpires?: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -29,9 +26,6 @@ const UserSchema = new Schema<IUser>(
     role: { type: String, enum: ["user", "instructor", "admin"], default: "user" },
     status: {type:String, enum: ["active", "blocked"], default:"active"},
     title: { type: String },
-    refreshToken: { type: String },
-    otp: { type: String },
-    otpExpires: { type: Date },
   },
   { timestamps: true }
 );
