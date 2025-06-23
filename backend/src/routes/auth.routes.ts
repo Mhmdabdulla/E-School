@@ -10,7 +10,7 @@ router.post("/register", ctrl.register);
 router.post("/verify-otp", ctrl.verifyOtp);
 router.post("/resend-otp", ctrl.resendOtp)
 router.post("/login", ctrl.login);
-// router.post("/admin/login",)
+router.post("/admin/login",ctrl.adminLogin)
 router.post("/refresh-token", ctrl.refreshToken);
 router.post("/logout", ctrl.logout);
 router.post("/forgot-password",ctrl.forgotPassword)

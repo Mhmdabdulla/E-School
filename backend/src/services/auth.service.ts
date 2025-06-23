@@ -99,6 +99,29 @@ export class AuthService implements IAuthService {
     return { accessToken, refreshToken, user};
   }
 
+  async adminLogin(email: string, password: string): Promise<any> {
+    const user = await this.repo.findUserByEmail( email );
+    if (!user) {
+      throw new Error("Invalid email address");
+    }
+
+    if (user.role !== "admin") {
+      throw new Error("Access denied: Not an admin");
+    }
+
+    const isPasswordValid = await comparePassword(password,user.password);
+
+    if (!isPasswordValid) {
+      throw new Error("Incorrect password");
+    }
+
+    const userId = user._id;
+    const accessToken = generateAccessToken(userId, user.role);
+    const refreshToken = generateRefreshToken(userId, user.role);
+
+    return { accessToken, refreshToken, user};
+  }
+
   async refreshAccessToken(refreshToken: string): Promise<any> {
     try {
       const decoded = await verifyRefreshToken(refreshToken)
@@ -149,5 +172,8 @@ export class AuthService implements IAuthService {
       throw new Error(error.message);
     }
   }
+
+    
+
 
 }

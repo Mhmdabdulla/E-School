@@ -1,0 +1,34 @@
+import { IUser } from "../models/user.model";
+import bcrypt from "bcryptjs";
+import { UserRepository } from "../repositories/user.repository";
+import { IUserService } from "./interfaces/IUserService";
+import { IUserRepository } from "../repositories/interfaces/IUserRepository";
+import { FilterQuery } from "mongoose";
+
+
+export class UserService  implements IUserService {
+
+  private userRepository: IUserRepository = new UserRepository();
+    
+  async getAllUsers(page: number, limit: number, searchQuery?: string): Promise<any | null> {
+    const skip = (Number(page) - 1) * Number(limit);
+
+    let filter: FilterQuery<IUser> = { role: "user" };
+    if (searchQuery) {
+      filter = {
+        ...filter,
+        $or: [{ name: { $regex: searchQuery, $options: "i" } }, { email: { $regex: searchQuery, $options: "i" } }],
+      };
+    }
+
+    const totalUsers = await this.userRepository.countDocuments(filter);
+    const users = await this.userRepository.findAllUsers(skip, limit, filter)
+
+    return {
+      totalUsers,
+      totalPages: Math.ceil(totalUsers / limit),
+      currentPage: page,
+      users,
+    };
+  }
+}

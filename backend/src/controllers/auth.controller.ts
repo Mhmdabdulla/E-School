@@ -1,8 +1,10 @@
 // src/controllers/auth.controller.ts
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { IAuthController } from "./interfaces/IAuthController";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 const authService = new AuthService();
 
@@ -79,6 +81,18 @@ export class AuthController implements IAuthController{
     const { token, newPassword } = req.body;
     await authService.resetPassword(token, newPassword);
     res.status(STATUS_CODES.OK).json({ message: "password reseted successfully" });
+  };
+
+   adminLogin = async (req: Request, res: Response): Promise<void> => {
+    const { email, password } = req.body;
+    const { refreshToken, ...user } = await authService.adminLogin(email, password);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.status(STATUS_CODES.OK).json(user);
   };
 
 

@@ -1,32 +1,54 @@
+import { NextFunction, Request, Response } from "express";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
+import { IUser } from "../models/user.model";
+import { STATUS_CODES  } from "../utils/constants";
+import { UserRole } from "../utils/constants";
+// import { IUserService } from "..";
 
-// import { Request, Response, NextFunction } from "express";
-// import { verifyAccessToken } from "../utils/jwt";
 
-// // First: Extend Express Request to include `user`
-// interface AuthenticatedRequest extends Request {
-//   user?: { id: string; role: string };
-// }
 
-// export const protect = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
-//   const header = req.headers.authorization;
+//  const userService = container.get<IUserService>(TYPES.UserService)
 
-//   if (!header || !header.startsWith("Bearer ")) {
-//     res.status(401).json({ message: "Unauthorized" });
-//     return; // 🚨 Make sure to return after sending response
-//   }
+export const authMiddleware = (
+  roles:UserRole[],
+) => {
+  return async (  req: Request,res: Response,next: NextFunction) => {
+    try {
+      const accessToken =
+      req.cookies.accessToken || req.header("Authorization")?.split(" ")[1];
+      if (!accessToken){
+        res.status(STATUS_CODES.UNAUTHORIZED).json({ error: "Unauthorized: No token provided" });
+        return 
+      }
+      
+      const decoded = jwt.verify(
+        accessToken,
+        process.env.ACCESS_TOKEN_SECRET!
+      ) as { userId: string, role:string };
+      
+        if(roles.length && !roles.includes(decoded.role as UserRole)){
+          res.status(STATUS_CODES.FORBIDDEN).json({message: "permisson denied"})
+          return
+        }
 
-//   try {
-//     const token = header.split(" ")[1];
-//     const payload = verifyAccessToken(token);
+        // const user = await userService.findById(decoded.userId)
 
-//     req.user = {
-//       id: payload.id,
-//       role: payload.role,
-//     };
-
-//     next(); // Continue to next middleware/route
-//   } catch (error) {
-//     res.status(401).json({ message: "Invalid token" });
-//     return;
-//   }
-// };
+        // if(user?.status === 'blocked'){
+        //    res.status(StatusCodes.FORBIDDEN).json({
+        //     message: "Your account has been blocked. Please contact support."
+        //   });
+        //   return
+        // }
+    
+        // req.user = { _id: decoded.userId };
+        next();
+      } catch (error) {
+        if (error instanceof TokenExpiredError) {
+          res.status(STATUS_CODES.UNAUTHORIZED).json({ error: "Token has expired" });
+          return;
+        }
+        res.status(STATUS_CODES.FORBIDDEN).json({ error: "Invalid token" });
+      }
+    }
+  
+};
