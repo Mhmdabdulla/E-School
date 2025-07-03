@@ -31,4 +31,22 @@ export class UserService  implements IUserService {
       users,
     };
   }
+    async findUserByGoogleId(googleId: string): Promise<IUser | null> {
+    return await this.userRepository.findUserByGoogleId(googleId);
+  }
+
+  async createGoogleUser(
+    name: string,
+    email: string,
+    profileImageUrl: string,
+    googleId: string
+  ): Promise<IUser | null> {
+    const password = await bcrypt.hash(Math.random().toString(36).substring(2, 10), 10);
+    const user = this.userRepository.create({ name, email, profileImageUrl, googleId, password });
+    if (!user) {
+      throw new Error("cannot create user please try again");
+    }
+    return user;
+  }
+
 }

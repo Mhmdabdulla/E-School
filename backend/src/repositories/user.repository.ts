@@ -34,4 +34,8 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   async findAllUsers(skip: number, limit: number, filter:FilterQuery<IUser>): Promise<IUser[] | null> {
     return await User.find(filter).skip(skip).limit(limit)
   }
+
+  async findUserByGoogleId(googleId: string): Promise<IUser | null> {
+      return await User.findOne({googleId})
+  }
 }

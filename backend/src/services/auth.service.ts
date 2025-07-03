@@ -15,7 +15,10 @@ import RedisClient from "../config/redis";
 import { generateAccessToken, generateRefreshToken,resetPasswordTocken,verifyRefreshToken, verifyResetToken } from "../utils/jwt";
 
 export class AuthService implements IAuthService {
-  private repo: IAuthRepository = new AuthRepository();
+  constructor(
+    private repo:IAuthRepository 
+  ){}
+  // private repo: IAuthRepository = new AuthRepository();
 
   async register(name: string, email: string, password: string): Promise<void> {
     const existing = await this.repo.findUserByEmail(email);

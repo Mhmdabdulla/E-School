@@ -3,16 +3,23 @@ import { Request, RequestHandler, Response } from "express";
 import { AuthService } from "../services/auth.service";
 import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { IAuthController } from "./interfaces/IAuthController";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
+import { IUserService } from "../services/interfaces/IUserService";
+import { UserService } from "../services/user.service";
+import { generateRefreshToken } from "../utils/jwt";
+import { IAuthService } from "../services/interfaces/IAuthService";
 
-const authService = new AuthService();
+// const authService = new AuthService();
 
 export class AuthController implements IAuthController{
+  constructor(
+    private authService:IAuthService
+  ){}
+  private userService:IUserService = new UserService
+
   async register(req: Request, res: Response):Promise<void> {
     const { name, email, password } = req.body;
     try {
-      await authService.register(name, email, password);
+      await this.authService.register(name, email, password);
       res.status(STATUS_CODES.CREATED).json({ message: MESSAGES.SUCCESS.SIGNUP });
     } catch (e) {
       res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
@@ -21,7 +28,7 @@ export class AuthController implements IAuthController{
 
   async verifyOtp(req: Request, res: Response) {
     try {
-      const tokens = await authService.verifyOtp(req.body.email, req.body.otp);
+      const tokens = await this.authService.verifyOtp(req.body.email, req.body.otp);
       res.status(STATUS_CODES.OK).json(tokens);
     } catch (e) {
       res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
@@ -30,7 +37,7 @@ export class AuthController implements IAuthController{
 
     async resendOtp(req: Request, res: Response) {
     try {
-      await authService.resendOtp(req.body.email);
+      await this.authService.resendOtp(req.body.email);
       res.status(STATUS_CODES.OK).json({ message: "OTP resent to email" });
     } catch (e) {
       res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
@@ -39,7 +46,7 @@ export class AuthController implements IAuthController{
 
   login = async (req: Request, res: Response): Promise<void> => {
     const { email,password } = req.body 
-    const { refreshToken, ...user } = await authService.login(email, password);
+    const { refreshToken, ...user } = await this.authService.login(email, password);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -59,7 +66,7 @@ export class AuthController implements IAuthController{
     }
 
     const { role } = req.body;
-    const { accessToken, user } = await authService.refreshAccessToken(refreshToken);
+    const { accessToken, user } = await this.authService.refreshAccessToken(refreshToken);
     res.status(STATUS_CODES.OK).json({ accessToken, user });
   };
   logout = async (req: Request, res: Response): Promise<void> => {
@@ -71,21 +78,21 @@ export class AuthController implements IAuthController{
     res.status(STATUS_CODES.OK).json({ message: "Logged out successfully" });
   };
 
-    forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  forgotPassword = async (req: Request, res: Response): Promise<void> => {
     const { email } = req.body;
-    await authService.sendMagicLink(email);
+    await this.authService.sendMagicLink(email);
     res.status(STATUS_CODES.OK).json({ message: "A reset link has been sent to your email" });
   };
 
   resetPassword = async (req: Request, res: Response): Promise<void> => {
     const { token, newPassword } = req.body;
-    await authService.resetPassword(token, newPassword);
+    await this.authService.resetPassword(token, newPassword);
     res.status(STATUS_CODES.OK).json({ message: "password reseted successfully" });
   };
 
-   adminLogin = async (req: Request, res: Response): Promise<void> => {
+  adminLogin = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
-    const { refreshToken, ...user } = await authService.adminLogin(email, password);
+    const { refreshToken, ...user } = await this.authService.adminLogin(email, password);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -93,6 +100,33 @@ export class AuthController implements IAuthController{
       sameSite: "strict",
     });
     res.status(STATUS_CODES.OK).json(user);
+  };
+
+    googleAuth = async (req: Request, res: Response): Promise<void> => {
+    const { id, displayName, emails, photos } = req.user as any;
+
+    if (!emails || emails.length === 0) {
+      res.status(400).json({ message: "Email is required" });
+      return;
+    }
+
+    const email = emails[0].value;
+    const profileImageUrl = photos ? photos[0].value : null;
+
+    let user = await this.userService.findUserByGoogleId(id);
+    if (!user) {
+      user = await this.userService.createGoogleUser(displayName, email, profileImageUrl, id);
+    }
+
+    const refreshToken = generateRefreshToken(user?.id, "user");
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.redirect(process.env.CLIENT_URL!);
   };
 
 
