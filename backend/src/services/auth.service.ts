@@ -13,10 +13,13 @@ import { IAuthRepository } from "../repositories/interfaces/IAuthRepository";
 import { sendForgotPasswordMail, sendOtpEmail } from "../utils/emailService";
 import RedisClient from "../config/redis";
 import { generateAccessToken, generateRefreshToken,resetPasswordTocken,verifyRefreshToken, verifyResetToken } from "../utils/jwt";
+import { inject, injectable } from "inversify";
+import TYPES from "../di/types";
 
+@injectable()
 export class AuthService implements IAuthService {
   constructor(
-    private repo:IAuthRepository 
+    @inject(TYPES.AuthRepository) private repo:IAuthRepository 
   ){}
   // private repo: IAuthRepository = new AuthRepository();
 

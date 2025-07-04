@@ -10,5 +10,5 @@ export interface IAuthController {
   logout: RequestHandler;
   forgotPassword: RequestHandler;
   resetPassword: RequestHandler;
-//   googleAuth: RequestHandler;
+  googleAuth: RequestHandler;
 }

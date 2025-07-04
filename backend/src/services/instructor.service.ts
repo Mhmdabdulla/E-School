@@ -3,11 +3,15 @@ import { IInstructorService } from "./interfaces/IInstructorService";
 import { IInstructorRepository } from "../repositories/interfaces/IInstructorRepository";
 
 import { InstructorRepository } from "../repositories/instructor.repository";
+import { inject, injectable } from "inversify";
+import TYPES from "../di/types";
 
-
+@injectable()
 export class InstructorService implements IInstructorService{
 
-        private instructorRepository:IInstructorRepository = new InstructorRepository()
+  constructor(
+    @inject(TYPES.InstructorRepository) private instructorRepository:IInstructorRepository
+  ){}
 
 
   

@@ -1,16 +1,14 @@
-// src/routes/auth.routes.ts
 import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
 import passport from "passport";
-import { AuthRepository } from "../repositories/auth.repository";
-import { AuthService } from "../services/auth.service";
+import container from "../di/inversify.config";
+import { IAuthController } from "../controllers/interfaces/IAuthController";
+import TYPES from "../di/types";
 
 
 const router = Router();
-const authRepository = new AuthRepository();
-const authService = new AuthService(authRepository);
-const ctrl = new AuthController(authService)
-// const ctrl = new AuthController();
+
+const ctrl = container.get<IAuthController>(TYPES.AuthController)
+
 
 router.post("/register", ctrl.register);
 router.post("/verify-otp", ctrl.verifyOtp);

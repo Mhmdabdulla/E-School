@@ -2,10 +2,14 @@ import { Request, Response } from "express";
 import { IUserController } from "./interfaces/IUserController";
 import { IUserService } from '../services/interfaces/IUserService';import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { UserService } from "../services/user.service";
+import { inject, injectable } from "inversify";
+import TYPES from "../di/types";
 
-
+@injectable()
 export class UserController implements IUserController {
-   private userService: IUserService = new UserService()
+   constructor(
+    @inject(TYPES.UserService) private userService: IUserService
+   ){} 
 
 
   getAllUsers = async (req: Request, res: Response): Promise<void> => {

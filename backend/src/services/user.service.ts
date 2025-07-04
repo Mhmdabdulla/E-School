@@ -4,11 +4,15 @@ import { UserRepository } from "../repositories/user.repository";
 import { IUserService } from "./interfaces/IUserService";
 import { IUserRepository } from "../repositories/interfaces/IUserRepository";
 import { FilterQuery } from "mongoose";
+import { inject, injectable } from "inversify";
+import TYPES from "../di/types";
 
-
+@injectable()
 export class UserService  implements IUserService {
 
-  private userRepository: IUserRepository = new UserRepository();
+  constructor(
+    @inject(TYPES.UserRepository) private userRepository:IUserRepository
+  ){}
     
   async getAllUsers(page: number, limit: number, searchQuery?: string): Promise<any | null> {
     const skip = (Number(page) - 1) * Number(limit);
