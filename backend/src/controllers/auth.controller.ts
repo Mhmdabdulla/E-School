@@ -4,17 +4,18 @@ import { AuthService } from "../services/auth.service";
 import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { IAuthController } from "./interfaces/IAuthController";
 import { IUserService } from "../services/interfaces/IUserService";
-import { UserService } from "../services/user.service";
 import { generateRefreshToken } from "../utils/jwt";
 import { IAuthService } from "../services/interfaces/IAuthService";
+import { inject, injectable } from "inversify";
+import TYPES from "../di/types";
 
 // const authService = new AuthService();
-
+@injectable()
 export class AuthController implements IAuthController{
   constructor(
-    private authService:IAuthService
+    @inject(TYPES.AuthService) private authService:IAuthService,
+    @inject(TYPES.UserService) private userService:IUserService
   ){}
-  private userService:IUserService = new UserService
 
   async register(req: Request, res: Response):Promise<void> {
     const { name, email, password } = req.body;

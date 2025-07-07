@@ -1,11 +1,12 @@
-import { RequestHandler } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
+import { AuthenticatedRequest } from "../../types/custom";
 
 export interface IUserController {
 //   updateProfile: RequestHandler;
 //   changePassword: RequestHandler;
 //   getUserProfile: RequestHandler;
-//   becomeInstructor: RequestHandler;
+  becomeInstructor: (req: AuthenticatedRequest, res: Response) => Promise<void>;
   getAllUsers: RequestHandler;
-//   toggleUserStatus: RequestHandler;
+  toggleUserStatus: RequestHandler;
 //   getDashboardData: RequestHandler;
 }

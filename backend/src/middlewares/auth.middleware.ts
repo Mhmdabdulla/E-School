@@ -3,11 +3,13 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 import { IUser } from "../models/user.model";
 import { STATUS_CODES  } from "../utils/constants";
 import { UserRole } from "../utils/constants";
-// import { IUserService } from "..";
+import container from "../di/inversify.config";
+import { IUserService } from "../services/interfaces/IUserService";
+import TYPES from "../di/types";
 
 
 
-//  const userService = container.get<IUserService>(TYPES.UserService)
+ const userService = container.get<IUserService>(TYPES.UserService)
 
 export const authMiddleware = (
   roles:UserRole[],
@@ -31,16 +33,16 @@ export const authMiddleware = (
           return
         }
 
-        // const user = await userService.findById(decoded.userId)
+        const user = await userService.findById(decoded.userId)
 
-        // if(user?.status === 'blocked'){
-        //    res.status(StatusCodes.FORBIDDEN).json({
-        //     message: "Your account has been blocked. Please contact support."
-        //   });
-        //   return
-        // }
+        if(user?.status === 'blocked'){
+           res.status(STATUS_CODES.FORBIDDEN).json({
+            message: "Your account has been blocked. Please contact support."
+          });
+          return
+        }
     
-        // req.user = { _id: decoded.userId };
+        req.user = { id: decoded.userId , role:decoded.role };
         next();
       } catch (error) {
         if (error instanceof TokenExpiredError) {
@@ -52,3 +54,6 @@ export const authMiddleware = (
     }
   
 };
+
+
+

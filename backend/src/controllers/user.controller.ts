@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { IUserController } from "./interfaces/IUserController";
 import { IUserService } from '../services/interfaces/IUserService';import {STATUS_CODES, MESSAGES} from "../utils/constants"
-import { UserService } from "../services/user.service";
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
+import { AuthenticatedRequest } from "../types/custom";
 
 @injectable()
 export class UserController implements IUserController {
@@ -25,12 +25,28 @@ export class UserController implements IUserController {
     res.status(STATUS_CODES.OK).json({ usersWithPagination });
   };
 
-//   toggleUserStatus = async (req: Request, res: Response): Promise<void> => {
-//     const { userId } = req.params;
-//     const user = await this.userService.toggleStatus(userId);
-//     res.status(StatusCodes.OK).json({ message: "user status changed successfully" });
-//   };
+  toggleUserStatus = async (req: Request, res: Response): Promise<void> => {
+    const { userId } = req.params;
+    const user = await this.userService.toggleStatus(userId);
+    res.status(STATUS_CODES.OK).json({ message: "user status changed successfully" });
+  };
 
+ becomeInstructor = async(req:AuthenticatedRequest,res:Response):Promise<void>=>{
+      const instructorData = req.body;
+    instructorData.userId =  req.user?.id;
 
+    if (!req.file) {
+      res.status(STATUS_CODES.BAD_REQUEST).json({ message: "file not found" });
+      return;
+    }
+
+    // const url = await uploadImageToCloudinary(req.file.buffer, "instructors/idCards");
+    const url = 'https://img.freepik.com/premium-vector/professional-modern-office-id-card-design-template_642592-1935.jpg'
+    instructorData.idCardImageUrl = url;
+
+    const instructor = await this.userService.becomeInstructor(instructorData);
+
+    res.status(STATUS_CODES.OK).json({ message: "application submitted successfully" });
+ }
 
 }

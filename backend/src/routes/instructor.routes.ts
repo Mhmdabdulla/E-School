@@ -6,13 +6,16 @@ import { authMiddleware } from "../middlewares/auth.middleware";
 
 import { UserRole } from "../utils/constants";
 import container from "../di/inversify.config";
-import { IAuthController } from "../controllers/interfaces/IAuthController";
 import TYPES from "../di/types";
+import { IInstructorController } from "../controllers/interfaces/IInstructorController";
 
-const ctrl = container.get<IAuthController>(TYPES.AuthController)
+const ctrl = container.get<IInstructorController>(TYPES.InstructorController)
 // get instructors
 
 
-router.get("/",authMiddleware([UserRole.ADMIN]),);
-// router.patch("/:userId/status",authMiddleware([UserRole.ADMIN]), userController.toggleUserStatus)
+router.get("/",authMiddleware([UserRole.ADMIN]),ctrl.getAllInstructors);
+router.get("/applications",authMiddleware([UserRole.ADMIN]),ctrl.getInstructorApplications)
+router.patch("/applications/:instructorId/status",ctrl.reviewInstructor)
+
+
 export default router

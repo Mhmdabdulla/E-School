@@ -1,11 +1,11 @@
 import { RequestHandler } from "express";
 
 export interface IInstructorController {
-//   getInstructorApplications: RequestHandler;
+  getInstructorApplications: RequestHandler;
 //   getInstructorProfile: RequestHandler;
 //   updateInstrucotrProfile: RequestHandler;
 //   getUserApplications: RequestHandler;
-//   reviewInstructor: RequestHandler;
+  reviewInstructor: RequestHandler;
 //   getEnrolledInstructorsForUser:RequestHandler;
   getAllInstructors: RequestHandler;
 }

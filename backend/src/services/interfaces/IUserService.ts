@@ -1,13 +1,14 @@
 // import { IInstructor } from "../../../models/Instructor";
+import { IInstructor } from "../../models/instructor.model";
 import { IUser } from "../../models/user.model";
 
 import { IBaseService } from "./IBaseService";
 
-export interface IUserService  {
+export interface IUserService extends IBaseService<IUser> {
 //   updateUser(userId: string, updateData: Partial<IUser>): Promise<IUser>;
 //   changePassword(userId: string,currentPassword: string,newPassword: string): Promise<IUser>;
 //   getUserProfile(userId: string): Promise<IUser>;
-//   becomeInstructor(instructorData:Partial<IInstructor>): Promise<IInstructor|null>
+  becomeInstructor(instructorData:Partial<IInstructor>): Promise<IInstructor|null>
   findUserByGoogleId(googleId:string):Promise<IUser | null>
   createGoogleUser(name:string, email:string, profileImageUrl?:string,googleId?:string): Promise<IUser | null>
 //   getDashboardData(userId: string): Promise<DashboardData>

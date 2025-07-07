@@ -6,13 +6,19 @@ import { IUserRepository } from "../repositories/interfaces/IUserRepository";
 import { FilterQuery } from "mongoose";
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
+import { BaseService } from "./base.service";
+import { IInstructor } from "../models/instructor.model";
+import { IInstructorRepository } from "../repositories/interfaces/IInstructorRepository";
 
 @injectable()
-export class UserService  implements IUserService {
+export class UserService extends BaseService<IUser>  implements IUserService {
 
   constructor(
-    @inject(TYPES.UserRepository) private userRepository:IUserRepository
-  ){}
+    @inject(TYPES.UserRepository) private userRepository:IUserRepository,
+    @inject(TYPES.InstructorRepository) private instructorRepository:IInstructorRepository
+  ){
+    super(userRepository)
+  }
     
   async getAllUsers(page: number, limit: number, searchQuery?: string): Promise<any | null> {
     const skip = (Number(page) - 1) * Number(limit);
@@ -51,6 +57,16 @@ export class UserService  implements IUserService {
       throw new Error("cannot create user please try again");
     }
     return user;
+  }
+
+  async becomeInstructor(instructorData: Partial<IInstructor>): Promise<IInstructor | null> {
+    const instructorExists = await this.instructorRepository.findInstructorByUserId(instructorData.userId as string);
+    //@ts-ignore
+    if (instructorExists?.adminApproval.status === "pending") throw new Error("your application is already in pending");
+    const instructor = await this.instructorRepository.createInstructor(instructorData);
+    if (!instructor) throw new Error("cannot apply to become an instructor. please try again");
+
+    return instructor;
   }
 
 }

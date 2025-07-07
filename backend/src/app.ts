@@ -5,6 +5,7 @@ import  "./config/passport"
 import authRoutes from './routes/auth.routes'
 import adminRoute from './routes/admin.routes'
 import userRoute from './routes/user.routes'
+import instructorRoute from './routes/instructor.routes'
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/api/auth',authRoutes)
 app.use('/api/admin',adminRoute)
 app.use('/api/users',userRoute)
+app.use('/api/instructors',instructorRoute)
 
 
 export default app;

@@ -122,8 +122,8 @@ export class AuthService implements IAuthService {
     }
 
     const userId = user._id;
-    const accessToken = generateAccessToken(userId, user.role);
-    const refreshToken = generateRefreshToken(userId, user.role);
+    const accessToken = generateAccessToken(userId.toString(), user.role);
+    const refreshToken = generateRefreshToken(userId.toString(), user.role);
 
     return { accessToken, refreshToken, user};
   }
@@ -134,7 +134,7 @@ export class AuthService implements IAuthService {
 
       const userId = decoded.userId;
       const role = decoded.role;
-      const newAccessToken = generateAccessToken(userId, role)
+      const newAccessToken = generateAccessToken(userId.toString(), role)
 
       const user = await this.repo.findUserById(decoded.userId);
 

@@ -38,4 +38,8 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   async findUserByGoogleId(googleId: string): Promise<IUser | null> {
       return await User.findOne({googleId})
   }
+
+  async updateById(userId: string, updateData: Partial<IUser>): Promise<IUser | null> {
+      return await User.findByIdAndUpdate(userId, updateData,{new:true})
+  }
 }
