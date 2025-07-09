@@ -96,6 +96,7 @@ const SignupForm = () => {
     const { firstName, lastName, email, password } = data
     const response: AxiosResponse = await registerUser(`${firstName} ${lastName}`, email, password)
     setLoading(false)
+    console.log('status = ',response.status)
     if (response.status === 201) {
       // const data = { email, time: 120, length: 6 }
       // navigate("/verify-otp", { state: data })

@@ -17,7 +17,7 @@ export class AuthController implements IAuthController{
     @inject(TYPES.UserService) private userService:IUserService
   ){}
 
-  async register(req: Request, res: Response):Promise<void> {
+  register = async (req: Request, res: Response):Promise<void> =>{
     const { name, email, password } = req.body;
     try {
       await this.authService.register(name, email, password);
@@ -27,7 +27,7 @@ export class AuthController implements IAuthController{
     }
   }
 
-  async verifyOtp(req: Request, res: Response) {
+  verifyOtp = async (req: Request, res: Response) =>{
     try {
       const tokens = await this.authService.verifyOtp(req.body.email, req.body.otp);
       res.status(STATUS_CODES.OK).json(tokens);
@@ -36,7 +36,7 @@ export class AuthController implements IAuthController{
     }
   }
 
-    async resendOtp(req: Request, res: Response) {
+    resendOtp = async (req: Request, res: Response) => {
     try {
       await this.authService.resendOtp(req.body.email);
       res.status(STATUS_CODES.OK).json({ message: "OTP resent to email" });

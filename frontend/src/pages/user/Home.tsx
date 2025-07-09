@@ -1,16 +1,17 @@
+import CategorySection from '../../components/user/home/category-section'
+import Header from '../../components/user/home/Header'
+import HeroSection from '../../components/user/home/hero-section'
 
-import { Link} from "react-router-dom";
-
-const Home = ()=>{
-
-    return (
-        <div>
-            <h1>Home</h1>
-                <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium hover:underline">
-                  Create account
-                </Link>
-        </div>
-    )
+const HomePage = () => {
+  return (
+    <div className="flex min-h-screen flex-col">
+        <Header/>
+    <main className=''>
+        <HeroSection/>
+        <CategorySection/>
+    </main>
+    </div>
+  )
 }
 
-export default Home;
+export default HomePage
