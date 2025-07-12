@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { IUserController } from "./interfaces/IUserController";
-import { IUserService } from '../services/interfaces/IUserService';import {STATUS_CODES, MESSAGES} from "../utils/constants"
+import { IUserService } from '../services/interfaces/IUserService';
+import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { AuthenticatedRequest } from "../types/custom";

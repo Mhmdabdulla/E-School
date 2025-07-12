@@ -4,7 +4,6 @@ import {type AppDispatch } from "../redux/store";
 import apiClient from "../lib/axios";
 
 
-// const API_URL = import.meta.env.VITE_API_BASE_URL
 
 export const registerUser = async (name: string, email: string, password: string) => {
   try {
@@ -110,8 +109,10 @@ export const refreshToken = async (dispatch: AppDispatch) => {
     if (isAdmin === "true") {
       data = { role: "admin" };
     }
+    
     const response = await apiClient.post(`auth/refresh-token`, data, { withCredentials: true });
 
+    console.log(response.data)
     dispatch(
       setAuthData({
         accessToken: response.data.accessToken,

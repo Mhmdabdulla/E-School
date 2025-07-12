@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
-// import ResetPasswordDialog from "@/components/common/reset-password-dialog"
+import ResetPasswordDialog from "../../components/common/reset-password-dialog"
 
 const LoginPage = () => {
   const location = useLocation()
@@ -65,7 +65,7 @@ const LoginPage = () => {
           </motion.div>
         </div>
       </div>
-      {/* <ResetPasswordDialog/> */}
+      <ResetPasswordDialog/>
     </div>
   )
 }

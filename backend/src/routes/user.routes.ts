@@ -3,7 +3,6 @@ import { RequestHandler, Router } from "express";
 const router = Router()
 
 import { authMiddleware } from "../middlewares/auth.middleware";
-
 import { UserRole } from "../utils/constants";
 import container from "../di/inversify.config";
 import { IUserController } from "../controllers/interfaces/IUserController";

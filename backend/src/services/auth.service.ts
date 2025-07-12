@@ -131,16 +131,15 @@ export class AuthService implements IAuthService {
   async refreshAccessToken(refreshToken: string): Promise<any> {
     try {
       const decoded = await verifyRefreshToken(refreshToken)
-
       const userId = decoded.userId;
       const role = decoded.role;
       const newAccessToken = generateAccessToken(userId.toString(), role)
-
       const user = await this.repo.findUserById(decoded.userId);
 
       if (!user) {
         throw new Error("cannot find user please try again");
       }
+      console.log('from auth service refresh tocken',user,newAccessToken)
       return { accessToken: newAccessToken, user };
     } catch (error) {
       throw new Error("Invalid refresh token");
@@ -152,6 +151,7 @@ export class AuthService implements IAuthService {
       const user = await this.repo.findUserByEmail(email);
       if (!user) throw new Error("Invalid email address");
       const token = resetPasswordTocken(user.id,email)
+      console.log('from sendmagic link in auth.service',token)
       const magicLink = `${process.env.CLIENT_URL}/login?token=${token}`;
       console.log('magiclink : ',magicLink)
       await sendForgotPasswordMail(email, magicLink);

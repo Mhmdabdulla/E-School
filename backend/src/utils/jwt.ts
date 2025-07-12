@@ -5,16 +5,16 @@ import RedisClient from "../config/redis";
 const ACCESS_SECRET = process.env.ACCESS_TOKEN_SECRET!;
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET!;
 
-export const generateAccessToken = (id: string, role: string) =>
-  jwt.sign({ id, role }, ACCESS_SECRET, { expiresIn: "15m" });
+export const generateAccessToken = (userId: string, role: string) =>
+  jwt.sign({ userId, role }, ACCESS_SECRET, { expiresIn: "15m" });
 
-export const generateRefreshToken = (id: string, role: string) =>
-  jwt.sign({ id, role }, REFRESH_SECRET, { expiresIn: "7d" });
+export const generateRefreshToken = (userId: string, role: string) =>
+  jwt.sign({ userId, role }, REFRESH_SECRET, { expiresIn: "7d" });
 
 export const verifyAccessToken = (token: string) => jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as { userId: string; role: string };
 export const verifyRefreshToken = (token: string) => jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!) as { userId: string; role: string };
 export const resetPasswordTocken = (userId:string,email:string) =>{
-  jwt.sign({ userId, email, purpose: "reset-password" }, process.env.JWT_TOKEN_SECRET!, {
+  return jwt.sign({ userId, email, purpose: "reset-password" }, process.env.JWT_TOKEN_SECRET!, {
         expiresIn: "15m",
       });
 }
@@ -23,7 +23,7 @@ export const resetPasswordTocken = (userId:string,email:string) =>{
 
 export const verifyResetToken = async (token: string, expectedPurpose: string) => {
   try {
-    const currentLink = `${process.env.CLIENT_URL!}/reset-password?token=${token}`
+    const currentLink = `${process.env.CLIENT_URL!}/login?token=${token}`
       const decoded = jwt.verify(token, process.env.JWT_TOKEN_SECRET!) as {
           userId: string
           email: string

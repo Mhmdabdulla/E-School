@@ -4,7 +4,7 @@ import { refreshToken } from "../services/authServices";
 import {logout  } from '../redux/slices/authSlice'
 
 const apiClient = axios.create({ 
-  baseURL:"http://localhost:5000/api/",
+  baseURL:import.meta.env.VITE_BASE_URL,
   withCredentials: true, 
 });
 
@@ -31,6 +31,7 @@ apiClient.interceptors.response.use(
         console.error("Session expired. Please log in again.");
         store.dispatch(logout());
         localStorage.clear()
+        
       }
     }
 
