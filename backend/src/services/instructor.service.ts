@@ -7,6 +7,7 @@ import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { IInstructor } from "../models/instructor.model";
 import { IUserRepository } from "../repositories/interfaces/IUserRepository";
+import { PaginatedInstructorsResponse } from "../types/userTypes";
 
 @injectable()
 export class InstructorService implements IInstructorService{
@@ -16,7 +17,7 @@ export class InstructorService implements IInstructorService{
     @inject(TYPES.UserRepository) private userRepository:IUserRepository
   ){}
   
-  async getAllInstructors(page: number, limit: number, searchQuery?: string): Promise<any | null>{
+  async getAllInstructors(page: number, limit: number, searchQuery?: string): Promise<PaginatedInstructorsResponse | null>{
         const skip = (Number(page) - 1) * Number(limit);
         
         const instructors = await this.instructorRepository.findAllInstructors( skip, limit, searchQuery)

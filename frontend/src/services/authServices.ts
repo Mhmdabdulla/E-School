@@ -72,7 +72,6 @@ export const adminLogin = async (email: string, password: string, dispatch: AppD
 export const login = async (email: string, password: string, dispatch: AppDispatch) => {
   try {
     const response = await apiClient.post(`auth/login`, { email, password });
-    console.log(response.data)
     dispatch(
       setAuthData({
         accessToken: response.data.accessToken,
@@ -109,7 +108,7 @@ export const refreshToken = async (dispatch: AppDispatch) => {
     if (isAdmin === "true") {
       data = { role: "admin" };
     }
-    
+
     const response = await apiClient.post(`auth/refresh-token`, data, { withCredentials: true });
 
     console.log(response.data)

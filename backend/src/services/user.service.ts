@@ -9,6 +9,7 @@ import TYPES from "../di/types";
 import { BaseService } from "./base.service";
 import { IInstructor } from "../models/instructor.model";
 import { IInstructorRepository } from "../repositories/interfaces/IInstructorRepository";
+import { PaginatedUsersResponse } from "../types/userTypes";
 
 @injectable()
 export class UserService extends BaseService<IUser>  implements IUserService {
@@ -20,7 +21,7 @@ export class UserService extends BaseService<IUser>  implements IUserService {
     super(userRepository)
   }
     
-  async getAllUsers(page: number, limit: number, searchQuery?: string): Promise<any | null> {
+  async getAllUsers(page: number, limit: number, searchQuery?: string): Promise<PaginatedUsersResponse | null> {
     const skip = (Number(page) - 1) * Number(limit);
 
     let filter: FilterQuery<IUser> = { role: "user" };

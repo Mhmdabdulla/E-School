@@ -15,6 +15,8 @@ import RedisClient from "../config/redis";
 import { generateAccessToken, generateRefreshToken,resetPasswordTocken,verifyRefreshToken, verifyResetToken } from "../utils/jwt";
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
+import { refreshedUser, verifiedUer } from "../types/userTypes";
+import { LoginResponseDTO } from "../dto/response/auth.response.dto";
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -40,7 +42,7 @@ export class AuthService implements IAuthService {
 
 
 
-  async verifyOtp(email: string, otp: string):Promise<any> {
+  async verifyOtp(email: string, otp: string):Promise<verifiedUer> {
 
         const data = await RedisClient.get(`otp:${email}`);
     if (!data) throw new Error("OTP expired or invalid");
@@ -65,7 +67,7 @@ export class AuthService implements IAuthService {
     await RedisClient.del(`otp:${email}`);
     await RedisClient.del(`user_session:${email}`);
 
-    return { accessToken, refreshToken, user};
+    return { accessToken, refreshToken, user:LoginResponseDTO.fromEntity(user)};
   }
 
     async resendOtp(email: string): Promise<void> {
@@ -84,7 +86,7 @@ export class AuthService implements IAuthService {
     }
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(email: string, password: string): Promise<verifiedUer> {
     const user = await this.repo.findUserByEmail( email );
     if (!user) throw new Error("Invalid email address");
 
@@ -102,10 +104,10 @@ export class AuthService implements IAuthService {
     const accessToken = generateAccessToken(userId, user.role)
     const refreshToken = generateRefreshToken(userId, user.role)
 
-    return { accessToken, refreshToken, user};
+    return { accessToken, refreshToken, user:LoginResponseDTO.fromEntity(user)};
   }
 
-  async adminLogin(email: string, password: string): Promise<any> {
+  async adminLogin(email: string, password: string): Promise<verifiedUer> {
     const user = await this.repo.findUserByEmail( email );
     if (!user) {
       throw new Error("Invalid email address");
@@ -125,10 +127,10 @@ export class AuthService implements IAuthService {
     const accessToken = generateAccessToken(userId.toString(), user.role);
     const refreshToken = generateRefreshToken(userId.toString(), user.role);
 
-    return { accessToken, refreshToken, user};
+    return { accessToken, refreshToken, user:LoginResponseDTO.fromEntity(user)};
   }
 
-  async refreshAccessToken(refreshToken: string): Promise<any> {
+  async refreshAccessToken(refreshToken: string): Promise<refreshedUser> {
     try {
       const decoded = await verifyRefreshToken(refreshToken)
       const userId = decoded.userId;
@@ -139,7 +141,7 @@ export class AuthService implements IAuthService {
       if (!user) {
         throw new Error("cannot find user please try again");
       }
-      console.log('from auth service refresh tocken',user,newAccessToken)
+      
       return { accessToken: newAccessToken, user };
     } catch (error) {
       throw new Error("Invalid refresh token");

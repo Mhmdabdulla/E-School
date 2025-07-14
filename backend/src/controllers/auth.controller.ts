@@ -1,6 +1,5 @@
 // src/controllers/auth.controller.ts
 import { Request, RequestHandler, Response } from "express";
-import { AuthService } from "../services/auth.service";
 import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { IAuthController } from "./interfaces/IAuthController";
 import { IUserService } from "../services/interfaces/IUserService";
@@ -9,7 +8,7 @@ import { IAuthService } from "../services/interfaces/IAuthService";
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 
-// const authService = new AuthService();
+
 @injectable()
 export class AuthController implements IAuthController{
   constructor(
@@ -29,8 +28,14 @@ export class AuthController implements IAuthController{
 
   verifyOtp = async (req: Request, res: Response) =>{
     try {
-      const tokens = await this.authService.verifyOtp(req.body.email, req.body.otp);
-      res.status(STATUS_CODES.OK).json(tokens);
+      const { refreshToken, ...user } = await this.authService.verifyOtp(req.body.email, req.body.otp);
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+    res.status(STATUS_CODES.OK).json(user);
     } catch (e) {
       res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
     }
