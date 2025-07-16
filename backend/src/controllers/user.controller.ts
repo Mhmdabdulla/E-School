@@ -4,7 +4,8 @@ import { IUserService } from '../services/interfaces/IUserService';
 import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
-import { AuthenticatedRequest } from "../types/custom";
+import { uploadImageToS3 } from "../utils/s3Services";
+
 
 @injectable()
 export class UserController implements IUserController {
@@ -32,18 +33,29 @@ export class UserController implements IUserController {
     res.status(STATUS_CODES.OK).json({ message: "user status changed successfully" });
   };
 
- becomeInstructor = async(req:AuthenticatedRequest,res:Response):Promise<void>=>{
+ becomeInstructor = async(req:Request,res:Response):Promise<void>=>{
       const instructorData = req.body;
-    instructorData.userId =  req.user?.id;
-
+      console.log('user in user.controller',req.user)
+    instructorData.userId =  req.user?._id;
+    
     if (!req.file) {
       res.status(STATUS_CODES.BAD_REQUEST).json({ message: "file not found" });
       return;
     }
 
-    // const url = await uploadImageToCloudinary(req.file.buffer, "instructors/idCards");
-    const url = 'https://img.freepik.com/premium-vector/professional-modern-office-id-card-design-template_642592-1935.jpg'
-    instructorData.idCardImageUrl = url;
+    // Upload to S3
+    const mimeType = req.file.mimetype;
+    const buffer = req.file.buffer;
+
+    const imageUrl = await uploadImageToS3(buffer, "instructor/idCards", mimeType);
+
+    if (!imageUrl) {
+      res.status(STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: "Failed to upload image" });
+      return;
+    }
+    console.log(imageUrl)
+
+    instructorData.idCardImageUrl = imageUrl;
 
     const instructor = await this.userService.becomeInstructor(instructorData);
 

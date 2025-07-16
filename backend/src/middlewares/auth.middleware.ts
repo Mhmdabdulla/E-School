@@ -8,6 +8,12 @@ import { IUserService } from "../services/interfaces/IUserService";
 import TYPES from "../di/types";
 
 
+declare module "express-serve-static-core"{
+  interface Request {
+    user?: Partial<IUser>
+    file?: Express.Multer.File
+  }
+}
 
  const userService = container.get<IUserService>(TYPES.UserService)
 
@@ -42,7 +48,8 @@ export const authMiddleware = (
           return
         }
     
-        req.user = { id: decoded.userId , role:decoded.role };
+        req.user = { _id: decoded.userId };
+        console.log('from authmiddleware,',req.user)
         next();
       } catch (error) {
         if (error instanceof TokenExpiredError) {
