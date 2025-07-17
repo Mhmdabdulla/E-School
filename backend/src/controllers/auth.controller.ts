@@ -1,5 +1,5 @@
 // src/controllers/auth.controller.ts
-import { Request, RequestHandler, Response } from "express";
+import { Request, Response } from "express";
 import {STATUS_CODES, MESSAGES} from "../utils/constants"
 import { IAuthController } from "./interfaces/IAuthController";
 import { IUserService } from "../services/interfaces/IUserService";
@@ -70,6 +70,7 @@ export class AuthController implements IAuthController{
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { role } = req.body;
     const { accessToken, user } = await this.authService.refreshAccessToken(refreshToken);
     res.status(STATUS_CODES.OK).json({ accessToken, user });

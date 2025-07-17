@@ -1,6 +1,7 @@
 // src/utils/jwt.ts
 import jwt from "jsonwebtoken";
 import RedisClient from "../config/redis";
+import logger from "../config/logger";
 
 const ACCESS_SECRET = process.env.ACCESS_TOKEN_SECRET!;
 const REFRESH_SECRET = process.env.REFRESH_TOKEN_SECRET!;
@@ -42,6 +43,7 @@ export const verifyResetToken = async (token: string, expectedPurpose: string) =
 
     return decoded
   } catch (error) {
+    logger.error(error)
     throw new Error('Invalid or expired token')
   }
 }

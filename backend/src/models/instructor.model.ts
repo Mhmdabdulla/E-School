@@ -19,19 +19,19 @@ export interface IInstructor extends Document {
   countryCode: string;
   bio: string;
   socialLinks: {
-    linkedin: { type: String };
-    github: { type: String };
-    portfolio: { type: String };
-    twitter: {type: String};
-    instagram: {type: String};
+    linkedin: { type: string };
+    github: { type: string };
+    portfolio: { type: string };
+    twitter: {type: string};
+    instagram: {type: string};
   };
   adminApproval: {
     status: {
-      type: String;
+      type: string;
       enum: ["pending", "approved", "rejected"];
       default: "pending";
     };
-    reason: { type: String };
+    reason: { type: string };
   };
   students:number;
   createdAt: Date;

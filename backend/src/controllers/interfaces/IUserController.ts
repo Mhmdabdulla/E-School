@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from "express";
+import {  RequestHandler, Response } from "express";
 import { AuthenticatedRequest } from "../../types/custom";
 
 export interface IUserController {
