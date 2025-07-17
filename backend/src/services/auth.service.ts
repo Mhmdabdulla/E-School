@@ -17,6 +17,7 @@ import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { refreshedUser, verifiedUer } from "../types/userTypes";
 import { LoginResponseDTO } from "../dto/response/auth.response.dto";
+import logger from "../config/logger";
 
 @injectable()
 export class AuthService implements IAuthService {
@@ -26,10 +27,12 @@ export class AuthService implements IAuthService {
   // private repo: IAuthRepository = new AuthRepository();
 
   async register(name: string, email: string, password: string): Promise<void> {
+    logger.info(`Register attempt for ${email}`);
     const existing = await this.repo.findUserByEmail(email);
     if (existing) throw new Error("Email already exists");
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    logger.debug(`Generated OTP for ${email}: ${otp}`);
 
     const hashedPassword = await hashPassword(password);
 
@@ -67,6 +70,8 @@ export class AuthService implements IAuthService {
     await RedisClient.del(`otp:${email}`);
     await RedisClient.del(`user_session:${email}`);
 
+    logger.info(`User registered successfully: ${email}`);
+
     return { accessToken, refreshToken, user:LoginResponseDTO.fromEntity(user)};
   }
 
@@ -95,11 +100,15 @@ export class AuthService implements IAuthService {
     }
 
     if ("status" in user && user.status === "blocked") {
+      logger.warn(`Blocked user tried to login: ${email}`);
       throw new Error("you have been blocked");
     }
 
     const isPasswordValid = await comparePassword(password, user.password);
-    if (!isPasswordValid) throw new Error("Incorrect password");
+    if (!isPasswordValid) {
+      logger.error(`Invalid password for: ${email}`);
+      throw new Error("Incorrect password");
+    }
     const userId = user._id;
     const accessToken = generateAccessToken(userId, user.role)
     const refreshToken = generateRefreshToken(userId, user.role)
@@ -114,6 +123,7 @@ export class AuthService implements IAuthService {
     }
 
     if (user.role !== "admin") {
+      logger.error(`Non-admin tried admin login: ${email}`);
       throw new Error("Access denied: Not an admin");
     }
 
@@ -144,6 +154,7 @@ export class AuthService implements IAuthService {
       
       return { accessToken: newAccessToken, user };
     } catch (error) {
+      logger.error("Invalid refresh token");
       throw new Error("Invalid refresh token");
     }
   }
@@ -153,13 +164,13 @@ export class AuthService implements IAuthService {
       const user = await this.repo.findUserByEmail(email);
       if (!user) throw new Error("Invalid email address");
       const token = resetPasswordTocken(user.id,email)
-      console.log('from sendmagic link in auth.service',token)
       const magicLink = `${process.env.CLIENT_URL}/login?token=${token}`;
-      console.log('magiclink : ',magicLink)
+      logger.debug(`Generated magic link: ${magicLink}`);
       await sendForgotPasswordMail(email, magicLink);
       await RedisClient.setex(`magicLink:${email}`, 900, JSON.stringify({ magicLink }));
       const link = await RedisClient.get(`magicLink:${email}`);
     } catch (error: any) {
+      logger.error(`Error sending magic link: ${error.message}`);
       throw new Error(error.message);
     }
   }
@@ -168,6 +179,7 @@ export class AuthService implements IAuthService {
     try {
       const { userId, email, purpose } = await verifyResetToken(token, "reset-password");
       if (!userId || purpose !== "reset-password") {
+        logger.error(`Invalid or expired reset token`);
         throw new Error("Invalid token");
       }
 
