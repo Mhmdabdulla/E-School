@@ -49,7 +49,6 @@ export const authMiddleware = (
         }
     
         req.user = { _id: decoded.userId };
-        console.log('from authmiddleware,',req.user)
         next();
       } catch (error) {
         if (error instanceof TokenExpiredError) {

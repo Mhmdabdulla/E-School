@@ -1,7 +1,6 @@
 // src/services/auth.service.ts
 
 import { IAuthService } from "./interfaces/IAuthService";
-import { AuthRepository } from "../repositories/auth.repository";
 import {
   hashPassword,
   comparePassword
@@ -154,7 +153,7 @@ export class AuthService implements IAuthService {
       
       return { accessToken: newAccessToken, user };
     } catch (error) {
-      logger.error("Invalid refresh token");
+      logger.error("Invalid refresh token",error);
       throw new Error("Invalid refresh token");
     }
   }
@@ -168,7 +167,7 @@ export class AuthService implements IAuthService {
       logger.debug(`Generated magic link: ${magicLink}`);
       await sendForgotPasswordMail(email, magicLink);
       await RedisClient.setex(`magicLink:${email}`, 900, JSON.stringify({ magicLink }));
-      const link = await RedisClient.get(`magicLink:${email}`);
+      // const link = await RedisClient.get(`magicLink:${email}`);
     } catch (error: any) {
       logger.error(`Error sending magic link: ${error.message}`);
       throw new Error(error.message);

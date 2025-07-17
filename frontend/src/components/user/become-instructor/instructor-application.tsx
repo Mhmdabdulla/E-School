@@ -60,6 +60,7 @@ const InstructorApplicationForm = () => {
       console.log(resposne)
       setIsSubmitted(true)
       toast.success("Application submitted successfully",{position:"top-right"})
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error:any) {
       console.log(error)
       toast.error(error.response.data.message||"Something went wrong. Please try again.",{position:"top-right"})

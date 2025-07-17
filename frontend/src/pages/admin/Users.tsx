@@ -63,6 +63,7 @@ const UsersPage = () => {
   }
   useEffect(() => {
      fetchUsers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, searchQuery]);
 
   const handleChangeStatus = async (userId: string) => {
