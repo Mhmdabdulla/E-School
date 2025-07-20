@@ -18,17 +18,15 @@ export class AuthController implements IAuthController{
 
   register = async (req: Request, res: Response):Promise<void> =>{
     const { name, email, password } = req.body;
-    try {
+
       await this.authService.register(name, email, password);
       res.status(STATUS_CODES.CREATED).json({ message: MESSAGES.SUCCESS.SIGNUP });
-    } catch (e) {
-      res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
-    }
+
   }
 
   verifyOtp = async (req: Request, res: Response) =>{
-    try {
-      const { refreshToken, ...user } = await this.authService.verifyOtp(req.body.email, req.body.otp);
+
+    const { refreshToken, ...user } = await this.authService.verifyOtp(req.body.email, req.body.otp);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -36,18 +34,13 @@ export class AuthController implements IAuthController{
       sameSite: "strict",
     });
     res.status(STATUS_CODES.OK).json(user);
-    } catch (e) {
-      res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
-    }
+
   }
 
     resendOtp = async (req: Request, res: Response) => {
-    try {
+
       await this.authService.resendOtp(req.body.email);
       res.status(STATUS_CODES.OK).json({ message: "OTP resent to email" });
-    } catch (e) {
-      res.status(STATUS_CODES.BAD_REQUEST).json({ error: (e as Error).message });
-    }
   }
 
   login = async (req: Request, res: Response): Promise<void> => {

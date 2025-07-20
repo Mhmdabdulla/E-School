@@ -174,9 +174,9 @@ export default function OtpVerification({
           
         )
       }
-    } catch (error) {
+    } catch (error:any) {
       setVerificationStatus("error");
-      setErrorMessage("Verification failed");
+      setErrorMessage(`Verification failed.`);
       console.error("Error verifying OTP:", error);
     } finally {
       setIsVerifying(false);

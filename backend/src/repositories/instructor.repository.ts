@@ -3,7 +3,6 @@ import { IInstructor,Instructor } from "../models/instructor.model";
 import { BaseRepository } from "./base.repository";
 import { IInstructorRepository } from "./interfaces/IInstructorRepository";
 
-// apply for instructor
 
 export class InstructorRepository extends BaseRepository<IInstructor> implements IInstructorRepository{
       constructor() {

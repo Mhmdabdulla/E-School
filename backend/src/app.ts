@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.routes'
 import adminRoute from './routes/admin.routes'
 import userRoute from './routes/user.routes'
 import instructorRoute from './routes/instructor.routes'
+import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use('/api/auth',authRoutes)
 app.use('/api/admin',adminRoute)
 app.use('/api/users',userRoute)
 app.use('/api/instructors',instructorRoute)
+
+app.use(errorHandler)
 
 
 export default app;

@@ -127,21 +127,17 @@ export const refreshToken = async (dispatch: AppDispatch) => {
 };
 
 export const forgotPassword = async (email: string) => {
-  try {
+
     const response = await apiClient.post(`auth/forgot-password`, { email });
     return response;
-  } catch (error: any) {
-    throw error;
-  }
+
 };
 
 export const resetPassword = async (token: string, newPassword: string) => {
-  try {
+
     const response = await apiClient.post(`auth/reset-password`, { token, newPassword });
     return response;
-  } catch (error: any) {
-    throw error;
-  }
+
 };
 
 export const googleLogin = () => {

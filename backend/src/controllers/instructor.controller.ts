@@ -4,7 +4,7 @@ import { IInstructorService } from "../services/interfaces/IInstructorService";
 import {STATUS_CODES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
-// import { IInstructor } from "../models/Instructor";
+
 
 @injectable()
 export class InstructorController implements IInstructorController {

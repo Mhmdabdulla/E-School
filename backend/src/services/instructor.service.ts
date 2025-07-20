@@ -2,12 +2,13 @@
 import { IInstructorService } from "./interfaces/IInstructorService";
 import { IInstructorRepository } from "../repositories/interfaces/IInstructorRepository";
 
-import { InstructorRepository } from "../repositories/instructor.repository";
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { IInstructor } from "../models/instructor.model";
 import { IUserRepository } from "../repositories/interfaces/IUserRepository";
 import { PaginatedInstructorsResponse } from "../types/userTypes";
+import { AppError } from "../utils/AppError";
+import { STATUS_CODES } from "../utils/constants";
 
 @injectable()
 export class InstructorService implements IInstructorService{
@@ -33,21 +34,19 @@ export class InstructorService implements IInstructorService{
 
 
   async getInstructorApplications():Promise<IInstructor[]|null>{
-        try {
+
             const instructorApplications = await this.instructorRepository.getInstructorApplications()
             if(!instructorApplications)
-                throw new Error(" cannot find any applications")
+                throw new AppError("No instructor applications found", STATUS_CODES.NOT_FOUND);
 
             return instructorApplications
-        } catch (error) {
-            throw new Error(" cannot find any applications please try again")
-        }
+
     }
 
  reviewTutorApplication = async(tutorId: string, status: string, reason?: string) :Promise<IInstructor|null> => {
-        try {
+
             if (!["approved", "rejected"].includes(status)) {
-              throw new Error("Invalid status. Must be 'approved' or 'rejected'.");
+              throw new AppError("Invalid status. Must be 'approved' or 'rejected'.", STATUS_CODES.BAD_REQUEST);
             }
 
             const updatedInstructor =  await  this.instructorRepository.updateInstructorStatus(tutorId, {
@@ -56,7 +55,7 @@ export class InstructorService implements IInstructorService{
             });
       
             if (!updatedInstructor) {
-              throw new Error("instructor not found");
+              throw new AppError("Instructor not found", STATUS_CODES.NOT_FOUND);
             }
     
             const InstructorStatus:any = updatedInstructor.adminApproval.status
@@ -64,15 +63,11 @@ export class InstructorService implements IInstructorService{
             if( InstructorStatus === 'approved'){
                const instructor = await this.userRepository.updateById(updatedInstructor.userId as string, {role:"instructor"})
                if(!instructor){
-                throw new Error("user not found")
+                throw new AppError("Associated user not found", STATUS_CODES.NOT_FOUND);
                }
             }
       
             return updatedInstructor;
-          } catch (error) {
-            console.error("Error updating tutor status:", error);
-            throw error
-          }
        }
     
 }
