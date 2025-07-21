@@ -69,5 +69,14 @@ export class InstructorService implements IInstructorService{
       
             return updatedInstructor;
        }
+
+
+ async getUserApplications(userId: string): Promise<IInstructor[] | null> {
+    const applications = await this.instructorRepository.getUserApplications(userId);
+    if (!applications) {
+      throw new Error("no applications found");
+    }
+    return applications;
+  }
     
 }

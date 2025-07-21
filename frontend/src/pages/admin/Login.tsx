@@ -11,6 +11,7 @@ const LoginPage = () => {
         if(user && isAdmin === 'true'){
             navigate('/admin/dashboard')
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
   return (
     <div className="container relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">

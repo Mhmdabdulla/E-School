@@ -1,15 +1,21 @@
 import mongoose, { Types } from "mongoose";
-import { IInstructor,Instructor } from "../models/instructor.model";
+import { IInstructor, Instructor } from "../models/instructor.model";
 import { BaseRepository } from "./base.repository";
 import { IInstructorRepository } from "./interfaces/IInstructorRepository";
 
-
-export class InstructorRepository extends BaseRepository<IInstructor> implements IInstructorRepository{
-      constructor() {
+export class InstructorRepository
+  extends BaseRepository<IInstructor>
+  implements IInstructorRepository
+{
+  constructor() {
     super(Instructor);
   }
 
-  async findAllInstructors(skip: number, limit: number, searchQuery?: string): Promise<IInstructor[] | null> {
+  async findAllInstructors(
+    skip: number,
+    limit: number,
+    searchQuery?: string
+  ): Promise<IInstructor[] | null> {
     const pipeline: any[] = [
       {
         $match: {
@@ -43,14 +49,15 @@ export class InstructorRepository extends BaseRepository<IInstructor> implements
   }
 
   async findInstructorByUserId(userId: string): Promise<IInstructor | null> {
-      return Instructor.findOne({ userId: new Types.ObjectId(userId) });
+    return Instructor.findOne({ userId: new Types.ObjectId(userId) });
   }
 
   async createInstructor(instructor: any): Promise<IInstructor | null> {
-    instructor.userId = new mongoose.Types.ObjectId(instructor.userId as string);
+    instructor.userId = new mongoose.Types.ObjectId(
+      instructor.userId as string
+    );
 
     return await Instructor.create(instructor);
-
   }
 
   getInstructorApplications = async (): Promise<IInstructor[] | null> => {
@@ -59,8 +66,15 @@ export class InstructorRepository extends BaseRepository<IInstructor> implements
     }).populate("userId");
   };
 
-
-  updateInstructorStatus = async (id: string, updates: Partial<IInstructor>): Promise<IInstructor | null> => {
+  updateInstructorStatus = async (
+    id: string,
+    updates: Partial<IInstructor>
+  ): Promise<IInstructor | null> => {
     return await Instructor.findByIdAndUpdate(id, updates, { new: true });
   };
+
+  async getUserApplications(userId: string): Promise<IInstructor[] | null> {
+    return await Instructor.find({ userId: new Types.ObjectId(userId) }).populate("userId");
+  }
+  
 }

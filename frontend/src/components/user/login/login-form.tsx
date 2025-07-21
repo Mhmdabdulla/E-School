@@ -44,6 +44,7 @@ const LoginForm = () => {
   const onSubmit = async (data: FormData) => {
     const { email, password } = data
     const response = await login(email, password, dispatch)
+    console.log(response)
     if (response.status === 200) {
       // appDispatch(fetchCartItems())
       // appDispatch(fetchNotificationsThunk())

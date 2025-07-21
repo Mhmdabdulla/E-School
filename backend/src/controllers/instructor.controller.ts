@@ -33,4 +33,10 @@ export class InstructorController implements IInstructorController {
     res.status(STATUS_CODES.OK).json({ message: `instructor ${status} successfully` });
   };
 
+  getUserApplications = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user?._id;
+    const applications = await this.instructorService.getUserApplications(userId as string);
+    res.status(STATUS_CODES.OK).json({ applications, message: "applications fetched successfully" });
+  };
+
 }

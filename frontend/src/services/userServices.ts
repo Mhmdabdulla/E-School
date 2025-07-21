@@ -46,12 +46,9 @@ export const sendInstructorApplication = async (formData: FormData) => {
 };
 
 export const getApplications = async () => {
-  try {
     const res = await apiClient.get("users/applications");
     return res.data;
-  } catch (error) {
-    throw error;
-  }
+
 };
 
 export const getUsers = async (page:number,limit:number,searchQuery:string) => {

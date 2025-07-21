@@ -120,7 +120,7 @@ export class AuthService implements IAuthService {
     const isPasswordValid = await comparePassword(password, user.password);
     if (!isPasswordValid) {
       logger.error(`Invalid password for: ${email}`);
-      throw new AppError("Incorrect password", STATUS_CODES.UNAUTHORIZED);
+      throw new AppError("Invalid Credentials", STATUS_CODES.UNAUTHORIZED);
     }
     const userId = user._id;
     const accessToken = generateAccessToken(userId, user.role);

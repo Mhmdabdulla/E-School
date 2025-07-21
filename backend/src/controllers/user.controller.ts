@@ -1,10 +1,12 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { IUserController } from "./interfaces/IUserController";
 import { IUserService } from '../services/interfaces/IUserService';
-import {STATUS_CODES, MESSAGES} from "../utils/constants"
+import {STATUS_CODES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { uploadImageToS3 } from "../utils/s3Services";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 
 @injectable()
@@ -29,7 +31,7 @@ export class UserController implements IUserController {
 
   toggleUserStatus = async (req: Request, res: Response): Promise<void> => {
     const { userId } = req.params;
-    const user = await this.userService.toggleStatus(userId);
+    await this.userService.toggleStatus(userId);
     res.status(STATUS_CODES.OK).json({ message: "user status changed successfully" });
   };
 
@@ -57,9 +59,53 @@ export class UserController implements IUserController {
 
     instructorData.idCardImageUrl = imageUrl;
 
-    const instructor = await this.userService.becomeInstructor(instructorData);
+    await this.userService.becomeInstructor(instructorData);
 
     res.status(STATUS_CODES.OK).json({ message: "application submitted successfully" });
+ }
+
+ getUserProfile = async (req:Request, res:Response):Promise<void> => {
+  const userId = req.user?._id as string;
+
+    const user = await this.userService.getUserProfile(userId);
+
+    if (user.status === "blocked") {
+      res.status(STATUS_CODES.FORBIDDEN).json({ message: "you have been blocked" });
+      return;
+    }
+
+    res.status(STATUS_CODES.OK).json({ user });
+ }
+
+ updateProfile = async (req:Request, res:Response): Promise<void> => {
+  const userId = req.user?._id as string;
+    const { name, title } = req.body;
+
+    const updateData: { name: any; title: any; profileImageUrl?: string } = {
+      name,
+      title,
+    };
+
+    if (req.file) {
+      const url = await uploadImageToS3(req.file.buffer, "users/profileImages",req.file.mimetype);
+      if (url) updateData.profileImageUrl = url;
+    }
+
+    const response = await this.userService.updateUser(userId, updateData);
+    res.status(STATUS_CODES.OK).json({ message: "user updated successfully", user: response });
+ }
+
+ changePassword = async (req:Request, res:Response): Promise<void> => {
+  const { currentPassword, newPassword } = req.body;
+    const userId = req.user?._id as string;
+    const updatedUser = await this.userService.changePassword(userId, currentPassword, newPassword);
+    if (!updatedUser || updatedUser instanceof Error) {
+      console.log(updatedUser);
+      res.status(STATUS_CODES.BAD_REQUEST).json({ message: "please check the given passwords" });
+      return;
+    }
+
+    res.status(STATUS_CODES.OK).json({ message: "password changed successfully" });
  }
 
 }
