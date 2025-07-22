@@ -74,7 +74,21 @@ export class InstructorRepository
   };
 
   async getUserApplications(userId: string): Promise<IInstructor[] | null> {
-    return await Instructor.find({ userId: new Types.ObjectId(userId) }).populate("userId");
+    return await Instructor.find({
+      userId: new Types.ObjectId(userId),
+    }).populate("userId");
   }
-  
+
+  async getInstructorProfile(
+    instructorId: string
+  ): Promise<IInstructor | null> {
+    return await Instructor.findOne({ userId: instructorId }).populate(
+      "userId"
+    );
+  }
+
+  updateInstructorProfile = async (userId: string, data: Partial<IInstructor>): Promise<IInstructor | null> => {
+    return await Instructor.findOneAndUpdate({ userId }, data, { new: true });
+  };
+
 }

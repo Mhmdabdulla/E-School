@@ -78,5 +78,17 @@ export class InstructorService implements IInstructorService{
     }
     return applications;
   }
+
+  async getInstructorProfile(instructorId: string): Promise<IInstructor | null> {
+    const instructor = await this.instructorRepository.getInstructorProfile(instructorId);
+    if (!instructor) {
+      throw new Error("instructor not found ");
+    }
+    return instructor;
+  }
+
+  async updateInstructorProfile(instructorId: string, data: Partial<IInstructor>): Promise<IInstructor | null> {
+    return await this.instructorRepository.updateInstructorProfile(instructorId, data);
+  }
     
 }

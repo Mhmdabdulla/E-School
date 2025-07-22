@@ -4,6 +4,7 @@ import { IInstructorService } from "../services/interfaces/IInstructorService";
 import {STATUS_CODES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
+import { IInstructor } from "../models/instructor.model";
 
 
 @injectable()
@@ -38,5 +39,21 @@ export class InstructorController implements IInstructorController {
     const applications = await this.instructorService.getUserApplications(userId as string);
     res.status(STATUS_CODES.OK).json({ applications, message: "applications fetched successfully" });
   };
+
+
+  getInstructorProfile = async (req: Request, res: Response): Promise<void> => {
+    const { userId } = req.params;
+    const instructor = await this.instructorService.getInstructorProfile(userId as string);
+    res.status(STATUS_CODES.OK).json({ message: "instructor profile fetched successfully", instructor });
+  };
+
+  updateInstrucotrProfile = async (req: Request, res: Response): Promise<void> => {
+    const { userId } = req.params;
+    const data: Partial<IInstructor> = req.body.data;
+    console.log(data);
+    const instructor = await this.instructorService.updateInstructorProfile(userId, data);
+    res.status(STATUS_CODES.OK).json({ message: "instructor updated successfully", instructor });
+  };
+
 
 }

@@ -1,4 +1,5 @@
 import { LoginResponseDTO } from "../dto/response/auth.response.dto";
+import { ICourse } from "../models/Course";
 import { IInstructor } from "../models/instructor.model";
 
 import { IUser } from "../models/user.model";
@@ -20,12 +21,12 @@ export interface AdminDashboardStats {
   totalCourses: number | null;
 }
 
-// export interface PaginatedCoursesResponse {
-//   totalCourses: number;
-//   totalPages: number;
-//   currentPage: number;
-//   courses: ICourse[] | null;
-// }
+export interface PaginatedCoursesResponse {
+  totalCourses: number;
+  totalPages: number;
+  currentPage: number;
+  courses: ICourse[] | null;
+}
 
 export interface PaginatedInstructorsResponse {
   totalInstructors: number;

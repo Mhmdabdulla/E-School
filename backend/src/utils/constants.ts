@@ -13,6 +13,7 @@ export const STATUS_CODES = {
   NOT_FOUND: 404,
   CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
+  PARTIAL_CONTENT:206,
 };
 
 export const MESSAGES = {
