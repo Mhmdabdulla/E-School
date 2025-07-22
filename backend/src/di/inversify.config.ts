@@ -49,6 +49,14 @@ import { LessonService } from "../services/lesson.service";
 import { LessonRepository } from "../repositories/lesson.repository";
 import { ILessonRepository } from "../repositories/interfaces/ILessonRepository";
 
+//category
+import { ICategoryController } from "../controllers/interfaces/ICategoryController";
+import { CategoryController } from "../controllers/category.controller";
+import { ICategoryService } from "../services/interfaces/ICategoryService";
+import { CategoryService } from "../services/category.service";
+import { CategoryRepository } from "../repositories/category.repository";
+import { ICategoryRepository } from "../repositories/interfaces/ICategoryRepository";
+
 const container = new Container();
 
 container.bind<IAuthRepository>(TYPES.AuthRepository).to(AuthRepository);
@@ -74,5 +82,9 @@ container.bind<IModuleRepository>(TYPES.ModuleRepository).to(ModuleRepository)
 container.bind<ILessonController>(TYPES.LessonController).to(LessonController)
 container.bind<ILessonService>(TYPES.LessonService).to(LessonService)
 container.bind<ILessonRepository>(TYPES.LessonRepository).to(LessonRepository)
+
+container.bind<ICategoryController>(TYPES.CategoryController).to(CategoryController)
+container.bind<ICategoryService>(TYPES.CategoryService).to(CategoryService)
+container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository)
 
 export default container;
