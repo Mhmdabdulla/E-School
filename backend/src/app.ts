@@ -7,6 +7,10 @@ import authRoutes from './routes/auth.routes'
 import adminRoute from './routes/admin.routes'
 import userRoute from './routes/user.routes'
 import instructorRoute from './routes/instructor.routes'
+import categoryRoute from './routes/category.routes'
+import courseRoute from './routes/course.routes'
+import lessonRoute from './routes/lesson.routes'
+import moduleRoute from './routes/module.routes'
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 const app = express();
@@ -25,6 +29,10 @@ app.use('/api/auth',authRoutes)
 app.use('/api/admin',adminRoute)
 app.use('/api/users',userRoute)
 app.use('/api/instructors',instructorRoute)
+app.use('/api/categories', categoryRoute)
+app.use('/api/courses', courseRoute)
+app.use('/api/lessons', lessonRoute)
+app.use('/api/modules', moduleRoute)
 
 app.use(errorHandler)
 

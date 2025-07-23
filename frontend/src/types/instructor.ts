@@ -28,11 +28,11 @@ export interface IInstructor {
   };
   adminApproval: {
     status: {
-      type: String;
+      type: string;
       enum: ["pending", "approved", "rejected"];
       default: "pending";
     };
-    reason: { type: String };
+    reason: { type: string };
   };
   rating?:string;
   students?: string;

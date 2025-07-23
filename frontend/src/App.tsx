@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { commonRoutes } from './routes/common.routes'
 import { userRoutes } from './routes/user.routes'
 import { adminRoutes } from './routes/admin.routes'
+import { instructorRoutes } from './routes/instructor.routes'
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
       {commonRoutes}
       {userRoutes}
       {adminRoutes}
+      {instructorRoutes}
     </Routes>
     </BrowserRouter>
     </>
