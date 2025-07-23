@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 import { Input } from "../../ui/input"
-import ThemeToggle from "../../common/ThemeToggler"
+// import ThemeToggle from "../../common/ThemeToggler"
 
 const PageHeader = () => {
   const location = useLocation()
@@ -72,10 +72,10 @@ const PageHeader = () => {
         </div>
         <Avatar>
           <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-          <AvatarFallback>VS</AvatarFallback>
+          <AvatarFallback>A</AvatarFallback>
         </Avatar>
       </div>
-      <ThemeToggle/>
+      {/* <ThemeToggle/> */}
     </header>
   )
 }

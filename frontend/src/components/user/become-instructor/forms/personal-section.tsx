@@ -17,7 +17,8 @@ const PersonalInfoSection = ({ control }: PersonalInfoSectionProps) => {
         name="idCardImage"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>ID Card Image</FormLabel>
+            {/* <FormLabel>ID Card Image</FormLabel> */}
+            <FormLabel>Experience Certificate Image</FormLabel>
             <FormControl>
               <Input
                 type="file"

@@ -13,7 +13,9 @@ interface getAllCoursesArgument {
 export interface ICourseService extends IBaseService<ICourse> {
   createCourse(
     courseData: Partial<ICourse>,
-    files: { [fieldname: string]: Express.Multer.File[] }
+    files: { [fieldname: string]: Express.Multer.File[] },
+    thumbnailMimeType:string,
+    trailerMimeType:string
   ): Promise<ICourse | null>;
   getCoursesByInstructorId(instructorId: string): Promise<ICourse[] | null>;
   getFullCourse(courseId: string): Promise<ICourse | null>;

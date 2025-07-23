@@ -4,7 +4,7 @@ import { ICourseService } from "./interfaces/ICourseService";
 import { ICourse } from "../models/Course";
 import  TYPES  from "../di/types";
 import { ICourseRepository } from "../repositories/interfaces/ICourseRepository";
-// import { deleteImageFromCloudinary, deleteVideoFromCloudinary, uploadImageToCloudinary, uploadVideoToCloudinary } from "../utils/clodinaryServices";
+import { uploadImageToS3,uploadVideoToS3,deleteFileFromS3 } from "../utils/s3Services";
 import { PaginatedCoursesResponse } from "../types/userTypes";
 import { FilterQuery } from "mongoose";
 
@@ -13,15 +13,13 @@ export class CourseService extends BaseService<ICourse> implements ICourseServic
     constructor(@inject(TYPES.CourseRepository) private courseRepository: ICourseRepository) {
         super(courseRepository);
     }
-  async createCourse(courseData: Partial<ICourse>, files:{ [fieldname: string]: Express.Multer.File[] }): Promise<ICourse | null> {
+  async createCourse(courseData: Partial<ICourse>, files:{ [fieldname: string]: Express.Multer.File[] },thumbnailMimeType:string,trailerMimeType:string): Promise<ICourse | null> {
 
     if(!files)
         throw new Error("files must be provided for creating a course")
 
-        // const thumbnail = await uploadImageToCloudinary(files.thumbnail[0].buffer, 'course/thumbnail')
-        // const trailerData = await uploadVideoToCloudinary(files.trailer[0].buffer, 'course/trailer')
-        const thumbnail = 'heo';
-        const trailerData = {url:'a'}
+        const thumbnail = await uploadImageToS3(files.thumbnail[0].buffer,'course/thumbnail',thumbnailMimeType)
+        const trailerData = await uploadVideoToS3(files.trailer[0].buffer, 'course/trailer',trailerMimeType)
 
         courseData.thumbnail = thumbnail as string
         courseData.trailer = trailerData?.url as string
@@ -175,16 +173,21 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
         throw new Error("cannot find the course. please try again")
     }
 
-    // if (files?.thumbnail && files.thumbnail.length > 0) {
-    //     await deleteImageFromCloudinary(existingCourse?.thumbnail as string)
-    //     data.thumbnail = await uploadImageToCloudinary(files.thumbnail[0].buffer, 'course/thumbnail' ) as string
-    // }
+    
 
-    // if(files?.trailer && files.trailer.length > 0){
-    //     await deleteVideoFromCloudinary(existingCourse?.trailer as string)
-    //     const trailerData = await uploadVideoToCloudinary(files.trailer[0].buffer, 'course/trailer') 
-    //     data.trailer = trailerData?.url 
-    // }
+    if (files?.thumbnail && files.thumbnail.length > 0) {
+      const thumbnailMimeType = files["thumbnail"]?.[0]?.mimetype
+      await deleteFileFromS3(existingCourse?.thumbnail as string)
+      data.thumbnail = await uploadImageToS3(files.thumbnail[0].buffer, 'course/thumbnail',thumbnailMimeType) as string
+    
+    }
+
+    if(files?.trailer && files.trailer.length > 0){
+      await deleteFileFromS3(existingCourse?.trailer as string)
+      const trailerMimeType = files["trailer"]?.[0]?.mimetype 
+      const trailerData = await uploadVideoToS3(files.trailer[0].buffer, 'course/trailer',trailerMimeType)
+      data.trailer = trailerData?.url 
+    }
     console.log(data)
     return  await this.courseRepository.findByIdAndUpdate(courseId,data )
  }

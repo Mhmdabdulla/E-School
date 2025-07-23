@@ -13,8 +13,11 @@ export class CourseController implements ICourseController {
     const courseData = req.body;
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     courseData.instructorId = req.user?._id;
+    const thumbnailMimeType = files["thumbnail"]?.[0]?.mimetype;
+    const trailerMimeType = files["trailer"]?.[0]?.mimetype;
+ 
 
-    const course = await this.courseService.createCourse(courseData, files);
+    const course = await this.courseService.createCourse(courseData, files,thumbnailMimeType,trailerMimeType);
     res.status(STATUS_CODES.CREATED).json(course);
   };
 
@@ -67,6 +70,7 @@ export class CourseController implements ICourseController {
     const { courseId } = req.params;
     const data = req.body;
     const files = req.files ? (req.files as { [fieldname: string]: Express.Multer.File[] }) : undefined;
+    
 
     if(data.title){
       const course = await this.courseService.findOne({title: data.title})

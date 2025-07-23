@@ -57,7 +57,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
       >
         <div className="flex h-16 items-center justify-between border-b border-gray-300 px-6 ">
           <Link to="/" className="flex items-center gap-2 font-bold text-xl">
-            TUTORIAM
+            E-SCHOOL
           </Link>
           <Button
             variant="ghost"
