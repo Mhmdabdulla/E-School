@@ -14,16 +14,16 @@ export const userRoutes = (
       <Route path="/be-instructor" element={<BecomeInstructorPage />} />
       <Route path="/be-instructor/apply" element={<InstructorApply/>} />
 
-        <Route path="/user" element={<UserProfile />}>
+      <Route path="/user" element={<UserProfile />}>
     <Route index element={<Navigate to="dashboard" />} />
     <Route path="dashboard" element={<UserDashboard />} />
     <Route path="settings" element={<AccountSettings />} />
-    {/* <Route path="courses" element={<UserCourses />} />
-    <Route path="messages" element={<MessagingPage />} />
-    <Route path="messages/:chatId" element={<MessagingPage />} />
-    <Route path="purchase-history" element={<PurchaseHistoryContent />} />
-    <Route path="instructors" element={<InstructorsPage/>}/>
-    <Route path="certificates" element={<CertificatesPage/>}/> */}
+    {/* <Route path="courses" element={<UserCourses />} /> */}
+    {/* <Route path="messages" element={<MessagingPage />} /> */}
+    {/* <Route path="messages/:chatId" element={<MessagingPage />} /> */}
+    {/* <Route path="purchase-history" element={<PurchaseHistoryContent />} /> */}
+    {/* <Route path="instructors" element={<InstructorsPage/>}/> */}
+    {/* <Route path="certificates" element={<CertificatesPage/>}/> */}
   </Route>
     </Route>
     </>

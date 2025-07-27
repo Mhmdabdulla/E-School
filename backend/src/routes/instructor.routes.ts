@@ -10,7 +10,7 @@ import TYPES from "../di/types";
 import { IInstructorController } from "../controllers/interfaces/IInstructorController";
 
 const ctrl = container.get<IInstructorController>(TYPES.InstructorController)
-// get instructors
+
 
 
 router.get("/",authMiddleware([UserRole.ADMIN]),ctrl.getAllInstructors);

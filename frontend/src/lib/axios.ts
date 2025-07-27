@@ -6,6 +6,7 @@ import {logout  } from '../redux/slices/authSlice'
 const apiClient = axios.create({ 
   baseURL:import.meta.env.VITE_BASE_URL,
   withCredentials: true, 
+  
 });
 
 apiClient.interceptors.request.use(
