@@ -1,3 +1,5 @@
+
+import { ConfirmDialog } from "../../components/common/ConfirmationDialogue";
 import { GenericPagination } from "../../components/common/pagination";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar";
 import { Badge } from "../../components/ui/badge";
@@ -42,6 +44,9 @@ const UsersPage = () => {
   const [search, setSearch] = useState<string>("")
   const [searchQuery, setSearchQuery] = useState<string>("")
 
+  const [selectedUserId,setSelectedUserId] = useState<string | null>(null);
+  const [confirmDialogOpen, setConfirmDialogOpen ] = useState<boolean>(false)
+
   useEffect(()=> {
     const debouce = setTimeout(()=>{
         setSearchQuery(search)
@@ -66,32 +71,29 @@ const UsersPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, searchQuery]);
 
-  const handleChangeStatus = async (userId: string) => {
-    const response = await toggleUserStatus(userId);
-    if (response.status === 200) {
-      setUsers((prevUsers) =>
-        prevUsers.map((user) => {
-          if (user._id === userId) {
-            return {
-              ...user,
-              status: user.status === "active" ? "blocked" : "active",
-            };
-          }
-          return user;
-        })
-      );
-      toast.success(
-        response.data.message || "user status changed successfully",
-        {
-          position: "top-right",
-        }
-      );
-    }else{
-        toast.error("error while changing user status. Please try again", 
-            {position:"top-right"}
-        )
-    }
-  };
+  const confirmChangeStatus = async () => {
+  if (!selectedUserId) return;
+
+  const response = await toggleUserStatus(selectedUserId);
+  if (response.status === 200) {
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user._id === selectedUserId
+          ? { ...user, status: user.status === "active" ? "blocked" : "active" }
+          : user
+      )
+    );
+    toast.success(response.data.message || "User status changed", {
+      position: "top-right",
+    });
+  } else {
+    toast.error("Error while changing user status", { position: "top-right" });
+  }
+
+  setConfirmDialogOpen(false);
+  setSelectedUserId(null);
+};
+
   return (
     <div className="flex-1 space-y-4 md:pl-64">
       <div className="flex items-center justify-between mt-2">
@@ -160,7 +162,10 @@ const UsersPage = () => {
                         <DropdownMenuItem>Send email</DropdownMenuItem> */}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => handleChangeStatus(user._id)}
+                          onClick={() => {
+                            setSelectedUserId(user._id)
+                            setConfirmDialogOpen(true)
+                          }}
                         >
                           {user.status === "active"
                             ? "Block user"
@@ -178,6 +183,18 @@ const UsersPage = () => {
       { totalPages > 1 &&
       <GenericPagination currentPage={page} onPageChange={setPage} totalPages={totalPages}/>
       }
+      <ConfirmDialog
+      open={confirmDialogOpen}
+      title="Change user status?"
+      description="Are you sure you want to block/unblock this user?"
+      confirmText="Yes"
+      cancelText="No"
+      onConfirm={confirmChangeStatus}
+      onCancel={() => {
+      setConfirmDialogOpen(false);
+      setSelectedUserId(null);
+  }}
+      />
     </div>
     
   );

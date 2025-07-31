@@ -1,3 +1,4 @@
+import { ConfirmDialog } from "../../components/common/ConfirmationDialogue";
 import { GenericPagination } from "../../components/common/pagination";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
@@ -29,6 +30,9 @@ const CoursesPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState<boolean>(false)
+
   useEffect(() => {
     const debounce = setTimeout(() => {
       setSearchQuery(search);
@@ -51,22 +55,27 @@ const CoursesPage = () => {
     }
   };
 
-  const handleChangeStatus = async(courseId: string) => {
+  const handleChangeStatus = async() => {
+    if(!selectedCourseId)return
     try {
-        await toggleCourseStatus(courseId);
+        await toggleCourseStatus(selectedCourseId);
         setCourses(prev =>
           prev.map(course =>
-            course._id === courseId ? { ...course, status: !course.status } : course
+            course._id === selectedCourseId ? { ...course, status: !course.status } : course
           )
         );
         toast.info("course status changed successfully")
       } catch (error:any) {
        toast.error(error.message || "unexpected error while updating status")
       }
+
+      setSelectedCourseId(null);
+      setConfirmationDialogOpen(false)
   }
 
   useEffect(() => {
     getAllCourses();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, searchQuery]);
 
   return (
@@ -157,7 +166,10 @@ const CoursesPage = () => {
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             {/* <DropdownMenuItem>View details</DropdownMenuItem>
                             <DropdownMenuItem>Edit course</DropdownMenuItem> */}
-                            <DropdownMenuItem onClick={() => handleChangeStatus(course._id)}>{course.status ? "Unlist" : " List"}</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => {
+                              setSelectedCourseId(course._id)
+                              setConfirmationDialogOpen(true)
+                            }}>{course.status ? "Unlist" : " List"}</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -173,6 +185,20 @@ const CoursesPage = () => {
       {!isLoading && totalPages > 1 && (
         <GenericPagination currentPage={page} onPageChange={setPage} totalPages={totalPages} />
       )}
+
+      <ConfirmDialog 
+      open={confirmationDialogOpen}
+      title="Change Corse status?"
+      description="Are you sure you want to List/Unlist this course?"
+      confirmText="Yes"
+      cancelText="No"
+      onConfirm={handleChangeStatus}
+      onCancel={() => {
+      setConfirmationDialogOpen(false);
+      setSelectedCourseId(null);
+      }}
+      />
+
     </div>
   );
 };
