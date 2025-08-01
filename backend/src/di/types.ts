@@ -8,6 +8,7 @@ const TYPES = {
   ModuleController: Symbol.for("ModuleController"),
   LessonController: Symbol.for("LessonController"),
   CategoryController: Symbol.for("CategoryController"),
+  CartController: Symbol.for("CartController"),
   
 
   //SERVICES
@@ -18,6 +19,7 @@ const TYPES = {
   ModuleService: Symbol.for("ModuleService"),
   LessonService: Symbol.for("LessonService"),
   CategoryService: Symbol.for("CategoryService"),
+  CartService: Symbol.for("CartService"),
 
   //REPOSITORIES
   AuthRepository: Symbol.for("AuthRepository"),
@@ -27,6 +29,7 @@ const TYPES = {
   ModuleRepository: Symbol.for("ModuleRepository"),
   LessonRepository: Symbol.for("LessonRepository"),
   CategoryRepository: Symbol.for("CategoryRepsoitory"),
+  CartRepository: Symbol.for("CartRepository"),
 };
 
 export default TYPES;

@@ -2,13 +2,12 @@
 import { Clock, BarChart, Users, Globe, CheckCircle, Download, BookOpenText } from "lucide-react"
 import { Button } from "../../ui/button"
 import { toast } from "sonner"
-// import { useAppDispatch } from "../../../redux/store"
-// import { addToCart } from "../../../redux/thunks/cartThunk"
+import { useAppDispatch } from "../../../redux/store"
+import { addToCart } from "../../../redux/thunks/cartThunk"
 import { useEffect, } from "react"
 // import { enrollUserIntoCourse, fetchUserEnrollmentStatus } from "@/services/enrollmentService"
 // import { Link } from "react-router-dom"
-// import { addCourseToWishlist } from "@/services/wishlistService"
-// import { addCourseToWishlist } from "@/services/wishlistService"
+import { addCourseToWishlist } from "../../../services/wishlistService"
 // import type { EnrolledCourse } from "../../../types/enrollment"
 
 export default function CourseSidebar({
@@ -20,14 +19,13 @@ export default function CourseSidebar({
   language,
 }: any) {
 //   const [isUserEnrolled, setIsUserEnrolled] = useState<EnrolledCourse>()
-//   const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
 
   const handleAddToCart = async () => {
     try {
-    //   const result = await dispatch(addToCart(id))
-    //   toast.success("course added to cart", {position:"top-right"})
-    //   console.log(result)
-    console.log('Item added to cart')
+      const result = await dispatch(addToCart(id))
+      toast.success("course added to cart", {position:"top-right"})
+      console.log(result)
     } catch (error:any) {
       toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})
     }
@@ -35,8 +33,8 @@ export default function CourseSidebar({
 
   const handleAddToWishlist = async () => {
     try {
-    //   await addCourseToWishlist(id)
-    //   toast.success("course added to wishlist", {position:"top-right"})
+      await addCourseToWishlist(id)
+      toast.success("course added to wishlist", {position:"top-right"})
     console.log("item added to wishlist")
     } catch (error:any) {
       toast.error(error.data.message ||"error while adding course to cart", {position:"top-right"})

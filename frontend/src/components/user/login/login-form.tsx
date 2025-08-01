@@ -10,10 +10,10 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-// import { useAppDispatch } from "../../../redux/store"
-// import { fetchCartItems } from "@/redux/thunks/cartThunk"
 import { motion } from "framer-motion"
 import ForgotPasswordDialog from "../../../components/common/forgot-password-dialog"
+import { useAppDispatch } from "../../../redux/store"
+import { fetchCartItems } from "../../../redux/thunks/cartThunk"
 // import { fetchNotificationsThunk } from "@/redux/thunks/notificationThunk"
 
 const formSchema = z.object({
@@ -30,7 +30,7 @@ type FormData = z.infer<typeof formSchema>
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
   const dispatch = useDispatch()
-  // const appDispatch = useAppDispatch()
+  const appDispatch = useAppDispatch()
   const navigate = useNavigate()
 
   const {
@@ -44,9 +44,8 @@ const LoginForm = () => {
   const onSubmit = async (data: FormData) => {
     const { email, password } = data
     const response = await login(email, password, dispatch)
-    console.log(response)
     if (response.status === 200) {
-      // appDispatch(fetchCartItems())
+      appDispatch(fetchCartItems())
       // appDispatch(fetchNotificationsThunk())
       navigate("/")
     } else {

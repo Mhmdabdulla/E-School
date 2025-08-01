@@ -11,6 +11,7 @@ import categoryRoute from './routes/category.routes'
 import courseRoute from './routes/course.routes'
 import lessonRoute from './routes/lesson.routes'
 import moduleRoute from './routes/module.routes'
+import cartRoute from './routes/cart.routes'
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 const app = express();
@@ -33,6 +34,7 @@ app.use('/api/categories', categoryRoute)
 app.use('/api/courses', courseRoute)
 app.use('/api/lessons', lessonRoute)
 app.use('/api/modules', moduleRoute)
+app.use('/api/carts',cartRoute)
 
 app.use(errorHandler)
 

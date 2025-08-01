@@ -16,14 +16,14 @@ export interface ICategory extends Document {
 
 const SubcategorySchema = new Schema<ISubcategory>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true,unique:true },
   },
   { timestamps: true }
 );
 
 const CategorySchema = new Schema<ICategory>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique:true },
     status: { type: Boolean, required: true, default: true },
     subcategories: [SubcategorySchema],
     courses: { type: Number, required: true, default: 0 },

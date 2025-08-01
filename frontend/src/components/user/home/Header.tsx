@@ -13,7 +13,7 @@ import { MobileSidebar } from "../../common/MobileSideBar";
 
 const Header = () => {
   const user = useSelector((state: any) => state.auth.user);
-  const cartCount = 3
+  const cartCount = useSelector((state: any) => state.cart.cartItems.length)
   const isAdmin = localStorage.getItem("adminLoggedIn") === "true"
   const dispatch = useDispatch();
   const navigate = useNavigate();

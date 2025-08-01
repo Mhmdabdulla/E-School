@@ -57,6 +57,14 @@ import { CategoryService } from "../services/category.service";
 import { CategoryRepository } from "../repositories/category.repository";
 import { ICategoryRepository } from "../repositories/interfaces/ICategoryRepository";
 
+//cart
+import { ICartController } from "../controllers/interfaces/ICartController";
+import { CartController } from "../controllers/cart.controller";
+import { ICartService } from "../services/interfaces/ICartService";
+import { CartService } from "../services/cart.service";
+import { ICartRepository } from "../repositories/interfaces/ICartRepository";
+import { CartRepository } from "../repositories/cart.repository";
+
 const container = new Container();
 
 container.bind<IAuthRepository>(TYPES.AuthRepository).to(AuthRepository);
@@ -86,5 +94,9 @@ container.bind<ILessonRepository>(TYPES.LessonRepository).to(LessonRepository)
 container.bind<ICategoryController>(TYPES.CategoryController).to(CategoryController)
 container.bind<ICategoryService>(TYPES.CategoryService).to(CategoryService)
 container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryRepository)
+
+container.bind<ICartController>(TYPES.CartController).to(CartController)
+container.bind<ICartService>(TYPES.CartService).to(CartService)
+container.bind<ICartRepository>(TYPES.CartRepository).to(CartRepository)
 
 export default container;
