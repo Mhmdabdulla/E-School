@@ -46,6 +46,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/stripe": "^8.0.417",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
     "eslint": "^9.31.0",
@@ -54,6 +55,7 @@
     "globals": "^16.3.0",
     "ioredis": "^5.6.1",
     "prettier": "^3.6.2",
+    "stripe": "^18.4.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.37.0"

@@ -1,6 +1,7 @@
 import { LoginResponseDTO } from "../dto/response/auth.response.dto";
 import { ICourse } from "../models/Course";
 import { IInstructor } from "../models/instructor.model";
+import { IOrder } from "../models/Order";
 
 import { IUser } from "../models/user.model";
 
@@ -14,6 +15,12 @@ export interface refreshedUser {
   accessToken: string;
   user: IUser 
 }
+
+export interface EnrolledStudent {
+  user: Partial<IUser>;
+  enrollmentDate: Date;
+}
+
 
 export interface AdminDashboardStats {
   totalUsers: number | null;
@@ -50,3 +57,24 @@ export interface PaginatedUsersResponse {
   users: IUser[] | null;
 }
 
+export interface PaginatedOrdersResponse {
+  totalOrders: number;
+  totalPages: number;
+  currentPage: number;
+  orders: IOrder[] | null;
+}
+
+export interface InstructorRating {
+  averageRating: number
+  totalReviews: number
+  breakdown: {
+    rating: number;
+    count: any;
+    percentage: number;
+}[]
+}
+
+export interface InstructorStats {
+  coursesSold: number;
+  studentCount: number;
+}

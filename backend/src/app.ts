@@ -12,6 +12,9 @@ import courseRoute from './routes/course.routes'
 import lessonRoute from './routes/lesson.routes'
 import moduleRoute from './routes/module.routes'
 import cartRoute from './routes/cart.routes'
+import paymentRoute from './routes/payment.routes'
+import orderRoute from './routes/order.routes'
+import webhookRoutes from './routes/webhook.routes'
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 const app = express();
@@ -22,6 +25,9 @@ app.use(cors({
   origin: allowedOrigin,
   credentials: true, //  allow cookies/credentials
 }));
+
+app.use("/api/webhook", webhookRoutes);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -35,6 +41,8 @@ app.use('/api/courses', courseRoute)
 app.use('/api/lessons', lessonRoute)
 app.use('/api/modules', moduleRoute)
 app.use('/api/carts',cartRoute)
+app.use('/api/payments',paymentRoute)
+app.use('/api/orders',orderRoute)
 
 app.use(errorHandler)
 

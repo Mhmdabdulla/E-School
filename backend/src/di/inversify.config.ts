@@ -65,6 +65,26 @@ import { CartService } from "../services/cart.service";
 import { ICartRepository } from "../repositories/interfaces/ICartRepository";
 import { CartRepository } from "../repositories/cart.repository";
 
+//payment
+import { IPaymentController } from "../controllers/interfaces/IPaymentController";
+import { PaymentController } from "../controllers/payment.controller";
+import { IPaymentService } from "../services/interfaces/IPaymentService";
+import { PaymentService } from "../services/paymentService";
+
+//order
+import { IOrderController } from "../controllers/interfaces/IorderController";
+import { OrderController } from "../controllers/order.controller";
+import { OrderService } from "../services/order.service";
+import { IOrderService } from "../services/interfaces/IOrderService";
+import { IOrderRepository } from "../repositories/interfaces/IOrderRepository";
+import { OrderRepository } from "../repositories/order.repository";
+import { IEnrollmentController } from "../controllers/interfaces/IEnrollmentController";
+import { EnrollmentController } from "../controllers/enrollment.controller";
+import { IEnrollmentService } from "../services/interfaces/IEnrollmentService";
+import { EnrollmentService } from "../services/enrollment.service";
+import { IEnrollmentRepository } from "../repositories/interfaces/IEnrollmentRepository";
+import { EnrollmentRepository } from "../repositories/enrollment.repository";
+
 const container = new Container();
 
 container.bind<IAuthRepository>(TYPES.AuthRepository).to(AuthRepository);
@@ -98,5 +118,16 @@ container.bind<ICategoryRepository>(TYPES.CategoryRepository).to(CategoryReposit
 container.bind<ICartController>(TYPES.CartController).to(CartController)
 container.bind<ICartService>(TYPES.CartService).to(CartService)
 container.bind<ICartRepository>(TYPES.CartRepository).to(CartRepository)
+
+container.bind<IPaymentController>(TYPES.PaymentController).to(PaymentController)
+container.bind<IPaymentService>(TYPES.PaymentService).to(PaymentService)
+
+container.bind<IOrderController>(TYPES.OrderController).to(OrderController)
+container.bind<IOrderService>(TYPES.OrderService).to(OrderService)
+container.bind<IOrderRepository>(TYPES.OrderRepository).to(OrderRepository)
+
+container.bind<IEnrollmentController>(TYPES.EnrollmentController).to(EnrollmentController)
+container.bind<IEnrollmentService>(TYPES.EnrollmentService).to(EnrollmentService)
+container.bind<IEnrollmentRepository>(TYPES.EnrollmentRepository).to(EnrollmentRepository)
 
 export default container;
