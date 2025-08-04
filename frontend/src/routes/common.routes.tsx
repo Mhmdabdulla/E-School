@@ -6,18 +6,22 @@ import { UserRole } from "../lib/constants/role";
 import UserCoursesPage from "../pages/user/CorsePage";
 import UserCourseDetailsPage from "../pages/user/CourseDetails";
 import CartPage from "../pages/user/CartPage";
+import PaymentSuccess from "../pages/user/PaymentSuccess";
 
 export const commonRoutes = (
-    <>
+  <>
     <Route path="/login" element={<Login />} />
     <Route path="/" element={<Home />} />
+    <Route path="/payment-success" element={<PaymentSuccess/>} />
 
-    <Route element={<ProtectedRoute role={[UserRole.USER, UserRole.INSTRUCTOR]} />}>
+
+    <Route
+      element={<ProtectedRoute role={[UserRole.USER, UserRole.INSTRUCTOR]} />}
+    >
       <Route path="/courses" element={<UserCoursesPage />} />
       <Route path="/courses/:courseId" element={<UserCourseDetailsPage />} />
       <Route path="/cart" element={<CartPage />} />
       {/* <Route path="/wishlist" element={<WishlistPage />} /> */}
     </Route>
-    </>
-    
+  </>
 );

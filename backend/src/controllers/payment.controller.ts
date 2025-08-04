@@ -17,6 +17,7 @@ export class PaymentController implements IPaymentController {
 
 
         const sessionUrl = await this.paymentService.createStripeSession(userId as string, courseIds)
+        console.log(sessionUrl)
         res.status(STATUS_CODES.OK).json({ url: sessionUrl });
     }
 

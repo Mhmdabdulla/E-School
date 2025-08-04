@@ -84,6 +84,10 @@ import { IEnrollmentService } from "../services/interfaces/IEnrollmentService";
 import { EnrollmentService } from "../services/enrollment.service";
 import { IEnrollmentRepository } from "../repositories/interfaces/IEnrollmentRepository";
 import { EnrollmentRepository } from "../repositories/enrollment.repository";
+import { IWebhookController } from "../controllers/interfaces/IWebhookController";
+import { WebhookController } from "../controllers/webhook.controller";
+import { IWebhookService } from "../services/interfaces/IWebhookService";
+import { WebhookService } from "../services/webhook.service";
 
 const container = new Container();
 
@@ -129,5 +133,8 @@ container.bind<IOrderRepository>(TYPES.OrderRepository).to(OrderRepository)
 container.bind<IEnrollmentController>(TYPES.EnrollmentController).to(EnrollmentController)
 container.bind<IEnrollmentService>(TYPES.EnrollmentService).to(EnrollmentService)
 container.bind<IEnrollmentRepository>(TYPES.EnrollmentRepository).to(EnrollmentRepository)
+
+container.bind<IWebhookController>(TYPES.WebhookController).to(WebhookController)
+container.bind<IWebhookService>(TYPES.WebhookService).to(WebhookService)
 
 export default container;

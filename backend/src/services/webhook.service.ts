@@ -32,6 +32,8 @@ export class WebhookService implements IWebhookService{
 
         for(const courseId of courseIds){
             await this.enrollmentService.enrollUserIntoCourse(userId, courseId);
+
+            
         }
        
 

@@ -59,8 +59,8 @@ export class PaymentService implements IPaymentService {
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: `${process.env.CLIENT_URL}/payment-success`,
-      cancel_url: `${process.env.CLIENT_URL}/payment-cancel`,
+      success_url: `${process.env.NGORK_URL_FRONDEND}/payment-success`,
+      cancel_url: `${process.env.NGORK_URL_FRONDEND}/payment-cancel`,
       metadata: {
         userId,
         courseIds: courseIds.join(","),
