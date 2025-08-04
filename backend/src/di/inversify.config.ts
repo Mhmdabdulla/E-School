@@ -88,6 +88,12 @@ import { IWebhookController } from "../controllers/interfaces/IWebhookController
 import { WebhookController } from "../controllers/webhook.controller";
 import { IWebhookService } from "../services/interfaces/IWebhookService";
 import { WebhookService } from "../services/webhook.service";
+import { ITransactionController } from "../controllers/interfaces/ITransactionController";
+import { TransactionController } from "../controllers/transaction.controller";
+import { ITransactionService } from "../services/interfaces/ITransactionService";
+import { TransactionService } from "../services/transaction.service";
+import { ITransactionRepository } from "../repositories/interfaces/ITransactionRepository";
+import { TransactionRepository } from "../repositories/transaction.repository";
 
 const container = new Container();
 
@@ -136,5 +142,9 @@ container.bind<IEnrollmentRepository>(TYPES.EnrollmentRepository).to(EnrollmentR
 
 container.bind<IWebhookController>(TYPES.WebhookController).to(WebhookController)
 container.bind<IWebhookService>(TYPES.WebhookService).to(WebhookService)
+
+container.bind<ITransactionController>(TYPES.TransactionController).to(TransactionController)
+container.bind<ITransactionService>(TYPES.TransactionService).to(TransactionService)
+container.bind<ITransactionRepository>(TYPES.TransactionRepository).to(TransactionRepository)
 
 export default container;
