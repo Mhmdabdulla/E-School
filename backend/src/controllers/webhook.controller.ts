@@ -23,7 +23,7 @@ export class WebhookController implements IWebhookController {
       return;
     }
 
-    console.log(event)
+
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       await this.webhookService.handleCheckoutSuccess(session);

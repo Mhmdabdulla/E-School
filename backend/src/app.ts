@@ -15,6 +15,8 @@ import cartRoute from './routes/cart.routes'
 import paymentRoute from './routes/payment.routes'
 import orderRoute from './routes/order.routes'
 import webhookRoutes from './routes/webhook.routes'
+import walletRoute from './routes/wallet.routes'
+import transactionRoute from './routes/transaction.routes'
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 const app = express();
@@ -43,6 +45,8 @@ app.use('/api/modules', moduleRoute)
 app.use('/api/carts',cartRoute)
 app.use('/api/payments',paymentRoute)
 app.use('/api/orders',orderRoute)
+app.use('/api/wallets', walletRoute)
+app.use('/api/transactions', transactionRoute)
 
 app.use(errorHandler)
 
