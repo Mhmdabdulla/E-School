@@ -14,6 +14,7 @@ const TYPES = {
   EnrollmentController: Symbol.for("EnrollmentController"),
   WebhookController: Symbol.for("WebhookController"),
   TransactionController: Symbol.for("TransactionController"),
+  WalletController: Symbol.for("WalletController"),
   
 
   //SERVICES
@@ -30,6 +31,7 @@ const TYPES = {
   EnrollmentService: Symbol.for("EnrollmentService"),
   WebhookService: Symbol.for("WebhookService"),
   TransactionService: Symbol.for("TransactionService"),
+  WalletService: Symbol.for("WalletService"),
 
   //REPOSITORIES
   AuthRepository: Symbol.for("AuthRepository"),
@@ -42,7 +44,8 @@ const TYPES = {
   CartRepository: Symbol.for("CartRepository"),
   OrderRepository: Symbol.for("OrderRepository"),
   EnrollmentRepository: Symbol.for("EnrollmentRepository"),
-  TransactionRepository: Symbol.for("TransactionRepository")
+  TransactionRepository: Symbol.for("TransactionRepository"),
+  WalletRepository: Symbol.for("WalletRepository")
 };
 
 export default TYPES;

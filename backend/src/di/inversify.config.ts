@@ -94,6 +94,12 @@ import { ITransactionService } from "../services/interfaces/ITransactionService"
 import { TransactionService } from "../services/transaction.service";
 import { ITransactionRepository } from "../repositories/interfaces/ITransactionRepository";
 import { TransactionRepository } from "../repositories/transaction.repository";
+import { IWalletController } from "../controllers/interfaces/IWalletController";
+import { WalletController } from "../controllers/wallet.controller";
+import { IWalletService } from "../services/interfaces/IWalletService";
+import { WalletService } from "../services/wallet.service";
+import { IWalletRepository } from "../repositories/interfaces/IWalletRepository";
+import { WalletRepository } from "../repositories/wallet.repository";
 
 const container = new Container();
 
@@ -146,5 +152,9 @@ container.bind<IWebhookService>(TYPES.WebhookService).to(WebhookService)
 container.bind<ITransactionController>(TYPES.TransactionController).to(TransactionController)
 container.bind<ITransactionService>(TYPES.TransactionService).to(TransactionService)
 container.bind<ITransactionRepository>(TYPES.TransactionRepository).to(TransactionRepository)
+
+container.bind<IWalletController>(TYPES.WalletController).to(WalletController)
+container.bind<IWalletService>(TYPES.WalletService).to(WalletService)
+container.bind<IWalletRepository>(TYPES.WalletRepository).to(WalletRepository)
 
 export default container;
