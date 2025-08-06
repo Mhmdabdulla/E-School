@@ -91,4 +91,44 @@ export class InstructorRepository
     return await Instructor.findOneAndUpdate({ userId }, data, { new: true });
   };
 
+  async findInstructorsByUserId(
+    instructorIds: string[],
+    skip: number,
+    limit: number,
+    searchQuery?: string
+  ): Promise<IInstructor[] | null> {
+    const pipeline: any[] = [
+      {
+        $match: {
+          userId: { $in: instructorIds.map((id) => new mongoose.Types.ObjectId(id)) },
+          "adminApproval.status": "approved",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userId",
+        },
+      },
+      {
+        $unwind: "$userId",
+      },
+    ];
+
+    if (searchQuery) {
+      pipeline.push({
+        $match: {
+          "userId.name": { $regex: searchQuery, $options: "i" },
+        },
+      });
+    }
+
+    pipeline.push({ $skip: skip }, { $limit: limit });
+
+    return await Instructor.aggregate(pipeline);
+  }
+
+
 }

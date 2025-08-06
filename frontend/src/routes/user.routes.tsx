@@ -10,6 +10,8 @@ import UserCourses from "../components/user/enrolled-courses/enrolled-courses-pa
 import WatchCoursePage from "../components/user/watch-course/watch-course-page"
 import PaymentSuccess from "../components/common/PaymentSuccess";
 import PaymentFailed from "../components/common/PaymentFailed";
+import { InstructorsPage } from "../components/user/instructors/instructor-page";
+import PurchaseHistoryContent from "../components/user/purchase-history/purchase-history-content";
 
 export const userRoutes = (
     <>
@@ -26,10 +28,10 @@ export const userRoutes = (
     <Route path="dashboard" element={<UserDashboard />} />
     <Route path="settings" element={<AccountSettings />} />
     <Route path="courses" element={<UserCourses />} />
+    <Route path="instructors" element={<InstructorsPage/>}/>
+    <Route path="purchase-history" element={<PurchaseHistoryContent />} />
     {/* <Route path="messages" element={<MessagingPage />} /> */}
     {/* <Route path="messages/:chatId" element={<MessagingPage />} /> */}
-    {/* <Route path="purchase-history" element={<PurchaseHistoryContent />} /> */}
-    {/* <Route path="instructors" element={<InstructorsPage/>}/> */}
     {/* <Route path="certificates" element={<CertificatesPage/>}/> */}
   </Route>
     </Route>

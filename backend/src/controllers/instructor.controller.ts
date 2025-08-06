@@ -1,10 +1,12 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { IInstructorController } from "./interfaces/IInstructorController";
 import { IInstructorService } from "../services/interfaces/IInstructorService";
 import {STATUS_CODES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { IInstructor } from "../models/instructor.model";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 
 @injectable()
@@ -55,5 +57,17 @@ export class InstructorController implements IInstructorController {
     res.status(STATUS_CODES.OK).json({ message: "instructor updated successfully", instructor });
   };
 
+  getEnrolledInstructorsForUser = async (req:Request,res:Response): Promise<void> =>{
+    const userId = req.user?._id as string;
+    const { searchQuery, page = 1, limit = 12 } = req.query;
+
+    const instructorswithPagination = await this.instructorService.getEnrolledInstructors(
+      userId,
+      Number(page),
+      Number(limit),
+      searchQuery as string
+    );
+    res.status(STATUS_CODES.OK).json({ message: "instructors fetched successfully", instructorswithPagination });
+  }
 
 }

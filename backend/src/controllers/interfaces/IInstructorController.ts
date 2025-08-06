@@ -6,6 +6,6 @@ export interface IInstructorController {
   updateInstrucotrProfile: RequestHandler;
   getUserApplications: RequestHandler;
   reviewInstructor: RequestHandler;
-//   getEnrolledInstructorsForUser:RequestHandler;
+  getEnrolledInstructorsForUser:RequestHandler;
   getAllInstructors: RequestHandler;
 }

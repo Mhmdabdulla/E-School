@@ -25,13 +25,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
 
-    /* Custom route */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
+
   },
   "include": ["src"]
 }
