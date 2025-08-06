@@ -12,6 +12,7 @@ import { IInstructorController } from "../controllers/interfaces/IInstructorCont
 
 const ctrl = container.get<IUserController>(TYPES.UserController)
 const instructorController = container.get<IInstructorController>(TYPES.InstructorController)
+const userController = container.get<IUserController>(TYPES.UserController)
 
 
 
@@ -28,5 +29,6 @@ router.patch("/change-password", authMiddleware([UserRole.USER, UserRole.ADMIN])
 router.get("/profile",authMiddleware([UserRole.USER,UserRole.ADMIN]),ctrl.getUserProfile)
 router.put("/profile", authMiddleware([UserRole.USER, UserRole.INSTRUCTOR, UserRole.ADMIN]), upload.single("profileImage"), ctrl.updateProfile);
 router.get("/applications", authMiddleware([UserRole.USER]), instructorController.getUserApplications);
+router.get("/dashboard", authMiddleware([UserRole.USER]), userController.getDashboardData )
 
 export default router

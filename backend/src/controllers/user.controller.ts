@@ -1,12 +1,11 @@
-import { Request, RequestHandler, Response } from "express";
+import { Request,  Response } from "express";
 import { IUserController } from "./interfaces/IUserController";
 import { IUserService } from '../services/interfaces/IUserService';
 import {STATUS_CODES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { uploadImageToS3 } from "../utils/s3Services";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
+
 
 
 @injectable()
@@ -107,5 +106,12 @@ export class UserController implements IUserController {
 
     res.status(STATUS_CODES.OK).json({ message: "password changed successfully" });
  }
+
+
+ getDashboardData = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user?._id as string;
+    const dashboardData = await this.userService.getDashboardData(userId);
+    res.status(STATUS_CODES.OK).json({ message: "user dashboard fetched successfully", dashboardData });
+  };
 
 }

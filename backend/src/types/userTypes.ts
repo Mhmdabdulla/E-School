@@ -1,5 +1,6 @@
 import { LoginResponseDTO } from "../dto/response/auth.response.dto";
 import { ICourse } from "../models/Course";
+import { IEnrollment } from "../models/Enrollment";
 import { IInstructor } from "../models/instructor.model";
 import { IOrder } from "../models/Order";
 
@@ -42,13 +43,13 @@ export interface PaginatedInstructorsResponse {
   instructors: IInstructor[] | null;
 }
 
-// export interface DashboardData {
-//   enrolledCourses: number
-//   activeCourses: number
-//   completedCourses: number
-//   instructors: number
-//   enrollments: IEnrollment[] | null
-// }
+export interface DashboardData {
+  enrolledCourses: number
+  activeCourses: number
+  completedCourses: number
+  instructors: number
+  enrollments: IEnrollment[] | null
+}
 
 export interface PaginatedUsersResponse {
   totalUsers: number;

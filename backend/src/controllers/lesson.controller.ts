@@ -47,7 +47,6 @@ export class LessonController implements ILessonController {
   };
 
   streamLesson = async (req: Request, res: Response): Promise<void> => {
-    console.log('is am working')
     const { lessonId } = req.params;
     const user = verifyRefreshToken(req.cookies.refreshToken);
 
@@ -81,7 +80,7 @@ export class LessonController implements ILessonController {
       lesson?.videoPublicId as string,
        60
     );
-    console.log('signed url',signedUrl)
+  
     const range = req.headers.range;
     if (!range) {
       res.status(STATUS_CODES.BAD_REQUEST).send("Requires Range header");

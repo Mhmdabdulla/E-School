@@ -8,5 +8,5 @@ export interface IUserController {
   becomeInstructor: (req: AuthenticatedRequest, res: Response) => Promise<void>;
   getAllUsers: RequestHandler;
   toggleUserStatus: RequestHandler;
-//   getDashboardData: RequestHandler;
+  getDashboardData: RequestHandler;
 }

@@ -1,5 +1,7 @@
 // import { EnrolledCourse } from "./enrollment";
 
+import type { EnrolledCourse } from "./enrollment";
+
 export interface IUser {
     _id:string
     name: string;
@@ -15,10 +17,10 @@ export interface IUser {
     updatedAt: Date;
   }
 
-//   export interface DashboardData {
-//     enrolledCourses: number
-//     activeCourses: number
-//     completedCourses: number
-//     instructors: number
-//     enrollments: EnrolledCourse[] | null
-//   }
+  export interface DashboardData {
+    enrolledCourses: number
+    activeCourses: number
+    completedCourses: number
+    instructors: number
+    enrollments: EnrolledCourse[] | null
+  }

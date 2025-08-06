@@ -8,16 +8,18 @@ import TYPES from "../di/types";
 import { BaseService } from "./base.service";
 import { IInstructor } from "../models/instructor.model";
 import { IInstructorRepository } from "../repositories/interfaces/IInstructorRepository";
-import { PaginatedUsersResponse } from "../types/userTypes";
+import { DashboardData, PaginatedUsersResponse } from "../types/userTypes";
 import { STATUS_CODES } from "../utils/constants";
 import { AppError } from "../utils/AppError";
+import { IEnrollmentRepository } from "../repositories/interfaces/IEnrollmentRepository";
 
 @injectable()
 export class UserService extends BaseService<IUser>  implements IUserService {
 
   constructor(
     @inject(TYPES.UserRepository) private userRepository:IUserRepository,
-    @inject(TYPES.InstructorRepository) private instructorRepository:IInstructorRepository
+    @inject(TYPES.InstructorRepository) private instructorRepository:IInstructorRepository,
+    @inject(TYPES.EnrollmentRepository) private enrollmentRepository:IEnrollmentRepository
   ){
     super(userRepository)
   }
@@ -117,6 +119,23 @@ export class UserService extends BaseService<IUser>  implements IUserService {
       console.error(error);
       throw new Error("error while fetching user");
     }
+  }
+
+  async getDashboardData(userId: string): Promise<DashboardData> {
+    const enrollments = (await this.enrollmentRepository.findEnrollmentsByUser(userId)) ?? [];
+    const instructors = (await this.enrollmentRepository.findDistinctInstructors(userId)).length;
+    const enrolledCourses = enrollments?.length ?? 0;
+    const coursesInProgress = enrollments?.filter((enroll) => !enroll.completed);
+    const activeCourses = coursesInProgress?.length ?? 0;
+    const completedCourses = enrollments?.filter((enroll) => enroll.completed).length ?? 0;
+
+    return {
+      enrolledCourses,
+      activeCourses,
+      completedCourses,
+      instructors,
+      enrollments: coursesInProgress?.slice(0, 4),
+    };
   }
 
 }
