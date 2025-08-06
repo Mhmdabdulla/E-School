@@ -18,6 +18,6 @@ router.put(
   lessonController.updateLesson
 );
 router.delete("/:lessonId", authMiddleware([UserRole.INSTRUCTOR]), lessonController.deleteLesson);
-// router.get("/:lessonId/stream", lessonController.streamLesson)
+router.get("/:lessonId/stream", lessonController.streamLesson)
 
 export default router;

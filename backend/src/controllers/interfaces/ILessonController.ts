@@ -4,5 +4,5 @@ export interface ILessonController {
   createLesson: RequestHandler;
   updateLesson: RequestHandler;
   deleteLesson: RequestHandler;
-//   streamLesson: RequestHandler;
+  streamLesson: RequestHandler;
 }

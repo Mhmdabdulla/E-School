@@ -1,13 +1,14 @@
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
 import s3Client from "../config/s3";
-import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import ffmpeg from "fluent-ffmpeg";
 import ffprobeInstaller from "@ffprobe-installer/ffprobe";
 // import { PassThrough } from "stream";
 import { tmpdir } from "os";
 import { writeFile, unlink } from "fs/promises";
 import path from "path";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 dotenv.config();
 // Export folder names for easier reference
@@ -141,3 +142,9 @@ export const deleteFileFromS3 = async (fileUrl: string): Promise<boolean> => {
     return false;
   }
 };
+
+
+export async function generateSignedUrl( key: string, expiresInSeconds: number = 60) {
+  const command = new GetObjectCommand({ Bucket: process.env.AWS_BUCKET_NAME!, Key: key });
+  return await getSignedUrl(s3Client, command, { expiresIn: expiresInSeconds });
+}

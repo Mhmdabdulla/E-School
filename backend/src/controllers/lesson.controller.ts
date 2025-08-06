@@ -6,12 +6,17 @@ import { STATUS_CODES } from "../utils/constants";
 import TYPES from "../di/types";
 
 import { ICourseService } from "../services/interfaces/ICourseService";
+import { verifyRefreshToken } from "../utils/jwt";
+import { IEnrollmentService } from "../services/interfaces/IEnrollmentService";
+import { generateSignedUrl } from "../utils/s3Services";
+import axios from "axios";
 
 @injectable()
 export class LessonController implements ILessonController {
   constructor(
     @inject(TYPES.LessonService) private lessonService: ILessonService,
-
+    @inject(TYPES.EnrollmentService)
+    private enrollmentService: IEnrollmentService,
     @inject(TYPES.CourseService) private courseService: ICourseService
   ) {}
 
@@ -41,5 +46,61 @@ export class LessonController implements ILessonController {
     res.status(STATUS_CODES.OK).json({ message: "lesson delete successfully" });
   };
 
+  streamLesson = async (req: Request, res: Response): Promise<void> => {
+    console.log('is am working')
+    const { lessonId } = req.params;
+    const user = verifyRefreshToken(req.cookies.refreshToken);
 
+    if (!user) {
+      res
+        .status(STATUS_CODES.UNAUTHORIZED)
+        .json({ message: "Unauthorized to access this route" });
+      return;
+    }
+    const userId = user?.userId;
+
+    const lesson = await this.lessonService.findById(lessonId);
+
+    const enrollment = await this.enrollmentService.findOne({
+      userId,
+      courseId: lesson?.courseId,
+    });
+
+    const isInstructor = await this.courseService.findOne({
+      _id: lesson?.courseId,
+      instructorId: userId as string,
+    });
+    if (!enrollment && !isInstructor) {
+      res
+        .status(STATUS_CODES.FORBIDDEN)
+        .json({ message: "you are not enrolled into this course" });
+      return;
+    }
+
+    const signedUrl = await generateSignedUrl(
+      lesson?.videoPublicId as string,
+       60
+    );
+    console.log('signed url',signedUrl)
+    const range = req.headers.range;
+    if (!range) {
+      res.status(STATUS_CODES.BAD_REQUEST).send("Requires Range header");
+      return;
+    }
+
+    const videoResponse = await axios.get(signedUrl, {
+      headers: { Range: range },
+      responseType: "stream",
+    });
+
+    res.status(STATUS_CODES.PARTIAL_CONTENT);
+    res.set({
+      "Content-Type": "video/mp4",
+      "Content-Length": videoResponse.headers["content-length"],
+      "Content-Range": videoResponse.headers["content-range"],
+      "Accept-Ranges": "bytes",
+    });
+
+    videoResponse.data.pipe(res);
+  };
 }
