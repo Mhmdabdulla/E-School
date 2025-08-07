@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -14,10 +15,13 @@ import type { Category } from "../../../types/category"
 export const basicInformationSchema = z.object({
   title: z
     .string({ message: "Please enter a title" })
+    .trim()
     .min(5, "Title should be at least 5 characters long")
-    .max(80, "Title must be less than 80 characters"),
+    .max(80, "Title must be less than 80 characters")
+    .regex(/[a-zA-Z0-9]/, "Title must contain at least one letter or number"),
   subtitle: z
     .string()
+    .trim()
     .min(10, "Subtitle should be at least 10 characters long")
     .max(120, "Subtitle must be less than 120 characters"),
   category: z.string({message:"Please select a category"}).min(1, "Please select a category"),

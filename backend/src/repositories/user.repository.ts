@@ -13,7 +13,7 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   }
 
   async findUserById(userId: string):Promise<IUser| null> {
-    return await User.findById(userId)
+    return await User.findById(userId).select('-password -__v')
   }
 
 
@@ -29,19 +29,21 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
           },
         ],
         { new: true }
-      )
+      ).select('-password -__v')
   }
 
   async findAllUsers(skip: number, limit: number, filter:FilterQuery<IUser>): Promise<IUser[] | null> {
-    return await User.find(filter).skip(skip).limit(limit)
+    return await User.find(filter)
+    .select('-password -__v')
+    .skip(skip).limit(limit)
   }
 
   async findUserByGoogleId(googleId: string): Promise<IUser | null> {
-      return await User.findOne({googleId})
+      return await User.findOne({googleId}).select('-password -__v')
   }
 
   async updateById(userId: string, updateData: Partial<IUser>): Promise<IUser | null> {
-      return await User.findByIdAndUpdate(userId, updateData,{new:true})
+      return await User.findByIdAndUpdate(userId, updateData,{new:true}).select('-password -__v')
   }
 
   async getAdminDashboardData():Promise<AdminDashboardStats>{
