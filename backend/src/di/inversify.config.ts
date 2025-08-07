@@ -100,6 +100,12 @@ import { IWalletService } from "../services/interfaces/IWalletService";
 import { WalletService } from "../services/wallet.service";
 import { IWalletRepository } from "../repositories/interfaces/IWalletRepository";
 import { WalletRepository } from "../repositories/wallet.repository";
+import { AdminController } from "../controllers/admin.controller";
+import { IAdminController } from "../controllers/interfaces/IAdminController";
+import { IAdminService } from "../services/interfaces/IAdminService";
+import { AdminService } from "../services/admin.service";
+import { AdminRepository } from "../repositories/admin.repository";
+import { IAdminRepository } from "../repositories/interfaces/IAdminRepository";
 
 const container = new Container();
 
@@ -156,5 +162,9 @@ container.bind<ITransactionRepository>(TYPES.TransactionRepository).to(Transacti
 container.bind<IWalletController>(TYPES.WalletController).to(WalletController)
 container.bind<IWalletService>(TYPES.WalletService).to(WalletService)
 container.bind<IWalletRepository>(TYPES.WalletRepository).to(WalletRepository)
+
+container.bind<IAdminController>(TYPES.AdminController).to(AdminController)
+container.bind<IAdminService>(TYPES.AdminService).to(AdminService)
+container.bind<IAdminRepository>(TYPES.AdminRepository).to(AdminRepository)
 
 export default container;
