@@ -12,6 +12,9 @@ import PaymentSuccess from "../components/common/PaymentSuccess";
 import PaymentFailed from "../components/common/PaymentFailed";
 import { InstructorsPage } from "../components/user/instructors/instructor-page";
 import PurchaseHistoryContent from "../components/user/purchase-history/purchase-history-content";
+import MessagingPage from "../components/user/messages/messaging-page";
+import CertificatesPage from "../pages/user/certificates-page";
+
 
 export const userRoutes = (
     <>
@@ -30,9 +33,9 @@ export const userRoutes = (
     <Route path="courses" element={<UserCourses />} />
     <Route path="instructors" element={<InstructorsPage/>}/>
     <Route path="purchase-history" element={<PurchaseHistoryContent />} />
-    {/* <Route path="messages" element={<MessagingPage />} /> */}
+    <Route path="messages" element={<MessagingPage />} />
     {/* <Route path="messages/:chatId" element={<MessagingPage />} /> */}
-    {/* <Route path="certificates" element={<CertificatesPage/>}/> */}
+    <Route path="certificates" element={<CertificatesPage/>}/>
   </Route>
     </Route>
     </>
