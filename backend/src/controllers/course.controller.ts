@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { STATUS_CODES } from "../utils/constants";
 import  TYPES  from "../di/types";
 import { ICourseService } from "../services/interfaces/ICourseService";
+import { ICourse } from "../models/Course";
 
 @injectable()
 export class CourseController implements ICourseController {
@@ -72,14 +73,15 @@ export class CourseController implements ICourseController {
     const files = req.files ? (req.files as { [fieldname: string]: Express.Multer.File[] }) : undefined;
     
 
-    if(data.title){
-      const course = await this.courseService.findOne({title: data.title})
-      const isCourseExists = course?._id !== courseId
-      if(isCourseExists){
-        res.status(STATUS_CODES.CONFLICT).json({message: "course name already exist"})
-        return
-      }
-    }
+    const _currentCourse:ICourse | null = await this.courseService.findById(courseId);
+
+if (data?.title && data?.title !== _currentCourse?.title) {
+  const _course:ICourse | null = await this.courseService.findOne({ title: data.title });
+  if (_course && _course?._id !== courseId) {
+    res.status(STATUS_CODES.CONFLICT).json({ message: "course name already exists" });
+    return;
+  }
+}
     const course = await this.courseService.updateCourse(courseId, data, files);
     res.status(STATUS_CODES.OK).json({ message: "course updated successfully", course });
   };

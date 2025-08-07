@@ -90,7 +90,26 @@ export function AccountSettings() {
     return updatedFields;
   };
 
+  function validateName(name: string): string | null {
+  const trimmed = name.trim();
+  if (!trimmed) return "Name is required.";
+  if (trimmed.length < 2) return "Name must be at least 2 characters.";
+  if (trimmed.length > 30) return "Name must be less than 30 characters.";
+  if (!/[a-zA-Z]/.test(trimmed)) return "Name must contain at least one letter.";
+  return null;
+}
+
+
   const handleSave = async () => {
+
+    const nameError = validateName(firstName);
+  if (nameError) {
+    toast.error(nameError, {
+  position: "top-right",
+  duration: 2000
+});
+    return;
+  }
     const { biography, phoneCode, phoneNumber, ...basicInstructorDetails } = getUpdatedData() ?? {};
 
     console.log(biography, phoneCode, phoneNumber, basicInstructorDetails);

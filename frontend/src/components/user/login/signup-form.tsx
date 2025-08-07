@@ -65,8 +65,14 @@ const passwordSchema = z
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
+    firstName: z.string()
+    .trim()
+    .min(1, "First name is required")
+    .regex(/[a-zA-Z]/, "First name must contain at least one letter"),
+    lastName: z.string()
+    .trim()
+    .min(1, "Last name is required")
+    .regex(/[a-zA-Z]/, "Last name must contain at least one letter"),
     email: z.string().email("Please enter a valid email address"),
     password: passwordSchema,
   })

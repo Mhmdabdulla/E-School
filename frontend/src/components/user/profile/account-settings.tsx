@@ -7,6 +7,7 @@ import profilePlaceholder from "/profile_placeholder.png";
 import { getUserProfile, updateProfile } from "../../../services/userServices";
 import { useDispatch } from "react-redux";
 import ChangePassword from "./change-password";
+import { toast } from "sonner";
 
 interface User {
   _id: string;
@@ -66,6 +67,46 @@ const AccountSettings: React.FC = () => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
+    const trimmedTitle = title.trim();
+    const letterRegex = /[a-zA-Z]/;
+
+    if (!trimmedFirstName) {
+      toast.error("First name is required.", {
+  position: "top-right",
+  duration: 2000
+});
+      return;
+    }
+   if (!letterRegex.test(trimmedFirstName)) {
+     toast.error("First name must contain at least one letter.", {
+  position: "top-right",
+  duration: 2000
+});
+    return;
+    }
+   if (!trimmedLastName) {
+     toast.error("Last name is required.", {
+  position: "top-right",
+  duration: 2000
+});
+     return;
+    }
+   if (!letterRegex.test(trimmedLastName)) {
+     toast.error("Last name must contain at least one letter.", {
+  position: "top-right",
+  duration: 2000
+});
+     return;
+    }
+   if (trimmedTitle && !letterRegex.test(trimmedTitle)) {
+     toast.error("Title must contain at least one letter.", {
+  position: "top-right",
+  duration: 2000
+});
+     return;
+   }
     const formData = new FormData();
     if (image) formData.append("profileImage", image);
     formData.append("name", `${firstName} ${lastName}`);
