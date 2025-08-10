@@ -16,6 +16,7 @@ const TYPES = {
   TransactionController: Symbol.for("TransactionController"),
   WalletController: Symbol.for("WalletController"),
   AdminController: Symbol.for("AdminController"),
+  ReviewController: Symbol.for("ReviewController"),
   
 
   //SERVICES
@@ -34,6 +35,7 @@ const TYPES = {
   TransactionService: Symbol.for("TransactionService"),
   WalletService: Symbol.for("WalletService"),
   AdminService: Symbol.for("AdminSerive"),
+  ReviewService: Symbol.for("ReviewService"),
 
   //REPOSITORIES
   AuthRepository: Symbol.for("AuthRepository"),
@@ -48,7 +50,8 @@ const TYPES = {
   EnrollmentRepository: Symbol.for("EnrollmentRepository"),
   TransactionRepository: Symbol.for("TransactionRepository"),
   WalletRepository: Symbol.for("WalletRepository"),
-  AdminRepository: Symbol.for("AdminRepository")
+  AdminRepository: Symbol.for("AdminRepository"),
+  ReviewRepository: Symbol.for("ReviewRepository")
 };
 
 export default TYPES;
