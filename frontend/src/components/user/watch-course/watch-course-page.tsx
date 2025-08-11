@@ -15,7 +15,7 @@ import { formatDate, formatTimeFromSeconds } from "../../../lib/utils/formatDate
 import ReactPlayer from "react-player";
 import {type EnrolledCourse } from "../../../types/enrollment";
 import {type Lesson } from "../../../types/lessons";
-// import CourseReviews from "../course-review/course-reviews";
+import CourseReviews from "../course-review/course-reviews";
 import { toast } from "sonner";
 
 export default function WatchCoursePage() {
@@ -126,7 +126,7 @@ export default function WatchCoursePage() {
               comments={154}
             />
             <LectureDescription description={currentLesson?.description as string} />
-            {/* <CourseReviews courseId={courseDetails._id} /> */}
+            <CourseReviews courseId={courseDetails._id} />
           </div>
           <div className="lg:col-span-1">
             <CourseContents

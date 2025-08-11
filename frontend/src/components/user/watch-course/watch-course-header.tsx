@@ -3,12 +3,12 @@ import { Button } from "../../ui/button";
 import { ArrowLeft, Download } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { type EnrolledCourse } from "../../../types/enrollment";
-// import { addReview as addNewReview } from "../../../services/reviewService";
+import { addReview as addNewReview } from "../../../services/reviewService";
 import { toast } from "sonner";
-// import ReviewDialog from "../course-review/course-review-dialog";
+import ReviewDialog from "../course-review/course-review-dialog";
 // import { applyForCertificate, downloadCertificate } from "@/services/certificateService";
 import { useAppDispatch } from "../../../redux/store";
-// import { addReview } from "@/redux/slices/reviewSlice";
+import { addReview } from "../../../redux/slices/reviewSlice";
 
 interface CourseHeaderProps {
   title: string;
@@ -33,10 +33,10 @@ export function CourseHeader({
 
   const handleSubmit = async(rating:number, review:string) => {
     try {
-        // const data = await addNewReview(enrollment.courseId as string, rating.toString(), review.trim())
-        // toast.success(data.message)
-        // console.log(data)
-        // dispatch(addReview(data.review))
+        const data = await addNewReview(enrollment.courseId as string, rating.toString(), review.trim())
+        toast.success(data.message)
+        console.log(data)
+        dispatch(addReview(data.review))
 
         console.log('Submited for adding review')
 
@@ -47,9 +47,9 @@ export function CourseHeader({
 
   const handleDownloadCertificate = async () => {
     try {
-    //   const data = await applyForCertificate(enrollment.courseId as string)
-    //   console.log(data)
-    //    await downloadCertificate(data.certificateUrl)
+      // const data = await applyForCertificate(enrollment.courseId as string)
+      // console.log(data)
+      //  await downloadCertificate(data.certificateUrl)
     console.log("download certificate clicked")
     } catch (error) {
       console.log(error)
@@ -89,7 +89,7 @@ export function CourseHeader({
         </Button>
         </div>
       )}
-      {/* {
+      {
         enrollment.completed && dialogOpen &&
         <ReviewDialog 
         isOpen={true}
@@ -100,7 +100,7 @@ export function CourseHeader({
         mode="create"
         />
 
-      } */}
+      }
 
       {/* {enrollment.completed && (
         <ReviewDialog 

@@ -1,5 +1,6 @@
 import { Star } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
+import { Progress } from "@radix-ui/react-progress"
 
 interface CourseReviewsProps {
   reviews: any
@@ -8,13 +9,13 @@ interface CourseReviewsProps {
 
 export default function CourseReviews({ reviews, rating }: CourseReviewsProps) {
 
-  // const ratingCounts = [0, 0, 0, 0, 0]
-  // reviews.forEach((review:any) => {
-  //   const ratingIndex = Math.floor(review.rating) - 1
-  //   if (ratingIndex >= 0 && ratingIndex < 5) {
-  //     ratingCounts[ratingIndex]++
-  //   }
-  // })
+  const ratingCounts = [0, 0, 0, 0, 0]
+  reviews.forEach((review:any) => {
+    const ratingIndex = Math.floor(review.rating) - 1
+    if (ratingIndex >= 0 && ratingIndex < 5) {
+      ratingCounts[ratingIndex]++
+    }
+  })
 
   const totalReviews = reviews.length
 
@@ -53,13 +54,13 @@ export default function CourseReviews({ reviews, rating }: CourseReviewsProps) {
             {[5, 4, 3, 2, 1].map((star) => (
               <div key={star} className="flex items-center gap-2">
                 <div className="w-6 text-sm">{star}</div>
-                {/* <Progress
+                <Progress
                   value={totalReviews > 0 ? (ratingCounts[star - 1] / totalReviews) * 100 : 0}
                   className="h-2"
                 />
                 <div className="w-10 text-right text-sm text-muted-foreground">
                   {totalReviews > 0 ? Math.round((ratingCounts[star - 1] / totalReviews) * 100) : 0}%
-                </div> */}
+                </div>
               </div>
             ))}
           </div>

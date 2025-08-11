@@ -12,7 +12,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { getCourseById } from "../../services/courseService"
 import Header from "../../components/user/home/Header"
 import { createCurriculumData } from "../../lib/utils/courses"
-// import CourseReviews from "@/components/user/course-review/course-reviews"
+import CourseReviews from "../../components/user/course-review/course-reviews"
 
 export default function UserCourseDetailsPage() {
 
@@ -30,7 +30,6 @@ const navigate = useNavigate()
       const fetchCourse = async () => {
         try {
           const res = await getCourseById(courseId); 
-          console.log(res.data)
           setCourse(res.data );
         } catch (error) {
           console.error("Failed to fetch course:", error);
@@ -76,7 +75,7 @@ const navigate = useNavigate()
               {activeTab === "overview" && <CourseDescription description={course.description as string} whatYouWillLearn={course.whatYouWillLearn } />}
               {activeTab === "curriculum" && <CourseCurriculum curriculum={createCurriculumData(course)} />}
               {activeTab === "instructor" && <CourseInstructor instructorId={course.instructorId} />}
-              {/* {activeTab === "review" && <CourseReviews courseId={course._id as string} />} */}
+              {activeTab === "review" && <CourseReviews courseId={course._id as string} />}
             </div>
           </div>
         </div>

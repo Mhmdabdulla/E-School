@@ -9,10 +9,14 @@ import SingleCoursePage from "../pages/instructor/CourseDetails";
 import EditCoursePage from "../pages/instructor/EditCoursePage";
 import EarningsPage from "../components/instructor/earnings/earnings-page";
 import InstructorMessagesPage from "../pages/instructor/MessagePage";
+import PaymentSuccess from "../components/common/PaymentSuccess";
+import PaymentFailed from "../components/common/PaymentFailed";
 
 
 export const instructorRoutes = (
   <Route element={<ProtectedRoute role={[UserRole.INSTRUCTOR]} />}>
+    <Route path="/payment-success" element={<PaymentSuccess />} />
+    <Route path="/payment-cancel" element={<PaymentFailed />} />
     <Route path="/instructor/dashboard" element={<InstructorDashboardPage />} />
     <Route path="/instructor/create-course" element={<CreateCoursePage />} />
     <Route path="/instructor/settings" element={<AccountSettingsPage/>}/>

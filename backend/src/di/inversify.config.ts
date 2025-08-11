@@ -106,6 +106,12 @@ import { IAdminService } from "../services/interfaces/IAdminService";
 import { AdminService } from "../services/admin.service";
 import { AdminRepository } from "../repositories/admin.repository";
 import { IAdminRepository } from "../repositories/interfaces/IAdminRepository";
+import { ReviewController } from "../controllers/review.controller";
+import { IReviewController } from "../controllers/interfaces/IReviewController";
+import { ReviewService } from "../services/review.service";
+import { IReviewService } from "../services/interfaces/IReviewService";
+import { ReviewRepository } from "../repositories/review.repository";
+import { IReviewRepository } from "../repositories/interfaces/IReviewRepository";
 
 const container = new Container();
 
@@ -166,5 +172,9 @@ container.bind<IWalletRepository>(TYPES.WalletRepository).to(WalletRepository)
 container.bind<IAdminController>(TYPES.AdminController).to(AdminController)
 container.bind<IAdminService>(TYPES.AdminService).to(AdminService)
 container.bind<IAdminRepository>(TYPES.AdminRepository).to(AdminRepository)
+
+container.bind<IReviewController>(TYPES.ReviewController).to(ReviewController)
+container.bind<IReviewService>(TYPES.ReviewService).to(ReviewService)
+container.bind<IReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository)
 
 export default container;
