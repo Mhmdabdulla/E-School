@@ -9,7 +9,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getCoursesByInstructorId(instructorId: string): Promise<ICourse[] | null> {
-    return await Course.find({ instructorId }).select('-__v');
+    return await Course.find({ instructorId });
   }
 
   async updateCoursePublishStatus(courseId: string): Promise<ICourse | null> {
@@ -25,11 +25,11 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
         },
       ],
       { new: true }
-    ).select('-__v');
+    );
   }
 
   async getAllCourses(filter: any, skip: any, limit: any, sort: any): Promise<ICourse[] | null> {
-    return await Course.find(filter).select('-__v').skip(skip).limit(limit).sort(sort).populate({
+    return await Course.find(filter).skip(skip).limit(limit).sort(sort).populate({
       path: "categoryId",
       select: "name",
     });
@@ -37,7 +37,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
 
   async getAllCoursesForAdmin(skip: number, limit: number, filter: FilterQuery<ICourse>): Promise<ICourse[] | null> {
     return await Course.find(filter)
-    .select('-__v')
+    
       .skip(skip)
       .limit(limit)
       .populate({
@@ -55,7 +55,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async getCoursesByIds(courseIds: string[]): Promise<ICourse[] | null> {
-    return await Course.find({ _id: { $in: courseIds } }).select('-__v');
+    return await Course.find({ _id: { $in: courseIds } });
   }
   async getCourseWithModulesAndLessons(courseId: string): Promise<ICourse | null> {
     const result = await Course.aggregate([
@@ -193,7 +193,7 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
   }
 
   async toggleCourseStatus(courseId: string): Promise<ICourse | null> {
-    const course = await Course.findById(courseId).select('-__v');
+    const course = await Course.findById(courseId);
     if (!course) return null;
     course.status = !course.status;
     return await course.save();

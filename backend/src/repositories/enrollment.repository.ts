@@ -91,7 +91,6 @@ async getEnrollmentsWithPagination(filter: mongoose.FilterQuery<IEnrollment>, sk
   }
 
     async updateLastVisitedLesson(filter: mongoose.FilterQuery<IEnrollment>, lessonId: string): Promise<IEnrollment | null> {
-     console.log(filter)
       return await Enrollment.findOneAndUpdate(filter, {
         $set: { 'progress.lastVisited': lessonId },
         $addToSet: { 'progress.visitedLessons': lessonId }

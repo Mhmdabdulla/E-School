@@ -13,7 +13,7 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   }
 
   async findUserById(userId: string):Promise<IUser| null> {
-    return await User.findById(userId).select('-password -__v')
+    return await User.findById(userId)
   }
 
 

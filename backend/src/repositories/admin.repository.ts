@@ -8,11 +8,11 @@ import { IUser, User } from "../models/user.model";
 export class AdminRepository implements IAdminRepository{
 
   async getUsers(): Promise<IUser[]> {
-    return await User.find({ role: "user" }).select('-password -__v');
+    return await User.find({ role: "user" });
   }
 
   async toggleUserStatus(userId: string): Promise<IUser|null> {
-    const user: IUser | null = await User.findById(userId).select('-password -__v');
+    const user: IUser | null = await User.findById(userId);
 
     if (!user) throw new Error("user not found");
 
