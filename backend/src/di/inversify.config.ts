@@ -112,6 +112,12 @@ import { ReviewService } from "../services/review.service";
 import { IReviewService } from "../services/interfaces/IReviewService";
 import { ReviewRepository } from "../repositories/review.repository";
 import { IReviewRepository } from "../repositories/interfaces/IReviewRepository";
+import { IPayoutController } from "../controllers/interfaces/IPayoutController";
+import { PayoutController } from "../controllers/payout.controller";
+import { PayoutService } from "../services/payout.service";
+import { IPayoutService } from "../services/interfaces/IPayoutService";
+import { IPayoutRepository } from "../repositories/interfaces/IPayoutRepository";
+import { PayoutRepository } from "../repositories/payout.repository";
 
 const container = new Container();
 
@@ -176,5 +182,9 @@ container.bind<IAdminRepository>(TYPES.AdminRepository).to(AdminRepository)
 container.bind<IReviewController>(TYPES.ReviewController).to(ReviewController)
 container.bind<IReviewService>(TYPES.ReviewService).to(ReviewService)
 container.bind<IReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository)
+
+container.bind<IPayoutController>(TYPES.PayoutController).to(PayoutController)
+container.bind<IPayoutService>(TYPES.PayoutService).to(PayoutService)
+container.bind<IPayoutRepository>(TYPES.PayoutRepository).to(PayoutRepository)
 
 export default container;
