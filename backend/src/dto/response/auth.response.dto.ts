@@ -1,9 +1,10 @@
-import { IsEmail, IsString } from "class-validator";
+import {  IsString } from "class-validator";
 import { IUser } from "../../models/user.model";
 
 export class LoginResponseDTO {
   @IsString()
   _id!: string;
+  // ! means  assignment assertion
 
   @IsString()
   name!: string;

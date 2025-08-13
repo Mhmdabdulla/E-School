@@ -1,4 +1,5 @@
 import { LoginResponseDTO } from "../dto/response/auth.response.dto";
+import { UserResponseDTO } from "../dto/response/user.response.dto";
 import { ICourse } from "../models/Course";
 import { IEnrollment } from "../models/Enrollment";
 import { IInstructor } from "../models/instructor.model";
@@ -14,7 +15,7 @@ export interface verifiedUer {
 
 export interface refreshedUser {
   accessToken: string;
-  user: IUser 
+  user: Partial<IUser>;
 }
 
 export interface EnrolledStudent {
@@ -55,7 +56,7 @@ export interface PaginatedUsersResponse {
   totalUsers: number;
   totalPages: number;
   currentPage: number;
-  users: IUser[] | null;
+  users: UserResponseDTO[];
 }
 
 export interface PaginatedOrdersResponse {

@@ -1,5 +1,3 @@
-// src/services/auth.service.ts
-
 import { IAuthService } from "./interfaces/IAuthService";
 import { hashPassword, comparePassword } from "../utils/password";
 
@@ -23,12 +21,11 @@ import { STATUS_CODES } from "../utils/constants";
 
 @injectable()
 export class AuthService implements IAuthService {
-  constructor(@inject(TYPES.AuthRepository) private repo: IAuthRepository) {}
-  // private repo: IAuthRepository = new AuthRepository();
+  constructor(@inject(TYPES.AuthRepository) private authRepository: IAuthRepository) {}
 
   async register(name: string, email: string, password: string): Promise<void> {
     logger.info(`Register attempt for ${email}`);
-    const existing = await this.repo.findUserByEmail(email);
+    const existing = await this.authRepository.findUserByEmail(email);
     if (existing)
       throw new AppError("Email already exists", STATUS_CODES.BAD_REQUEST);
 
@@ -65,7 +62,7 @@ export class AuthService implements IAuthService {
 
     const { name, hashedPassword } = JSON.parse(userData);
 
-    const user = await this.repo.createUser(name, email, hashedPassword);
+    const user = await this.authRepository.createUser(name, email, hashedPassword);
     if (!user)
       throw new AppError(
         "Cannot create account. Please try again",
@@ -104,7 +101,7 @@ export class AuthService implements IAuthService {
   }
 
   async login(email: string, password: string): Promise<verifiedUer> {
-    const user = await this.repo.findUserByEmail(email);
+    const user = await this.authRepository.findUserByEmail(email);
     if (!user)
       throw new AppError("Invalid email address", STATUS_CODES.NOT_FOUND);
 
@@ -134,7 +131,7 @@ export class AuthService implements IAuthService {
   }
 
   async adminLogin(email: string, password: string): Promise<verifiedUer> {
-    const user = await this.repo.findUserByEmail(email);
+    const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
       throw new AppError("Invalid email address", STATUS_CODES.NOT_FOUND);
     }
@@ -163,17 +160,17 @@ export class AuthService implements IAuthService {
 
   async refreshAccessToken(refreshToken: string): Promise<refreshedUser> {
     try {
-      const decoded = await verifyRefreshToken(refreshToken);
+      const decoded = verifyRefreshToken(refreshToken);
       const userId = decoded.userId;
       const role = decoded.role;
       const newAccessToken = generateAccessToken(userId.toString(), role);
-      const user = await this.repo.findUserById(decoded.userId);
+      const user = await this.authRepository.findUserById(decoded.userId);
 
       if (!user) {
         throw new AppError("User not found", STATUS_CODES.NOT_FOUND);
       }
 
-      return { accessToken: newAccessToken, user };
+      return { accessToken: newAccessToken, user:LoginResponseDTO.fromEntity(user) };
     } catch (error) {
       logger.error("Invalid refresh token", error);
       throw new AppError("Invalid refresh token", STATUS_CODES.UNAUTHORIZED);
@@ -182,7 +179,7 @@ export class AuthService implements IAuthService {
 
   async sendMagicLink(email: string): Promise<void> {
     try {
-      const user = await this.repo.findUserByEmail(email);
+      const user = await this.authRepository.findUserByEmail(email);
       if (!user)
         throw new AppError("Invalid email address", STATUS_CODES.NOT_FOUND);
       const token = resetPasswordTocken(user.id, email);
@@ -214,7 +211,7 @@ export class AuthService implements IAuthService {
 
       const hashedPassword = await hashPassword(newPassword);
 
-      await this.repo.updateUserPassword(userId, hashedPassword);
+      await this.authRepository.updateUserPassword(userId, hashedPassword);
 
       await RedisClient.del(`magicLink:${email}`);
     } catch (error: any) {

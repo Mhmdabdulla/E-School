@@ -111,7 +111,6 @@ export const refreshToken = async (dispatch: AppDispatch) => {
 
     const response = await apiClient.post(`auth/refresh-token`, data, { withCredentials: true });
 
-    console.log(response.data)
     dispatch(
       setAuthData({
         accessToken: response.data.accessToken,

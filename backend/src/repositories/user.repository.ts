@@ -34,7 +34,6 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
 
   async findAllUsers(skip: number, limit: number, filter:FilterQuery<IUser>): Promise<IUser[] | null> {
     return await User.find(filter)
-    .select('-password -__v')
     .skip(skip).limit(limit)
   }
 

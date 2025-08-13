@@ -36,7 +36,6 @@ export class UserController implements IUserController {
 
  becomeInstructor = async(req:Request,res:Response):Promise<void>=>{
       const instructorData = req.body;
-      console.log('user in user.controller',req.user)
     instructorData.userId =  req.user?._id;
     
     if (!req.file) {

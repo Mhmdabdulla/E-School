@@ -15,11 +15,6 @@ const instructorController = container.get<IInstructorController>(TYPES.Instruct
 const userController = container.get<IUserController>(TYPES.UserController)
 
 
-
-// get users
-//change users status
-//get instructers
-
 router.get("/",authMiddleware([UserRole.ADMIN]),ctrl.getAllUsers);
 router.patch("/:userId/status",authMiddleware([UserRole.ADMIN]), ctrl.toggleUserStatus)
 router.post(

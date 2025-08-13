@@ -7,6 +7,7 @@ import { generateRefreshToken } from "../utils/jwt";
 import { IAuthService } from "../services/interfaces/IAuthService";
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
+import logger from "../config/logger";
 
 
 @injectable()
@@ -63,8 +64,6 @@ export class AuthController implements IAuthController{
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { role } = req.body;
     const { accessToken, user } = await this.authService.refreshAccessToken(refreshToken);
     res.status(STATUS_CODES.OK).json({ accessToken, user });
   };
@@ -108,7 +107,7 @@ export class AuthController implements IAuthController{
       res.status(400).json({ message: "Email is required" });
       return;
     }
-
+    //add _ before variables
     const email = emails[0].value;
     const profileImageUrl = photos ? photos[0].value : null;
 
@@ -117,8 +116,14 @@ export class AuthController implements IAuthController{
       user = await this.userService.createGoogleUser(displayName, email, profileImageUrl, id);
     }
 
-    const refreshToken = generateRefreshToken(user?.id, "user");
+    if (!user || !user.id) { 
+    logger.error("User or user ID not found after fetch/create");
+    res.status(500).json({ message: "Failed to authenticate user" });
+    return;
+  }
 
+    console.log(user.id, user)
+    const refreshToken = generateRefreshToken(user.id, "user");
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
