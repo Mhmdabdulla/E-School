@@ -18,7 +18,8 @@ import webhookRoutes from "./routes/webhook.routes";
 import walletRoute from "./routes/wallet.routes";
 import transactionRoute from "./routes/transaction.routes";
 import enrollmentRoute from "./routes/enrollment.routes";
-import reviewRoute from "./routes/review.routes"
+import reviewRoute from "./routes/review.routes";
+import payoutRoute from "./routes/payout.routes"
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 const app = express();
@@ -53,6 +54,7 @@ app.use("/api/wallets", walletRoute);
 app.use("/api/transactions", transactionRoute);
 app.use("/api/enrollments", enrollmentRoute);
 app.use("/api/reviews", reviewRoute)
+app.use("/api/payouts", payoutRoute)
 
 
 app.use(errorHandler);

@@ -5,7 +5,7 @@ import { WithdrawButton } from "./withdraw-button";
 import { WithdrawalHistory } from "./withdrawal-history";
 import { Sidebar } from "../common/Sidebar";
 import PageHeader from "../common/Header";
-import { createPayoutRequest, fetchInstructorWallet,  } from "../../../services/earningService";
+import { createPayoutRequest, fetchInstructorWallet, fetchPayoutRequests,  } from "../../../services/earningService";
 import {type Wallet } from "../../../types/wallet";
 import { WithdrawForm } from "./withdraw-form";
 import type{ PayoutRequest, PayoutRequestData } from "../../../types/revenue";
@@ -17,52 +17,11 @@ export default function EarningsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [formSubmitting, setFormSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
-  const [payoutHistory, setPayoutHistory] = useState<PayoutRequestData[] >([
-  {
-    _id: "662f0a6d3c36721d82be3f49", // example MongoDB ObjectId string
-    instructorId: "65f1b9db8a129678f57e132a",
-    requestedAt: new Date(),
-    method: "Mastercards",
-    amount: 600,
-    status: "pending",
-  },
-  {
-    _id: "662f0a6d3c36721d82be3f49", // example MongoDB ObjectId string
-    instructorId: "65f1b9db8a129678f57e132a",
-    requestedAt: new Date(),
-    method: "Mastercards",
-    amount: 600,
-    status: "pending"
-  },
-  {
-    _id: "662f0a6d3c36721d82be3f49", // example MongoDB ObjectId string
-    instructorId: "65f1b9db8a129678f57e132a",
-    requestedAt: new Date(),
-    method: "Mastercards",
-    amount: 600,
-    status: "pending"
-  },
-  {
-    _id: "662f0a6d3c36721d82be3f49", // example MongoDB ObjectId string
-    instructorId: "65f1b9db8a129678f57e132a",
-    requestedAt: new Date(),
-    method: "Mastercards",
-    amount: 600,
-    status: "pending"
-  },
-  {
-    _id: "662f0a6d3c36721d82be3f49", // example MongoDB ObjectId string
-    instructorId: "65f1b9db8a129678f57e132a",
-    requestedAt: new Date(),
-    method: "Mastercards",
-    amount: 600,
-    status: "pending"
-  },
-])
+  const [payoutHistory, setPayoutHistory] = useState<PayoutRequestData[] >([])
 
   useEffect(() => {
     getWallet();
-    // getPayoutRequestHistory()
+    getPayoutRequestHistory()
     setLoading(false);
   }, []);
 
@@ -75,15 +34,14 @@ export default function EarningsPage() {
     } 
   };
 
-//   const getPayoutRequestHistory = async () => {
-//     try {
-//       const data = await fetchPayoutRequests()
-//       console.log(data)
-//       setPayoutHistory(data)
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
+  const getPayoutRequestHistory = async () => {
+    try {
+      const data = await fetchPayoutRequests()
+      setPayoutHistory(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handlePayoutRequestSubmit = async (data: PayoutRequest) => {
     try {
