@@ -10,6 +10,8 @@ import InstructorApplicationsPage from "../pages/admin/InstructorApplications";
 import CategoriesPage from "../pages/admin/CategoriesPage";
 import CoursesPage from "../pages/admin/CoursesPage";
 import PayoutRequestsPage from "../pages/admin/PayoutRequests";
+import OrdersPage from "../pages/admin/OrdersPage";
+import SettingsPage from "../pages/admin/AccountSettings";
 
 export const adminRoutes = (
     <>
@@ -24,9 +26,9 @@ export const adminRoutes = (
        <Route path="applications" element={<InstructorApplicationsPage />} />
        <Route path="categories" element={<CategoriesPage />} />
        <Route path="courses" element={<CoursesPage/>}/>
-       {/* <Route path="purchases" element={<OrdersPage/>}/> */}
+       <Route path="purchases" element={<OrdersPage/>}/>
        <Route path="payouts" element={<PayoutRequestsPage/>}/>
-       {/* <Route path="settings" element={<SettingsPage/>}/> */}
+       <Route path="settings" element={<SettingsPage/>}/>
        </Route>
        </Route>
     </>

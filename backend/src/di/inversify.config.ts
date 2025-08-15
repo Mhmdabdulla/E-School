@@ -118,6 +118,12 @@ import { PayoutService } from "../services/payout.service";
 import { IPayoutService } from "../services/interfaces/IPayoutService";
 import { IPayoutRepository } from "../repositories/interfaces/IPayoutRepository";
 import { PayoutRepository } from "../repositories/payout.repository";
+import { CertificateController } from "../controllers/certificate.controller";
+import { ICertificateController } from "../controllers/interfaces/ICertificateController";
+import { ICertificateService } from "../services/interfaces/ICertificateService";
+import { CertificateService } from "../services/certificate.service";
+import { CertificateRepository } from "../repositories/certificate.repository";
+import { ICertificateRepository } from "../repositories/interfaces/ICertificateRepository";
 
 const container = new Container();
 
@@ -186,5 +192,9 @@ container.bind<IReviewRepository>(TYPES.ReviewRepository).to(ReviewRepository)
 container.bind<IPayoutController>(TYPES.PayoutController).to(PayoutController)
 container.bind<IPayoutService>(TYPES.PayoutService).to(PayoutService)
 container.bind<IPayoutRepository>(TYPES.PayoutRepository).to(PayoutRepository)
+
+container.bind<ICertificateController>(TYPES.CertificateController).to(CertificateController)
+container.bind<ICertificateService>(TYPES.CertificateService).to(CertificateService)
+container.bind<ICertificateRepository>(TYPES.CertificateRepository).to(CertificateRepository)
 
 export default container;

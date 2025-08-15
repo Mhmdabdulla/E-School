@@ -6,7 +6,7 @@ import { type EnrolledCourse } from "../../../types/enrollment";
 import { addReview as addNewReview } from "../../../services/reviewService";
 import { toast } from "sonner";
 import ReviewDialog from "../course-review/course-review-dialog";
-// import { applyForCertificate, downloadCertificate } from "@/services/certificateService";
+import { applyForCertificate, downloadCertificate } from "../../../services/certificateService";
 import { useAppDispatch } from "../../../redux/store";
 import { addReview } from "../../../redux/slices/reviewSlice";
 
@@ -47,10 +47,9 @@ export function CourseHeader({
 
   const handleDownloadCertificate = async () => {
     try {
-      // const data = await applyForCertificate(enrollment.courseId as string)
-      // console.log(data)
-      //  await downloadCertificate(data.certificateUrl)
-    console.log("download certificate clicked")
+      const data = await applyForCertificate(enrollment.courseId as string)
+      console.log(data)
+       await downloadCertificate(data.certificateUrl)
     } catch (error) {
       console.log(error)
     }

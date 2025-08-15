@@ -17,32 +17,50 @@ export const awsFolderNames = {
   sub2: "sub2",
 };
 
+
+export const uploadBufferToS3 = async (
+  buffer: Buffer,
+  folder: string,
+  mimeType: string,
+): Promise<{ url: string; key: string } | null> => {
+  try {
+    const ext =  mimeType.split("/")[1] ?? "bin";
+    const key = `${folder}/${uuidv4()}.${ext}`;
+
+    await s3Client.send(
+      new PutObjectCommand({
+        Bucket: process.env.AWS_BUCKET_NAME!,
+        Key: key,
+        Body: buffer,
+        ContentType: mimeType,
+      })
+    );
+
+    const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    return { url, key };
+  } catch (error) {
+    console.error("Error uploading buffer to S3:", error);
+    return null;
+  }
+};
+
 // Function to upload image buffer to S3
 export const uploadImageToS3 = async (
   buffer: Buffer,
   folder: string,
   mimeType: string
 ): Promise<string | null> => {
-  try {
-    const fileExtension = mimeType.split("/")[1]; // e.g., "jpeg", "png"
-    const fileName = `${folder}/${uuidv4()}.${fileExtension}`;
+    const uploaded = await uploadBufferToS3(buffer, folder, mimeType);
+    return uploaded?.url ?? null;
+};
 
-    const uploadParams = {
-      Bucket: process.env.AWS_BUCKET_NAME!,
-      Key: fileName,
-      Body: buffer,
-      ContentType: mimeType,
-    };
+export const uploadPdfToS3 = async (
+  buffer: Buffer,
+  folder: string
+): Promise<{ url: string; key: string } | null> => {
 
-    await s3Client.send(new PutObjectCommand(uploadParams));
+  return uploadBufferToS3(buffer, folder, "application/pdf");
 
-    const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
-
-    return url;
-  } catch (error: any) {
-    console.error("Error uploading image to S3:", error);
-    return null;
-  }
 };
 
 // Set ffprobe path

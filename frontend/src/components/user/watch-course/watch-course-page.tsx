@@ -114,7 +114,7 @@ export default function WatchCoursePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
           <div className="lg:col-span-2">
             <ReactPlayer
-              src={`http://localhost:5000/api/lessons/${currentLesson?._id}/stream`}
+              src={`${import.meta.env.VITE_BASE_URL}lessons/${currentLesson?._id}/stream`}
               controls={true}
               width="100%"
               onEnded={handleVideoEnd}
