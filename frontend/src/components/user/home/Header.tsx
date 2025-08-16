@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import ThemeToggle from "../../common/ThemeToggler";
 import TutoriamLogo from "../../common/ESchoolLogo";
 import { MobileSidebar } from "../../common/MobileSideBar";
+import NotificationPopover from "../../common/notification-popover";
 
 const Header = () => {
   const user = useSelector((state: any) => state.auth.user);
@@ -146,7 +147,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {user && !isAdmin ? (
             <>
-              {/* <NotificationPopover /> */}
+              <NotificationPopover />
               <Link to="/wishlist" className="relative hidden sm:block">
                 <Button
                   variant="ghost"

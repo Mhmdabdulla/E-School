@@ -19,6 +19,7 @@ const TYPES = {
   ReviewController: Symbol.for("ReviewController"),
   PayoutController: Symbol.for("PayoutController"),
   CertificateController: Symbol.for("CertificateController"),
+  NotificationController: Symbol.for("NotificationController"),
   
 
   //SERVICES
@@ -40,6 +41,7 @@ const TYPES = {
   ReviewService: Symbol.for("ReviewService"),
   PayoutService: Symbol.for("PayoutSerivce"),
   CertificateService: Symbol.for("CertificateService"),
+  NotificationService: Symbol.for("NotificationService"),
 
   //REPOSITORIES
   AuthRepository: Symbol.for("AuthRepository"),
@@ -57,7 +59,8 @@ const TYPES = {
   AdminRepository: Symbol.for("AdminRepository"),
   ReviewRepository: Symbol.for("ReviewRepository"),
   PayoutRepository: Symbol.for("PayoutRepository"),
-  CertificateRepository: Symbol.for("CertificateRepository")
+  CertificateRepository: Symbol.for("CertificateRepository"),
+  NotificationRepository: Symbol.for("NotificationRepository")
 };
 
 export default TYPES;

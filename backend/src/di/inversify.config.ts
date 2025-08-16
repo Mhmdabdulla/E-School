@@ -124,6 +124,12 @@ import { ICertificateService } from "../services/interfaces/ICertificateService"
 import { CertificateService } from "../services/certificate.service";
 import { CertificateRepository } from "../repositories/certificate.repository";
 import { ICertificateRepository } from "../repositories/interfaces/ICertificateRepository";
+import { INotificationController } from "../controllers/interfaces/INotificationController";
+import { NotificationController } from "../controllers/notification.controller";
+import { NotificationService } from "../services/notification.service";
+import { INotificationService } from "../services/interfaces/INotificationService";
+import { INotificationRepository } from "../repositories/interfaces/INotificationRepository";
+import { NotificationRepository } from "../repositories/notification.repository";
 
 const container = new Container();
 
@@ -196,5 +202,9 @@ container.bind<IPayoutRepository>(TYPES.PayoutRepository).to(PayoutRepository)
 container.bind<ICertificateController>(TYPES.CertificateController).to(CertificateController)
 container.bind<ICertificateService>(TYPES.CertificateService).to(CertificateService)
 container.bind<ICertificateRepository>(TYPES.CertificateRepository).to(CertificateRepository)
+
+container.bind<INotificationController>(TYPES.NotificationController).to(NotificationController)
+container.bind<INotificationService>(TYPES.NotificationService).to(NotificationService)
+container.bind<INotificationRepository>(TYPES.NotificationRepository).to(NotificationRepository)
 
 export default container;

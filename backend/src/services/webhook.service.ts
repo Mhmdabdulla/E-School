@@ -8,6 +8,7 @@ import { ICartService } from "../services/interfaces/ICartService";
 import { ICourseService } from "../services/interfaces/ICourseService";
 import { ITransactionService } from "./interfaces/ITransactionService";
 import { IWalletService } from "./interfaces/IWalletService";
+import { INotificationService } from "./interfaces/INotificationService";
 
 
 @injectable()
@@ -18,7 +19,8 @@ export class WebhookService implements IWebhookService{
         @inject(TYPES.CartService) private cartService: ICartService,
         @inject(TYPES.CourseService) private courseService: ICourseService,
         @inject(TYPES.TransactionService) private transactionService: ITransactionService,
-        @inject(TYPES.WalletService) private walletService: IWalletService
+        @inject(TYPES.WalletService) private walletService: IWalletService,
+        @inject(TYPES.NotificationService) private notificationService: INotificationService
     ){}
     async handleCheckoutSuccess(session: Stripe.Checkout.Session): Promise<void> {
         const metadata = session.metadata;
@@ -60,6 +62,33 @@ export class WebhookService implements IWebhookService{
               });       
 
               await this.walletService.creditWallet(instructorId, instructorShare);
+
+                await this.notificationService.createNotification({
+                userId: instructorId,
+                type: 'coursePurchase',
+                title: 'course purchased',
+                description: `Your course "${course.title}" has been purchased.`,
+                courseId,
+              });
+
+                // const instructorSocketId = getUserSocketId(instructorId)
+                // if(instructorSocketId){
+                //     getIO().to(instructorSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, instructorNotification)
+                // }
+               await this.notificationService.createNotification({
+                userId: userId,
+                type: 'enrollment',
+                title: 'enrollment successful',
+                description: `You have successfully enrolled in "${course.title}".`,
+                courseId,
+              });
+
+            //   const userSocketId = getUserSocketId(userId)
+            //     if(userSocketId){
+            //         getIO().to(userSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, userNotification)
+            //     }
+
+
         }
        
 
