@@ -78,58 +78,88 @@ import { OrderService } from "../services/order.service";
 import { IOrderService } from "../services/interfaces/IOrderService";
 import { IOrderRepository } from "../repositories/interfaces/IOrderRepository";
 import { OrderRepository } from "../repositories/order.repository";
+
+//Enrollment
 import { IEnrollmentController } from "../controllers/interfaces/IEnrollmentController";
 import { EnrollmentController } from "../controllers/enrollment.controller";
 import { IEnrollmentService } from "../services/interfaces/IEnrollmentService";
 import { EnrollmentService } from "../services/enrollment.service";
 import { IEnrollmentRepository } from "../repositories/interfaces/IEnrollmentRepository";
 import { EnrollmentRepository } from "../repositories/enrollment.repository";
+
+//Webhook
 import { IWebhookController } from "../controllers/interfaces/IWebhookController";
 import { WebhookController } from "../controllers/webhook.controller";
 import { IWebhookService } from "../services/interfaces/IWebhookService";
 import { WebhookService } from "../services/webhook.service";
+
+//Transaction
 import { ITransactionController } from "../controllers/interfaces/ITransactionController";
 import { TransactionController } from "../controllers/transaction.controller";
 import { ITransactionService } from "../services/interfaces/ITransactionService";
 import { TransactionService } from "../services/transaction.service";
 import { ITransactionRepository } from "../repositories/interfaces/ITransactionRepository";
 import { TransactionRepository } from "../repositories/transaction.repository";
+
+//Wallet
 import { IWalletController } from "../controllers/interfaces/IWalletController";
 import { WalletController } from "../controllers/wallet.controller";
 import { IWalletService } from "../services/interfaces/IWalletService";
 import { WalletService } from "../services/wallet.service";
 import { IWalletRepository } from "../repositories/interfaces/IWalletRepository";
 import { WalletRepository } from "../repositories/wallet.repository";
+
+//Admin
 import { AdminController } from "../controllers/admin.controller";
 import { IAdminController } from "../controllers/interfaces/IAdminController";
 import { IAdminService } from "../services/interfaces/IAdminService";
 import { AdminService } from "../services/admin.service";
 import { AdminRepository } from "../repositories/admin.repository";
 import { IAdminRepository } from "../repositories/interfaces/IAdminRepository";
+
+//Review
 import { ReviewController } from "../controllers/review.controller";
 import { IReviewController } from "../controllers/interfaces/IReviewController";
 import { ReviewService } from "../services/review.service";
 import { IReviewService } from "../services/interfaces/IReviewService";
 import { ReviewRepository } from "../repositories/review.repository";
 import { IReviewRepository } from "../repositories/interfaces/IReviewRepository";
+
+//Payout
 import { IPayoutController } from "../controllers/interfaces/IPayoutController";
 import { PayoutController } from "../controllers/payout.controller";
 import { PayoutService } from "../services/payout.service";
 import { IPayoutService } from "../services/interfaces/IPayoutService";
 import { IPayoutRepository } from "../repositories/interfaces/IPayoutRepository";
 import { PayoutRepository } from "../repositories/payout.repository";
+
+//certificate
 import { CertificateController } from "../controllers/certificate.controller";
 import { ICertificateController } from "../controllers/interfaces/ICertificateController";
 import { ICertificateService } from "../services/interfaces/ICertificateService";
 import { CertificateService } from "../services/certificate.service";
 import { CertificateRepository } from "../repositories/certificate.repository";
 import { ICertificateRepository } from "../repositories/interfaces/ICertificateRepository";
+
+//Notification
 import { INotificationController } from "../controllers/interfaces/INotificationController";
 import { NotificationController } from "../controllers/notification.controller";
 import { NotificationService } from "../services/notification.service";
 import { INotificationService } from "../services/interfaces/INotificationService";
 import { INotificationRepository } from "../repositories/interfaces/INotificationRepository";
 import { NotificationRepository } from "../repositories/notification.repository";
+import { IChatController } from "../controllers/interfaces/IChatController";
+import { ChatController } from "../controllers/chat.controller";
+import { ChatService } from "../services/chat.service";
+import { IChatService } from "../services/interfaces/IChatService";
+import { IChatRepository } from "../repositories/interfaces/IChatRepository";
+import { ChatRepository } from "../repositories/chat.rpository";
+import { MessageController } from "../controllers/message.controller";
+import { IMessageController } from "../controllers/interfaces/IMessageController";
+import { IMessageService } from "../services/interfaces/IMessageService";
+import { MessageService } from "../services/message.service";
+import { MessageRepository } from "../repositories/message.repository";
+import { IMessageRepository } from "../repositories/interfaces/IMessageRepository";
 
 const container = new Container();
 
@@ -206,5 +236,13 @@ container.bind<ICertificateRepository>(TYPES.CertificateRepository).to(Certifica
 container.bind<INotificationController>(TYPES.NotificationController).to(NotificationController)
 container.bind<INotificationService>(TYPES.NotificationService).to(NotificationService)
 container.bind<INotificationRepository>(TYPES.NotificationRepository).to(NotificationRepository)
+
+container.bind<IChatController>(TYPES.ChatController).to(ChatController)
+container.bind<IChatService>(TYPES.ChatService).to(ChatService)
+container.bind<IChatRepository>(TYPES.ChatRepository).to(ChatRepository)
+
+container.bind<IMessageController>(TYPES.MessageController).to(MessageController)
+container.bind<IMessageService>(TYPES.MessageService).to(MessageService)
+container.bind<IMessageRepository>(TYPES.MessageRepository).to(MessageRepository)
 
 export default container;

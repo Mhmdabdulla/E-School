@@ -1,14 +1,25 @@
 import app from "./app";
-import dotenv from "dotenv";
-import connectDB from "./config/db";
+import {createServer} from 'http'
+import {Server} from "socket.io"
+import { initSocketServer } from "./config/socket";
 import logger from "./config/logger";
 
-dotenv.config();
+
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
-  app.listen(PORT, () => {
+const server = createServer(app)
+
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  },
+})
+
+initSocketServer(io)
+
+
+  server.listen(PORT, () => {
     logger.info(`Server running on port ${PORT}`)
-    // console.log(`Server running on port ${PORT}`);
+
   });
-});

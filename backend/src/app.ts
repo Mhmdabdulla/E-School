@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import "./config/passport";
 import cookieParser from "cookie-parser";
-// import userRoutes from "./routes/user.routes"; // sample route
+import connectDB from "./config/db";
+import dotenv from "dotenv";
+
 import authRoutes from "./routes/auth.routes";
 import adminRoute from "./routes/admin.routes";
 import userRoute from "./routes/user.routes";
@@ -23,6 +25,9 @@ import payoutRoute from "./routes/payout.routes";
 import certificateRoute from "./routes/certificate.routes";
 import notificationRoute from "./routes/notification.routes";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
+
+dotenv.config();
+connectDB();
 
 const app = express();
 
@@ -55,11 +60,10 @@ app.use("/api/orders", orderRoute);
 app.use("/api/wallets", walletRoute);
 app.use("/api/transactions", transactionRoute);
 app.use("/api/enrollments", enrollmentRoute);
-app.use("/api/reviews", reviewRoute)
-app.use("/api/payouts", payoutRoute)
-app.use("/api/certificates", certificateRoute)
-app.use("/api/notifications", notificationRoute)
-
+app.use("/api/reviews", reviewRoute);
+app.use("/api/payouts", payoutRoute);
+app.use("/api/certificates", certificateRoute);
+app.use("/api/notifications", notificationRoute);
 
 app.use(errorHandler);
 
