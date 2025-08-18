@@ -34,7 +34,7 @@ export const userRoutes = (
     <Route path="instructors" element={<InstructorsPage/>}/>
     <Route path="purchase-history" element={<PurchaseHistoryContent />} />
     <Route path="messages" element={<MessagingPage />} />
-    {/* <Route path="messages/:chatId" element={<MessagingPage />} /> */}
+    <Route path="messages/:chatId" element={<MessagingPage />} />
     <Route path="certificates" element={<CertificatesPage/>}/>
   </Route>
     </Route>

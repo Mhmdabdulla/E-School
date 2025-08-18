@@ -24,6 +24,8 @@ import reviewRoute from "./routes/review.routes";
 import payoutRoute from "./routes/payout.routes";
 import certificateRoute from "./routes/certificate.routes";
 import notificationRoute from "./routes/notification.routes";
+import chatRoute from "./routes/chat.routes";
+import messageRoute from "./routes/message.routes"
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 
 dotenv.config();
@@ -64,6 +66,8 @@ app.use("/api/reviews", reviewRoute);
 app.use("/api/payouts", payoutRoute);
 app.use("/api/certificates", certificateRoute);
 app.use("/api/notifications", notificationRoute);
+app.use("/api/chats", chatRoute)
+app.use("/api/messages", messageRoute)
 
 app.use(errorHandler);
 

@@ -25,6 +25,6 @@ export const instructorRoutes = (
     <Route path="/instructor/my-courses/:courseId/edit" element={< EditCoursePage/>} />
     <Route path="/instructor/earnings" element={<EarningsPage/>}/>
     <Route path="/instructor/messages" element={<InstructorMessagesPage />} />
-    {/* <Route path="/instructor/messages/:chatId" element={<InstructorMessagesPage />} /> */}
+    <Route path="/instructor/messages/:chatId" element={<InstructorMessagesPage />} />
   </Route>
 );

@@ -1,6 +1,6 @@
 import PageHeader from '../../components/instructor/common/Header'
 import { Sidebar } from '../../components/instructor/common/Sidebar'
-
+import MessagingPage from '../../components/user/messages/messaging-page'
 import { useState } from 'react'
 
 const InstructorMessagesPage = () => {
@@ -12,7 +12,7 @@ const InstructorMessagesPage = () => {
           <PageHeader />
           <main className="flex-1 overflow-y-auto p-6 pb-16 no-scrollbar">
             <div className=" items-center justify-center ">
-                <h1>Messages will show here</h1>
+                <MessagingPage/>
               {/* <div className="animate-pulse">Loading course details...</div> */}
             </div>
           </main>

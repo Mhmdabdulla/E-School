@@ -4,6 +4,8 @@ import instructorReducer from "./slices/instructorSlice"
 import cartReducer from "./slices/cartSlice"
 import reviewReducer from "./slices/reviewSlice"
 import notificationReducer from "./slices/notificationSlice"
+import chatReducer from "./slices/chatSlice"
+import messageReducer from "./slices/messageSlice"
 
 import {  useDispatch, useSelector } from "react-redux";
 import type { TypedUseSelectorHook } from "react-redux";
@@ -15,6 +17,8 @@ const store = configureStore({
     cart: cartReducer,
     review: reviewReducer,
     notification: notificationReducer,
+    chat: chatReducer,
+    message: messageReducer,
 
   },
 });

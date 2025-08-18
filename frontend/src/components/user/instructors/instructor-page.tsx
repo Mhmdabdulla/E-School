@@ -8,7 +8,6 @@ import { GenericPagination } from "../../common/pagination"
 export function InstructorsPage() {
     const [instructors, setInstructors] = useState<IInstructor[] | null> (null)
     const [searchQuery, setSearchQuery] = useState<string>("")
-    // const [curretPage, setCurrentPage] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const dataPerPage = 12

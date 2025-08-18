@@ -9,6 +9,8 @@ import { ICourseService } from "../services/interfaces/ICourseService";
 import { ITransactionService } from "./interfaces/ITransactionService";
 import { IWalletService } from "./interfaces/IWalletService";
 import { INotificationService } from "./interfaces/INotificationService";
+import { getIO, getUserSocketId } from "../config/socket";
+import { SocketEvents } from "../utils/constants";
 
 
 @injectable()
@@ -63,7 +65,7 @@ export class WebhookService implements IWebhookService{
 
               await this.walletService.creditWallet(instructorId, instructorShare);
 
-                await this.notificationService.createNotification({
+                const _instructorNotification = await this.notificationService.createNotification({
                 userId: instructorId,
                 type: 'coursePurchase',
                 title: 'course purchased',
@@ -71,11 +73,11 @@ export class WebhookService implements IWebhookService{
                 courseId,
               });
 
-                // const instructorSocketId = getUserSocketId(instructorId)
-                // if(instructorSocketId){
-                //     getIO().to(instructorSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, instructorNotification)
-                // }
-               await this.notificationService.createNotification({
+                const instructorSocketId = getUserSocketId(instructorId)
+                if(instructorSocketId){
+                    getIO().to(instructorSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, _instructorNotification)
+                }
+               const _userNotification = await this.notificationService.createNotification({
                 userId: userId,
                 type: 'enrollment',
                 title: 'enrollment successful',
@@ -83,10 +85,10 @@ export class WebhookService implements IWebhookService{
                 courseId,
               });
 
-            //   const userSocketId = getUserSocketId(userId)
-            //     if(userSocketId){
-            //         getIO().to(userSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, userNotification)
-            //     }
+              const userSocketId = getUserSocketId(userId)
+                if(userSocketId){
+                    getIO().to(userSocketId).emit(SocketEvents.RECEIVE_NOTIFICATION, _userNotification)
+                }
 
 
         }
