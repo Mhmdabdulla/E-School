@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@plugin "tailwindcss-animate";
+/* @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -130,7 +130,7 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
+} */
 
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

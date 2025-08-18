@@ -6,11 +6,15 @@ import { UserRole } from "../lib/constants/role";
 import UserCoursesPage from "../pages/user/CorsePage";
 import UserCourseDetailsPage from "../pages/user/CourseDetails";
 import CartPage from "../pages/user/CartPage";
+import PaymentSuccess from "../components/common/PaymentSuccess";
+import PaymentFailed from "../components/common/PaymentFailed";
 
 export const commonRoutes = (
   <>
     <Route path="/login" element={<Login />} />
     <Route path="/" element={<Home />} />
+    <Route path="/payment-success" element={<PaymentSuccess />} />
+    <Route path="/payment-cancel" element={<PaymentFailed />} />
 
 
     <Route

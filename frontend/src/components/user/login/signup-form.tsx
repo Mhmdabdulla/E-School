@@ -109,8 +109,8 @@ const SignupForm = () => {
               setUserEmail(email);
         setShowOtpDialog(true);
     } else {
-      console.log(response.data.error)
-      toast.error(response.data.error, {
+      console.log(response.data.message)
+      toast.error(response.data.message, {
         position: "top-right",
         duration: 2000,
         style: {

@@ -1,12 +1,11 @@
-import { Request, RequestHandler, Response } from "express";
+import { Request, Response } from "express";
 import { IInstructorController } from "./interfaces/IInstructorController";
 import { IInstructorService } from "../services/interfaces/IInstructorService";
 import {STATUS_CODES} from "../utils/constants"
 import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { IInstructor } from "../models/instructor.model";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
+
 
 
 @injectable()

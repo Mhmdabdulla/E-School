@@ -23,17 +23,11 @@ export default function CoursesPage() {
     setRating,
     searchQuery,
     setSearchQuery,
-    // loading
+
   } = useCourses({role:'instructor'})
 
   
-//   if (loading) {
-//       return (
-//           <div className="flex h-screen bg-background items-center justify-center">
-//         <div className="animate-spin h-16 w-16 border-t-4 border-blue-500 border-solid rounded-full" />
-//       </div>
-//     )
-// }
+
 
   return (
     <div className="flex h-screen bg-background">

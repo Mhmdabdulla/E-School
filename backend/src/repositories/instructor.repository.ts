@@ -11,42 +11,52 @@ export class InstructorRepository
     super(Instructor);
   }
 
-  async findAllInstructors(
-    skip: number,
-    limit: number,
-    searchQuery?: string
-  ): Promise<IInstructor[] | null> {
-    const pipeline: any[] = [
-      {
-        $match: {
-          "adminApproval.status": "approved",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "userId",
-          foreignField: "_id",
-          as: "userId",
-        },
-      },
-      {
-        $unwind: "$userId",
-      },
-    ];
+async findAllInstructors(
+skip: number,
+limit: number,
+searchQuery?: string
+): Promise<IInstructor[] | null> {
+const pipeline: any[] = [
+{
+$match: {
+"adminApproval.status": "approved",
+},
+},
 
-    if (searchQuery) {
-      pipeline.push({
-        $match: {
-          "userId.name": { $regex: searchQuery, $options: "i" },
-        },
-      });
-    }
+{
+$project: {
+__v: 0,
+},
+},
+{
+$lookup: {
+from: "users",
+let: { uid: "$userId" },
+pipeline: [
+{ $match: { $expr: { $eq: ["$_id", "$$uid"] } } },
 
-    pipeline.push({ $skip: skip }, { $limit: limit });
+{ $project: { password: 0, __v: 0 } },
+],
+as: "userId",
+},
+},
+{ $unwind: "$userId" },
+];
 
-    return await Instructor.aggregate(pipeline);
-  }
+if (searchQuery) {
+pipeline.push({
+$match: {
+"userId.name": { $regex: searchQuery, $options: "i" },
+},
+});
+}
+
+pipeline.push({ $skip: skip }, { $limit: limit });
+
+
+
+return Instructor.aggregate(pipeline);
+}
 
   async findInstructorByUserId(userId: string): Promise<IInstructor | null> {
     return Instructor.findOne({ userId: new Types.ObjectId(userId) });
@@ -82,12 +92,15 @@ export class InstructorRepository
   async getInstructorProfile(
     instructorId: string
   ): Promise<IInstructor | null> {
-    return await Instructor.findOne({ userId: instructorId }).populate(
-      "userId"
-    );
+    return await Instructor.findOne({ userId: instructorId })
+      .select("-__v")
+      .populate({ path: "userId", select: "-password -__v" });
   }
 
-  updateInstructorProfile = async (userId: string, data: Partial<IInstructor>): Promise<IInstructor | null> => {
+  updateInstructorProfile = async (
+    userId: string,
+    data: Partial<IInstructor>
+  ): Promise<IInstructor | null> => {
     return await Instructor.findOneAndUpdate({ userId }, data, { new: true });
   };
 
@@ -100,7 +113,9 @@ export class InstructorRepository
     const pipeline: any[] = [
       {
         $match: {
-          userId: { $in: instructorIds.map((id) => new mongoose.Types.ObjectId(id)) },
+          userId: {
+            $in: instructorIds.map((id) => new mongoose.Types.ObjectId(id)),
+          },
           "adminApproval.status": "approved",
         },
       },
@@ -129,6 +144,4 @@ export class InstructorRepository
 
     return await Instructor.aggregate(pipeline);
   }
-
-
 }
