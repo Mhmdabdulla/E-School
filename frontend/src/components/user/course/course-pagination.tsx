@@ -15,7 +15,7 @@ interface CoursePaginationProps {
 }
 
 export function CoursePagination({ currentPage, totalPages, onPageChange }: CoursePaginationProps) {
-  if (totalPages <= 1) return null
+  if (totalPages < 1) return null
 
   const getPageNumbers = () => {
     const pages = []

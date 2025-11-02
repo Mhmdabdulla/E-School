@@ -45,7 +45,7 @@ import { createLesson, deleteLesson, updateLesson } from "../../services/lessonS
           setIsLoading(true);
           const res = await getCourseById(courseId as string);
           const courseData = res.data
-          console.log(courseData)
+          console.log('coursedata',courseData)
 
           setBasicInformation(createBasicInformationData(courseData));
           setAdvancedInformation(createAdvancedInformationData(courseData));

@@ -27,6 +27,7 @@ const ProfileHeader = () => {
         setLoading(true);
         const response = await getApplications();
         setApplications(response.applications);
+        console.log(response)
       } catch (error) {
         console.log(error);
       } finally {

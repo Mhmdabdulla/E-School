@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchEnrolledCourses } from "../services/enrollmentService";
 import { type EnrolledCourse } from "../types/enrollment";
 
-interface UseEnrolledCoursesProps {
+interface UseEnrolledCoursesProps { 
   userId: string;
 }
 

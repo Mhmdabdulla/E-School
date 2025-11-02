@@ -5,6 +5,7 @@ import { ILesson} from "../models/Lesson";
 import  TYPES  from "../di/types";
 import { ILessonRepository } from "../repositories/interfaces/ILessonRepository";
 import { deleteFileFromS3, uploadVideoToS3 } from "../utils/s3Services";
+import { AppError } from "../utils/AppError";
 
 @injectable()
 export class LessonService extends BaseService<ILesson> implements ILessonService {
@@ -31,7 +32,7 @@ export class LessonService extends BaseService<ILesson> implements ILessonServic
   async createLesson(data:Partial<ILesson>, file?:Express.Multer.File):Promise<ILesson |null> {
     
     if(!file){
-        throw new Error("please provide the file for creating a lesson")
+        throw new AppError("please provide the file for creating a lesson")
     }
 
     const videoData = await uploadVideoToS3(file?.buffer, 'course/lesson',file?.mimetype)
