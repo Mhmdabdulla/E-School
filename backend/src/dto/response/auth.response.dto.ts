@@ -4,7 +4,6 @@ import { IUser } from "../../models/user.model";
 export class LoginResponseDTO {
   @IsString()
   _id!: string;
-  // ! means  assignment assertion
 
   @IsString()
   name!: string;
