@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"; 
-import { Star, MoreHorizontal } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "../../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../ui/DropDownMenu";
 import type{ Course } from "../../../types/course";
