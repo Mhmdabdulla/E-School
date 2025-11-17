@@ -14,6 +14,8 @@ import { IEnrollmentRepository } from "../repositories/interfaces/IEnrollmentRep
 import { comparePassword, hashPassword } from "../utils/password";
 import { GoogleAuthUserIdDTO, UserResponseDTO } from "../dto/response/user.response.dto";
 import logger from "../config/logger";
+import { BecomeInstructorResponseDTO } from "../dto/response/instructor.response.dto";
+import { EnrollmentResponseDTO } from "../dto/response/enrollment.response.dto";
 
 @injectable()
 export class UserService extends BaseService<IUser>  implements IUserService {
@@ -67,7 +69,7 @@ export class UserService extends BaseService<IUser>  implements IUserService {
     return GoogleAuthUserIdDTO.fromEntity(user);
   }
 
-  async becomeInstructor(instructorData: Partial<IInstructor>): Promise<IInstructor | null> {
+  async becomeInstructor(instructorData: Partial<IInstructor>): Promise<BecomeInstructorResponseDTO | null> {
     const existingInstructor = await this.instructorRepository.findInstructorByUserId(instructorData.userId as string);
 
     const existingInstructorStatus: any = existingInstructor?.adminApproval?.status;
@@ -83,7 +85,7 @@ export class UserService extends BaseService<IUser>  implements IUserService {
       throw new AppError("Unable to submit instructor application. Please try again.", STATUS_CODES.INTERNAL_SERVER_ERROR);
     }
 
-    return instructor;
+    return BecomeInstructorResponseDTO.fromEntity(instructor);
   }
 
   async updateUser(userId: string, updateData: Partial<IUser>): Promise<UserResponseDTO> {
@@ -96,7 +98,7 @@ export class UserService extends BaseService<IUser>  implements IUserService {
       return UserResponseDTO.fromEntity(user);
   }
 
-  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<IUser> {
+  async changePassword(userId: string, currentPassword: string, newPassword: string): Promise<UserResponseDTO> {
 
       const user = await this.userRepository.findUserById(userId);
       if (!user) throw new AppError("invalid userId",STATUS_CODES.BAD_REQUEST);
@@ -111,7 +113,7 @@ export class UserService extends BaseService<IUser>  implements IUserService {
       if (!updatedUser) {
         throw new AppError("cannot changed password. please try again",STATUS_CODES.INTERNAL_SERVER_ERROR);
       }
-      return updatedUser;
+      return UserResponseDTO.fromEntity(updatedUser);
   }
 
   async getUserProfile(userId: string): Promise<UserResponseDTO> {
@@ -130,18 +132,18 @@ export class UserService extends BaseService<IUser>  implements IUserService {
 
   async getDashboardData(userId: string): Promise<DashboardData> {
     const enrollments = (await this.enrollmentRepository.findEnrollmentsByUser(userId)) ?? [];
-    const instructors = (await this.enrollmentRepository.findDistinctInstructors(userId)).length;
+    const instructorsLength = (await this.enrollmentRepository.findDistinctInstructors(userId)).length;
     const enrolledCourses = enrollments?.length ?? 0;
-    const coursesInProgress = enrollments?.filter((enroll) => !enroll.completed);
+    const coursesInProgress = enrollments?.filter((enroll) => !enroll.completed)?.slice(0, 4);
     const activeCourses = coursesInProgress?.length ?? 0;
     const completedCourses = enrollments?.filter((enroll) => enroll.completed).length ?? 0;
-
+    
     return {
       enrolledCourses,
       activeCourses,
       completedCourses,
-      instructors,
-      enrollments: coursesInProgress?.slice(0, 4),
+      instructors:instructorsLength,
+      enrollments: EnrollmentResponseDTO.fromArray(coursesInProgress),
     };
   }
 

@@ -40,7 +40,7 @@ async getEnrollmentsWithPagination(filter: mongoose.FilterQuery<IEnrollment>, sk
   }
 
   async findEnrollmentsByUser(userId:string) {
-    return Enrollment.find({ userId }).populate("courseId");
+    return Enrollment.find({ userId }).populate("courseId","title subtitle price thumbnail rating isFree");
   }
 
   // async updateLessonCompletion(userId:string, courseId:string, lessonId:string) {
