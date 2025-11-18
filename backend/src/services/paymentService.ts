@@ -23,11 +23,11 @@ export class PaymentService implements IPaymentService {
 
     if (
       cart.status === "in_progress" &&
-      cart.stripeSesstionId &&
+      cart.stripeSessionId &&
       cart.sessionExpiresAt &&
-      cart.sessionExpiresAt > new Date()
+      new Date(cart.sessionExpiresAt) > new Date()
     ) {
-      return cart.stripeSesstionId;
+      return cart.stripeSessionId;
     }
 
     const courses: ICourse[] = [];
