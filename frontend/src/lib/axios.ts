@@ -1,17 +1,17 @@
 import axios from "axios";
-import store  from "../redux/store";
+import store from "../redux/store";
 import { refreshToken } from "../services/authServices";
-import {logout  } from '../redux/slices/authSlice'
+import { logout } from "../redux/slices/authSlice";
 
-const apiClient = axios.create({ 
-  baseURL:import.meta.env.VITE_BASE_URL,
-  withCredentials: true, 
-  
+const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_BASE_URL,
+  withCredentials: true,
 });
 
 apiClient.interceptors.request.use(
   (config) => {
-    const accessToken = (store.getState() as { auth: { accessToken: string } }).auth.accessToken;
+    const accessToken = (store.getState() as { auth: { accessToken: string } })
+      .auth.accessToken;
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -31,20 +31,19 @@ apiClient.interceptors.response.use(
       } catch {
         console.error("Session expired. Please log in again.");
         store.dispatch(logout());
-        localStorage.clear()
-        
+        localStorage.clear();
       }
     }
 
     if (error.response.status === 403) {
       console.error("You do not have permission to access this resource.");
-      localStorage.clear()
-      store.dispatch(logout()); 
-      return Promise.reject(error); 
+      localStorage.clear();
+      store.dispatch(logout());
+      return Promise.reject(error);
     }
 
     return Promise.reject(error);
   }
 );
 
-export default apiClient ;
+export default apiClient;

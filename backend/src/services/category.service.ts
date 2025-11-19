@@ -3,27 +3,29 @@ import { BaseService } from "./base.service";
 import { ICategoryService } from "../services/interfaces/ICategoryService";
 import { ICategory } from "../models/Category";
 import  TYPES  from "../di/types";
-import { CategoryFilter, ICategoryChanges, PaginatedCategories } from "../types/category.types";
+import { CategoryFilter, ICategoryChanges} from "../types/category.types";
 import { ICategoryRepository } from "../repositories/interfaces/ICategoryRepository";
+import { CategoryResponseDTO, PaginatedCategoryResponseDTO } from "../dto/response/category.response.dto";
+import { CategoryMapper } from "../mappers/category.mapper";
 
 @injectable()
 export class CategoryService extends BaseService<ICategory> implements ICategoryService {
   constructor(@inject(TYPES.CategoryRepository) private categoryRepository: ICategoryRepository) {
     super(categoryRepository);
   }
-  async toggleCategoryStatus(id: string): Promise<ICategory | null> {
+  async toggleCategoryStatus(id: string): Promise<CategoryResponseDTO | null> {
     const category = await this.categoryRepository.toggleCategoryStatus(id);
     if (!category) {
       throw new Error("Category not found");
     }
-    return category;
+    return CategoryMapper.toDTO(category);
   }
   async getAllCategories({
     page = 1,
     limit = 12,
     search = "",
     filter = "",
-  }: CategoryFilter): Promise<PaginatedCategories> {
+  }: CategoryFilter): Promise<PaginatedCategoryResponseDTO> {
     const skip = (page - 1) * limit;
     const filterData: any = {};
     if (search) {
@@ -45,20 +47,20 @@ export class CategoryService extends BaseService<ICategory> implements ICategory
         break;
     }
     const sort = { createdAt: -1 };
-    console.log(filterData);
+
 
     const categories = await this.categoryRepository.getAllCategories(filterData, skip, limit, sort);
     const totalCategories = await this.categoryRepository.countDocuments(filterData);
 
-    return {
+    return CategoryMapper.toPaginatedDTO(categories, {
       totalCategories,
       totalPages: Math.ceil(totalCategories / limit),
-      currentPage: page,
-      categories,
-    };
+      currentPage: page
+  });
+
   }
 
-  async updateCategory(id: string, data: ICategoryChanges): Promise<ICategory | null> {
+  async updateCategory(id: string, data: ICategoryChanges): Promise<CategoryResponseDTO | null> {
     const updatedCategory: Partial<ICategory> = {};
 
     if (data.name) {
@@ -99,11 +101,17 @@ export class CategoryService extends BaseService<ICategory> implements ICategory
       }
       updatedCategory.subcategories = subcategories;
     }
-    return await this.repository.update(id, updatedCategory);
+    const newUpdatedCategory = await this.repository.update(id, updatedCategory);
+    return newUpdatedCategory ? CategoryMapper.toDTO(newUpdatedCategory) : null;
+
   }
 
-  async getListedCategories () : Promise<ICategory[] | null>{
-    return await this.categoryRepository.getListedCategories()
+  async getListedCategories () : Promise<CategoryResponseDTO[] | null>{
+    const categories = await this.categoryRepository.getListedCategories();
+
+  if (!categories) return null;
+
+  return categories.map((cat) => CategoryMapper.toDTO(cat));
   }
 
 }

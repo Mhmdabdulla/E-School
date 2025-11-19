@@ -11,7 +11,7 @@ export class CategoryController implements ICategoryController {
     constructor(@inject(TYPES.CategoryService) private categoryService: ICategoryService) {}
     getAllCategories = async (req:Request, res:Response) => {
             const { page = 1, limit = 12, searchQuery = '', filter = '' } = req.query
-            console.log(page, limit, searchQuery, filter)
+            
                const categoriesWithPagination = await this.categoryService.getAllCategories({
                     page: Number(page),
                     limit: Number(limit),
@@ -33,15 +33,15 @@ export class CategoryController implements ICategoryController {
    }
 
    updateCategory = async (req:Request, res:Response) => {
-        const { id } = req.params
+        const { categoryId } = req.params
         const updatedData = req.body
-        const category = await this.categoryService.updateCategory(id, updatedData)
+        const category = await this.categoryService.updateCategory(categoryId, updatedData)
         res.status(STATUS_CODES.OK).json({message:"Category updated successfully", category})
    }
 
    toggleCategoryStatus = async (req:Request, res:Response) => {
-        const { id } = req.params
-        const category = await this.categoryService.toggleCategoryStatus(id)
+        const { categoryId } = req.params
+        const category = await this.categoryService.toggleCategoryStatus(categoryId)
         res.status(STATUS_CODES.OK).json({message:"Category status toggled successfully", category})
    }
 }
