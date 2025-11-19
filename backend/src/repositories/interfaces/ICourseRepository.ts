@@ -11,4 +11,5 @@ export interface ICourseRepository extends IBaseRepository<ICourse> {
   getCoursesByIds(courseIds:string[]):Promise<ICourse[] | null>
   getAllCoursesForAdmin(skip: number, limit: number, filter:FilterQuery<ICourse>): Promise<ICourse[] | null>
   toggleCourseStatus(courseId: string): Promise<ICourse | null>
+  count(filter: FilterQuery<ICourse>): Promise<number>
 }

@@ -1,3 +1,5 @@
+import { FilterQuery } from "mongoose";
+import { CourseResponseDTO, PaginatedCoursesDTO } from "../../dto/response/course.response.dto";
 import { ICourse } from "../../models/Course";
 import { PaginatedCoursesResponse } from "../../types/userTypes";
 import { IBaseService } from "./IBaseService";
@@ -18,9 +20,9 @@ export interface ICourseService extends IBaseService<ICourse> {
     trailerMimeType:string
   ): Promise<ICourse | null>;
   getCoursesByInstructorId(instructorId: string): Promise<ICourse[] | null>;
-  getFullCourse(courseId: string): Promise<ICourse | null>;
+  getFullCourse(courseId: string): Promise<CourseResponseDTO | null>;
   updatePublishStatus(courseId: string): Promise<ICourse | null>;
-  getAllCourses(arg0: getAllCoursesArgument): Promise<PaginatedCoursesResponse | null>;
+  getAllCourses(arg0: getAllCoursesArgument): Promise<PaginatedCoursesDTO>;
   updateCourse(
     courseId: string,
     data: Partial<ICourse>,
@@ -30,6 +32,7 @@ export interface ICourseService extends IBaseService<ICourse> {
     arg0: { page: number; limit: number; search: string; category: string; subCategory: string; sortBy: string },
     instructorId: string
   ): Promise<PaginatedCoursesResponse | null>;
-  getAllCoursesForAdmin(page: number, limit: number, searchQuery?: string): Promise<PaginatedCoursesResponse | null>;
-  toggleCourseStatus(courseId: string): Promise<ICourse | null>;
+  getAllCoursesForAdmin(page: number, limit: number, searchQuery?: string): Promise<PaginatedCoursesDTO | null>;
+  ActiveCourseCount(filter:FilterQuery<ICourse>):Promise<number>
+  // toggleCourseStatus(courseId: string): Promise<ICourse | null>;
 }

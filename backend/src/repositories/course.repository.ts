@@ -198,4 +198,9 @@ export class CourseRepository extends BaseRepository<ICourse> implements ICourse
     course.status = !course.status;
     return await course.save();
   }
+
+  async count(filter: FilterQuery<ICourse>): Promise<number> {
+  return Course.countDocuments(filter);
+}
+
 }

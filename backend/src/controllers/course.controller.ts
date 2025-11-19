@@ -36,7 +36,6 @@ export class CourseController implements ICourseController {
       },
       instructorId as string
     );
-
     res.status(STATUS_CODES.OK).json({ message: "courses fetched successfully", coursesWithPagination });
     // const courses = await this.courseService.getCoursesByInstructorId(userId as string)
     // res.status(STATUS_CODES.OK).json(courses)
@@ -97,8 +96,8 @@ if (data?.title && data?.title !== _currentCourse?.title) {
 
   getMyActiveCourseCount = async (req: Request, res: Response): Promise<void> => {
     const instructorId = req.user?._id as string
-    const activeCourses = await this.courseService.find({instructorId, isPublic: true})
-    res.status(STATUS_CODES.OK).json({message: "active course count of a instructor", activeCourses: activeCourses?.length})
+    const activeCoursesCount = await this.courseService.ActiveCourseCount({instructorId, isPublic: true})
+    res.status(STATUS_CODES.OK).json({message: "active course count of a instructor", activeCourses: activeCoursesCount})
   }
 
   toggleStatus = async (req: Request, res: Response) => {

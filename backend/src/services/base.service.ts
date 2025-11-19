@@ -17,20 +17,8 @@ export abstract class BaseService<T extends Document> implements IBaseService<T>
     return await this.repository.update(id, data);
   }
 
-  async findByIdAndUpdate(id: string, data: Partial<T>): Promise<T | null> {
-    return await this.repository.findByIdAndUpdate(id, data);
-  }
-
   async delete(id: string): Promise<T | null> {
     return await this.repository.delete(id);
-  }
-
-  async findByIdAndDelete(id: string): Promise<T | null> {
-    return await this.repository.delete(id)
-  }
-
-  async find(filter:FilterQuery<T>): Promise<T[] | null> {
-    return await this.repository.find(filter)
   }
 
   async findAll(): Promise<T[] | null> {
