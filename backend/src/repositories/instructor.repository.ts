@@ -15,7 +15,7 @@ async findAllInstructors(
 skip: number,
 limit: number,
 searchQuery?: string
-): Promise<IInstructor[] | null> {
+): Promise<IInstructor[] > {
 const pipeline: any[] = [
 {
 $match: {
@@ -80,10 +80,10 @@ return Instructor.aggregate(pipeline);
     id: string,
     updates: Partial<IInstructor>
   ): Promise<IInstructor | null> => {
-    return await Instructor.findByIdAndUpdate(id, updates, { new: true });
+    return await Instructor.findByIdAndUpdate(id, updates, { new: true }).select("-__v");
   };
 
-  async getUserApplications(userId: string): Promise<IInstructor[] | null> {
+  async getUserApplications(userId: string): Promise<IInstructor[] > {
     return await Instructor.find({
       userId: new Types.ObjectId(userId),
     }).populate("userId");
@@ -101,7 +101,7 @@ return Instructor.aggregate(pipeline);
     userId: string,
     data: Partial<IInstructor>
   ): Promise<IInstructor | null> => {
-    return await Instructor.findOneAndUpdate({ userId }, data, { new: true });
+    return await Instructor.findOneAndUpdate({ userId }, data, { new: true }).select("-__v");
   };
 
   async findInstructorsByUserId(
@@ -109,7 +109,7 @@ return Instructor.aggregate(pipeline);
     skip: number,
     limit: number,
     searchQuery?: string
-  ): Promise<IInstructor[] | null> {
+  ): Promise<IInstructor[] > {
     const pipeline: any[] = [
       {
         $match: {

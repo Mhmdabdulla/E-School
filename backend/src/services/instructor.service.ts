@@ -5,10 +5,11 @@ import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import { IInstructor } from "../models/instructor.model";
 import { IUserRepository } from "../repositories/interfaces/IUserRepository";
-import { PaginatedInstructorsResponse } from "../types/userTypes";
 import { AppError } from "../utils/AppError";
 import { STATUS_CODES } from "../utils/constants";
 import { IEnrollmentRepository } from "../repositories/interfaces/IEnrollmentRepository";
+import { InstructorMapper } from "../mappers/instructor.mapper";
+import { InstructorResponseDTO, PaginatedInstructorsResponseDTO } from "../dto/response/instructor.response.dto";
 
 @injectable()
 export class InstructorService implements IInstructorService {
@@ -23,7 +24,7 @@ export class InstructorService implements IInstructorService {
     page: number,
     limit: number,
     searchQuery?: string
-  ): Promise<PaginatedInstructorsResponse | null> {
+  ): Promise<PaginatedInstructorsResponseDTO | null> {
     const skip = (Number(page) - 1) * Number(limit);
 
     const instructors = await this.instructorRepository.findAllInstructors(
@@ -36,14 +37,14 @@ export class InstructorService implements IInstructorService {
       "adminApproval.status": "approved",
     });
     return {
-      totalInstructors,
-      totalPages: Math.ceil(totalInstructors / limit),
-      currentPage: page,
-      instructors,
-    };
+    totalInstructors,
+    totalPages: Math.ceil(totalInstructors / limit),
+    currentPage: page,
+    instructors: InstructorMapper.toInstructorListDTO(instructors),
+  };
   }
 
-  async getInstructorApplications(): Promise<IInstructor[] | null> {
+  async getInstructorApplications(): Promise<InstructorResponseDTO[] | null> {
     const instructorApplications =
       await this.instructorRepository.getInstructorApplications();
     if (!instructorApplications)
@@ -52,7 +53,8 @@ export class InstructorService implements IInstructorService {
         STATUS_CODES.NOT_FOUND
       );
 
-    return instructorApplications;
+      const mapped = InstructorMapper.toInstructorListDTO(instructorApplications);
+    return mapped;
   }
 
   reviewTutorApplication = async (
@@ -92,24 +94,24 @@ export class InstructorService implements IInstructorService {
     return updatedInstructor;
   };
 
-  async getUserApplications(userId: string): Promise<IInstructor[] | null> {
+  async getUserApplications(userId: string): Promise<InstructorResponseDTO[]> {
     const applications =
       await this.instructorRepository.getUserApplications(userId);
     if (!applications) {
       throw new Error("no applications found");
     }
-    return applications;
+    return InstructorMapper.toInstructorListDTO(applications)
   }
 
   async getInstructorProfile(
     instructorId: string
-  ): Promise<IInstructor | null> {
+  ): Promise<InstructorResponseDTO> {
     const instructor =
       await this.instructorRepository.getInstructorProfile(instructorId);
     if (!instructor) {
       throw new Error("instructor not found ");
     }
-    return instructor;
+    return InstructorMapper.toInstructorDTO(instructor);
   }
 
   async updateInstructorProfile(
@@ -127,7 +129,7 @@ export class InstructorService implements IInstructorService {
     page: number,
     limit: number,
     searchQuery?: string
-  ): Promise<PaginatedInstructorsResponse | null> {
+  ): Promise<PaginatedInstructorsResponseDTO> {
     const instructorIds = await this.enrollmentRepository.findDistinctInstructors(userId);
 
     const skip = (Number(page) - 1) * Number(limit);
@@ -139,12 +141,14 @@ export class InstructorService implements IInstructorService {
       searchQuery
     );
 
+
+
     return {
-      totalInstructors: instructorIds.length,
-      totalPages: Math.ceil(instructorIds.length / limit),
-      currentPage: page,
-      instructors,
-    };
+    totalInstructors: instructorIds.length,
+    totalPages: Math.ceil(instructorIds.length / limit),
+    currentPage: page,
+    instructors: InstructorMapper.toInstructorListDTO(instructors),
+  };
   }
 
 
