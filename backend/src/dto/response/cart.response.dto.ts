@@ -1,5 +1,5 @@
 export class CartCourseDTO {
-  id!: string;
+  _id!: string;
   title!: string;
   subtitle!: string;
   thumbnail!: string;
@@ -7,7 +7,7 @@ export class CartCourseDTO {
   discountPrice!: number;
   isFree!: boolean;
   instructor!: {
-    id: string;
+    _id: string;
     name: string;
     profileImageUrl: string;
     title?: string;
@@ -16,7 +16,7 @@ export class CartCourseDTO {
   static fromEntity(course: any): CartCourseDTO {
     const dto = new CartCourseDTO();
 
-    dto.id = course._id.toString();
+    dto._id = course._id.toString();
     dto.title = course.title;
     dto.subtitle = course.subtitle;
     dto.thumbnail = course.thumbnail;
@@ -25,7 +25,7 @@ export class CartCourseDTO {
     dto.isFree = course.isFree;
 
     dto.instructor = {
-      id: course.instructorId._id.toString(),
+      _id: course.instructorId._id.toString(),
       name: course.instructorId.name,
       profileImageUrl: course.instructorId.profileImageUrl,
       title: course.instructorId.title,
