@@ -4,7 +4,7 @@ import { ICart } from "../models/Cart";
 import  TYPES  from "../di/types";
 import { ICartRepository } from "../repositories/interfaces/ICartRepository";
 import mongoose from "mongoose";
-import { CartResponseDTO } from "../dto/response/cart.response.dto";
+import { CartBasicResponseDTO, CartResponseDTO } from "../dto/response/cart.response.dto";
 import { AppError } from "../utils/AppError";
 
 @injectable()
@@ -69,12 +69,12 @@ async updateCart(userId: string, update: Partial<ICart>): Promise<CartResponseDT
 }
 
 
-async findOne(userId: string): Promise<CartResponseDTO | null> {
+async findOne(userId: string): Promise<CartBasicResponseDTO | null> {
   const cart = await this.cartRepository.findOne({ userId });
 
   if (!cart) return null;
 
-  return CartResponseDTO.fromEntity(cart);
+  return CartBasicResponseDTO.fromEntity(cart);
 }
 
 

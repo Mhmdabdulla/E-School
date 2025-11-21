@@ -1,7 +1,7 @@
 export class EnrollmentResponseDTO {
-  id!: string;
+  _id!: string;
   course!: {
-    id: string;
+    _id: string;
     title: string;
     subtitle: string;
     thumbnail: string;
@@ -20,10 +20,10 @@ export class EnrollmentResponseDTO {
   static fromEntity(enrollment: any): EnrollmentResponseDTO {
     const dto = new EnrollmentResponseDTO();
 
-    dto.id = enrollment._id.toString();
+    dto._id = enrollment._id.toString();
 
     dto.course = {
-      id: enrollment.courseId._id.toString(),
+      _id: enrollment.courseId._id.toString(),
       title: enrollment.courseId.title,
       subtitle: enrollment.courseId.subtitle,
       thumbnail: enrollment.courseId.thumbnail,

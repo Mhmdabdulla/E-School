@@ -36,7 +36,7 @@ export class CartCourseDTO {
 }
 
 export class CartResponseDTO {
-  id!: string;
+  _id!: string;
   userId!: string;
   status!: "pending" | "in_progress" | "paid" | "expired";
   stripeSessionId!: string | null;
@@ -48,7 +48,7 @@ export class CartResponseDTO {
   static fromEntity(cart: any): CartResponseDTO {
     const dto = new CartResponseDTO();
 
-    dto.id = cart._id.toString();
+    dto._id = cart._id.toString();
     dto.userId = cart.userId.toString();
     dto.status = cart.status;
     dto.stripeSessionId = cart.stripeSesstionId;
@@ -59,6 +59,50 @@ export class CartResponseDTO {
     dto.updatedAt = cart.updatedAt.toISOString();
 
     dto.courses = cart.courses.map((c: any) => CartCourseDTO.fromEntity(c));
+
+    return dto;
+  }
+}
+
+
+//for findone method in cartservice
+export class CartItemIdDTO {
+  _id!: string;
+
+  static fromEntity(id: any): CartItemIdDTO {
+    const dto = new CartItemIdDTO();
+    dto._id = id.toString();
+    return dto;
+  }
+}
+
+export class CartBasicResponseDTO {
+  _id!: string;
+  userId!: string;
+  status!: "pending" | "in_progress" | "paid" | "expired";
+  stripeSessionId!: string | null;
+  sessionExpiresAt!: string | null;
+  courses!: CartItemIdDTO[];
+  createdAt!: string;
+  updatedAt!: string;
+
+  static fromEntity(cart: any): CartBasicResponseDTO {
+    const dto = new CartBasicResponseDTO();
+
+    dto._id = cart._id.toString();
+    dto.userId = cart.userId.toString();
+    dto.status = cart.status;
+    dto.stripeSessionId = cart.stripeSesstionId;
+    dto.sessionExpiresAt = cart.sessionExpiresAt
+      ? cart.sessionExpiresAt.toISOString()
+      : null;
+
+    dto.createdAt = cart.createdAt.toISOString();
+    dto.updatedAt = cart.updatedAt.toISOString();
+
+    dto.courses = cart.courses.map((id: any) =>
+      CartItemIdDTO.fromEntity(id)
+    );
 
     return dto;
   }

@@ -14,10 +14,8 @@ export class PaymentController implements IPaymentController {
     createCheckoutSession = async (req:Request, res:Response) => {
         const {courseIds} = req.body
         const userId = req.user?._id
-
-
+        
         const sessionUrl = await this.paymentService.createStripeSession(userId as string, courseIds)
-        console.log(sessionUrl)
         res.status(STATUS_CODES.OK).json({ url: sessionUrl });
     }
 
