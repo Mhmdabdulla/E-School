@@ -9,6 +9,7 @@ import { IEnrollment } from "../models/Enrollment";
 import { FilterQuery } from "mongoose";
 import { EnrolledStudent, InstructorStats } from "../types/userTypes";
 import { BaseService } from "./base.service";
+import { mapEnrollmentToDTO } from "../mappers/enrollment.mapper";
 
 
 
@@ -91,13 +92,15 @@ export class EnrollmentService extends BaseService<IEnrollment>  implements IEnr
         return title.includes(search) || subtitle.includes(search);
       });
     }
+
+    const mapped = filteredCourses.map((c: any) => mapEnrollmentToDTO(c));
     const totalCourses = await this.enrollmentRepository.countDocuments({ userId });
 
     return {
       totalItems: totalCourses,
       totalPages: Math.ceil(totalCourses / limit),
       currentPage: page,
-      data: filteredCourses,
+      data: mapped,
     };
   }
 

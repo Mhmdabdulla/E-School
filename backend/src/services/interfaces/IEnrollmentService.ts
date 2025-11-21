@@ -2,6 +2,7 @@ import { FilterQuery } from "mongoose";
 import { IEnrollment } from "../../models/Enrollment";
 import { EnrolledStudent, InstructorStats } from "../../types/userTypes";
 import { IBaseService } from "./IBaseService";
+import { EnrollmentResponseDTO } from "../../dto/response/enrollment.response.dto";
 
 
 
@@ -19,7 +20,7 @@ export interface IEnrollmentService extends IBaseService<IEnrollment>{
   getUserEnrollments(
     arg0: getUserEnrollmentsArgument,
     userId: string
-  ): Promise<{ data: IEnrollment[]; totalItems: number; totalPages: number; currentPage: number }>;
+  ): Promise<{ data: EnrollmentResponseDTO[]; totalItems: number; totalPages: number; currentPage: number }>;
   completeLesson(userId: string, courseId: string, lessonId: string): Promise<IEnrollment | null>;
   updateLastVisitedLesson(
     filter: FilterQuery<IEnrollment>,
