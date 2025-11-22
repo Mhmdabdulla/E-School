@@ -76,6 +76,7 @@ async getEnrollmentsWithPagination(filter: mongoose.FilterQuery<IEnrollment>, sk
     if (isCompleted) {
       enrollment.progress.completedLessons = completedLessons.filter(id => !id.equals(lessonObjectId));
     } else {
+      
       enrollment.progress.completedLessons.push(lessonObjectId);
     }
 

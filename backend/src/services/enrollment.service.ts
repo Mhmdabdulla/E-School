@@ -8,22 +8,19 @@ import { ILessonRepository } from "../repositories/interfaces/ILessonRepository"
 import { IEnrollment } from "../models/Enrollment";
 import { FilterQuery } from "mongoose";
 import { EnrolledStudent, InstructorStats } from "../types/userTypes";
-import { BaseService } from "./base.service";
 import { mapEnrollmentToDTO } from "../mappers/enrollment.mapper";
 
 
 
 
 @injectable()
-export class EnrollmentService extends BaseService<IEnrollment>  implements IEnrollmentService {
+export class EnrollmentService  implements IEnrollmentService {
   constructor(
     @inject(TYPES.EnrollmentRepository) private enrollmentRepository: IEnrollmentRepository,
     @inject(TYPES.CourseRepository) private courseRepository: ICourseRepository,
     @inject(TYPES.UserRepository) private userRepository: IUserRepository,
     @inject(TYPES.LessonRepository) private lessonRepository: ILessonRepository
-  ) {
-    super(enrollmentRepository)
-  }
+  ) {}
 
   async isUserEnrolled(userId: string, courseId: string): Promise<IEnrollment | null> {
     return this.enrollmentRepository.isUserEnrolled(userId, courseId);
@@ -130,6 +127,10 @@ export class EnrollmentService extends BaseService<IEnrollment>  implements IEnr
         studentCount,
       };
  
+  }
+
+  async findEnrolledCourse(data:Partial<IEnrollment>): Promise<IEnrollment | null> {
+    return await this.enrollmentRepository.findOne(data);
   }
 
 
