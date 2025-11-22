@@ -16,20 +16,19 @@ export class PaymentService implements IPaymentService {
   ) {}
 
   async createStripeSession(userId: string, courseIds: string[]): Promise<string> {
+    
     const cart = await this.cartService.findOne(userId);
     if (!cart) {
       throw new AppError("cart not found", STATUS_CODES.NOT_FOUND);
     }
-
     if (
       cart.status === "in_progress" &&
-      cart.stripeSesstionId &&
+      cart.stripeSessionId &&
       cart.sessionExpiresAt &&
-      cart.sessionExpiresAt > new Date()
+      new Date(cart.sessionExpiresAt) > new Date()
     ) {
-      return cart.stripeSesstionId;
+      return cart.stripeSessionId;
     }
-
     const courses: ICourse[] = [];
 
     for (const courseId of courseIds) {
@@ -39,7 +38,6 @@ export class PaymentService implements IPaymentService {
       }
       courses.push(course);
     }
-
     const totalAmount = courses.reduce((acc, course) => acc + (course.price ? +course.price : 0), 0);
 
     const lineItems = courses.map((course) => ({
@@ -59,8 +57,8 @@ export class PaymentService implements IPaymentService {
       payment_method_types: ["card"],
       mode: "payment",
       line_items: lineItems,
-      success_url: `${process.env.NGORK_URL_FRONDEND}/payment-success`,
-      cancel_url: `${process.env.NGORK_URL_FRONDEND}/payment-cancel`,
+      success_url: `${process.env.CLIENT_URL}/payment-success`,
+      cancel_url: `${process.env.CLIENT_URL}/payment-cancel`,
       metadata: {
         userId,
         courseIds: courseIds.join(","),

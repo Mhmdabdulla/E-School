@@ -31,8 +31,11 @@ export class CartRepository extends BaseRepository<ICart> implements ICartReposi
             { userId: new mongoose.Types.ObjectId(userId) }, 
             { $pull: { courses: courseObjectId } },
             { new: true }
-        );
-    }
+        ).populate({
+         path: "courses",
+         populate: { path: "instructorId", model: "User" },
+  });
+}
 
     async getCartItems(userId: string): Promise<ICart | null> {
         return await Cart.findOne({ userId: new mongoose.Types.ObjectId(userId) })

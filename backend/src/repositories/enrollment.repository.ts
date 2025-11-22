@@ -40,7 +40,7 @@ async getEnrollmentsWithPagination(filter: mongoose.FilterQuery<IEnrollment>, sk
   }
 
   async findEnrollmentsByUser(userId:string) {
-    return Enrollment.find({ userId }).populate("courseId");
+    return Enrollment.find({ userId }).populate("courseId","title subtitle price thumbnail rating isFree");
   }
 
   // async updateLessonCompletion(userId:string, courseId:string, lessonId:string) {
@@ -76,6 +76,7 @@ async getEnrollmentsWithPagination(filter: mongoose.FilterQuery<IEnrollment>, sk
     if (isCompleted) {
       enrollment.progress.completedLessons = completedLessons.filter(id => !id.equals(lessonObjectId));
     } else {
+      
       enrollment.progress.completedLessons.push(lessonObjectId);
     }
 

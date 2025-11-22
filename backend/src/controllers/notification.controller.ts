@@ -35,7 +35,7 @@ getNotifications = async (req: Request, res: Response) => {
 
   deleteNotification = async (req: Request, res: Response) => {
     const {notificationId} = req.params
-    const notification = await this.notificationService.delete(notificationId)
+    const notification = await this.notificationService.deleteNotification(notificationId)
     res.status(STATUS_CODES.OK).json({message: "notification deleted", notification})
   }
 }

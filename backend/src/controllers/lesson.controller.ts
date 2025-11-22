@@ -60,7 +60,7 @@ export class LessonController implements ILessonController {
 
     const lesson = await this.lessonService.findById(lessonId);
 
-    const enrollment = await this.enrollmentService.findOne({
+    const enrollment = await this.enrollmentService.findEnrolledCourse({
       userId,
       courseId: lesson?.courseId,
     });

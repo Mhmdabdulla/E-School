@@ -68,7 +68,7 @@ export class EnrollmentController implements IEnrollmentController{
     getOneEnrolledCourse = async(req: Request, res:Response) :Promise<void> => {
         const userId = req.user?._id
         const {courseId} = req.params
-        const enrolledCourse = await this.enrollmentService.findOne({userId,courseId})
+        const enrolledCourse = await this.enrollmentService.findEnrolledCourse({userId,courseId})
         const courseWithModulesAndLessons = await this.courseService.getFullCourse(courseId)
 
         res.status(STATUS_CODES.OK).json({message:"enrolled course fetched successfully", enrolledCourse, courseWithModulesAndLessons})

@@ -1,14 +1,14 @@
+import "express";
 
+export interface AuthUser {
+  _id: string;
+  role?: string;
+  email?: string;
+}
 
-// import { UserRole } from "../../utils/constants";
-
-// declare global {
-//   namespace Express {
-//     interface User {
-//       id: string;
-//       role: UserRole | string;
-//     }
-//   }
-// }
-
-// export {}
+declare module "express-serve-static-core" {
+  interface Request {
+    user?: AuthUser;
+    file?: Express.Multer.File;
+  }
+}

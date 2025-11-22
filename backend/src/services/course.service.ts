@@ -7,6 +7,9 @@ import { ICourseRepository } from "../repositories/interfaces/ICourseRepository"
 import { uploadImageToS3,uploadVideoToS3,deleteFileFromS3 } from "../utils/s3Services";
 import { PaginatedCoursesResponse } from "../types/userTypes";
 import { FilterQuery } from "mongoose";
+import { AppError } from "../utils/AppError";
+import { CourseResponseDTO, PaginatedCoursesDTO } from "../dto/response/course.response.dto";
+import { mapCourseToDTO, mapPaginatedCourses } from "../mappers/course.mapper";
 
 @injectable()
 export class CourseService extends BaseService<ICourse> implements ICourseService {
@@ -100,10 +103,12 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
      const course = await this.courseRepository.updateCoursePublishStatus(courseId)
      if(!course)
       throw new Error("cannot update course. please try agina")
+
+     console.log(course)
     return course
  }
 
- async getAllCourses({page=1, limit=12, searchQuery='', sortBy='createdAt', subCategory = ['all'],  }): Promise<PaginatedCoursesResponse | null> {
+ async getAllCourses({page=1, limit=12, searchQuery='', sortBy='createdAt', subCategory = ['all'],  }): Promise<PaginatedCoursesDTO> {
     const skip = (page - 1) * limit
   const perPage = limit
 
@@ -149,28 +154,31 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
     const courses = await this.courseRepository.getAllCourses(filter, skip, perPage, sort )
     const totalCourses = await this.courseRepository.getCoursescount(filter)
 
-    return {
+    const paginated =  {
         totalCourses,
         totalPages: Math.ceil(totalCourses / perPage),
         currentPage: page,
         courses
       };
 
+      return mapPaginatedCourses(paginated);
+
+
  }
 
- async getFullCourse(courseId: string): Promise<ICourse | null> {
+ async getFullCourse(courseId: string): Promise<CourseResponseDTO | null> {
      const course = await this.courseRepository.getCourseWithModulesAndLessons(courseId)
      if(!course)
       throw new Error("cannot find course. please try again")
 
-     return course
+     return mapCourseToDTO(course);
  }
 
  async updateCourse(courseId:string,data:Partial<ICourse> , files?:{ [fieldname: string]: Express.Multer.File[] }) : Promise<ICourse | null> {
     const existingCourse = await this.courseRepository.findById(courseId)
 
     if(!existingCourse){
-        throw new Error("cannot find the course. please try again")
+        throw new AppError("cannot find the course. please try again")
     }
 
     
@@ -188,11 +196,11 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
       const trailerData = await uploadVideoToS3(files.trailer[0].buffer, 'course/trailer',trailerMimeType)
       data.trailer = trailerData?.url 
     }
-    console.log(data)
+
     return  await this.courseRepository.findByIdAndUpdate(courseId,data )
  }
 
- async getAllCoursesForAdmin(page: number, limit: number, searchQuery?: string): Promise<PaginatedCoursesResponse | null> {
+ async getAllCoursesForAdmin(page: number, limit: number, searchQuery?: string): Promise<PaginatedCoursesDTO | null> {
   const skip = (Number(page) - 1) * Number(limit);
 
   const filter:FilterQuery<ICourse> = {};
@@ -209,15 +217,21 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
 
   const courses = await this.courseRepository.getAllCoursesForAdmin(skip, limit, filter)
   const totalCourses = await this.courseRepository.countDocuments({})
-  return {
-    totalCourses,
-      totalPages: Math.ceil(totalCourses / limit),
-      currentPage: page,
-      courses
-    };
+  const paginated =  {
+        totalCourses,
+        totalPages: Math.ceil(totalCourses / limit),
+        currentPage: page,
+        courses
+      };
+
+      return mapPaginatedCourses(paginated);
  }
 
- async toggleCourseStatus(courseId: string) {
-  return this.courseRepository.toggleCourseStatus(courseId);
-}
+ async ActiveCourseCount(filter:FilterQuery<ICourse>): Promise<number> {
+  return await this.courseRepository.count(filter);
+  }
+
+//  async toggleCourseStatus(courseId: string) {
+//   return this.courseRepository.toggleCourseStatus(courseId);
+// }
 }

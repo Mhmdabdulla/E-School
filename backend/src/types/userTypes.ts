@@ -1,4 +1,5 @@
 import { LoginResponseDTO } from "../dto/response/auth.response.dto";
+import { EnrollmentResponseDTO } from "../dto/response/enrollment.response.dto";
 import { UserResponseDTO } from "../dto/response/user.response.dto";
 import { ICourse } from "../models/Course";
 import { IEnrollment } from "../models/Enrollment";
@@ -49,7 +50,7 @@ export interface DashboardData {
   activeCourses: number
   completedCourses: number
   instructors: number
-  enrollments: IEnrollment[] | null
+  enrollments: EnrollmentResponseDTO[] | null
 }
 
 export interface PaginatedUsersResponse {

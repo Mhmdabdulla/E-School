@@ -26,7 +26,7 @@ export class CategoryRepository extends BaseRepository<ICategory> implements ICa
         return Category.find(filter).skip(skip).limit(limit).sort(sort).populate("subcategories").exec();
     }
 
-    async getListedCategories():Promise<ICategory[] | null>{
+    async getListedCategories():Promise<ICategory[]>{
         return await Category.find({status:true})
     }
 }
