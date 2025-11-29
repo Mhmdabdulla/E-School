@@ -104,7 +104,6 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
      if(!course)
       throw new Error("cannot update course. please try agina")
 
-     console.log(course)
     return course
  }
 
@@ -121,7 +120,6 @@ async getMycourses({page=1, limit=12, search='', category='', subCategory='', so
     //   { description: { $regex: searchQuery, $options: 'i' } } 
     ];
   }
-
     if(subCategory.length > 0 && subCategory[0] !== 'all'){
         filter.subCategoryId = { $in: subCategory };
     }

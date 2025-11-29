@@ -61,8 +61,8 @@ export class WebhookService implements IWebhookService{
                 referenceId: order._id,
                 method: 'stripe',
                 note: `Earning from course purchase: ${course.title}`,
-              });       
-
+              });
+                                  
               await this.walletService.creditWallet(instructorId, instructorShare);
 
                 const _instructorNotification = await this.notificationService.createNotification({

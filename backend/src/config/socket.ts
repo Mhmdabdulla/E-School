@@ -25,7 +25,7 @@ export const initSocketServer = (server: Server) => {
     const userId = socket.data.user;
     userSocketMap[userId] = socket.id;
 
-    console.log(`user is connected to socket : ${socket.id}`)
+    console.log(`user is connected to socket : ${userId}->${socket.id}`)
 
     server.emit("getOnlineUsers", Object.keys(userSocketMap))
     
