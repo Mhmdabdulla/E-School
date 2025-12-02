@@ -17,7 +17,10 @@ export class PayoutController implements IPayoutController {
 
   getMyPayoutRequests = async (req: Request, res: Response) => {
     const instructorId = req.user?._id as string
-    const payouts = await this.payoutService.getPayoutsByInstructor(instructorId);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const payouts = await this.payoutService.getPayoutsByInstructor(instructorId,page,limit);
     res.status(STATUS_CODES.OK).json(payouts);
   };
 

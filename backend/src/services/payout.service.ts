@@ -23,8 +23,8 @@ export class PayoutService implements IPayoutService {
     return await this.payoutRepo.findAllPending();
   }
 
-  async getPayoutsByInstructor(instructorId: string): Promise<IPayoutRequest[]> {
-    return await this.payoutRepo.findByInstructorId(instructorId);
+  async getPayoutsByInstructor(instructorId: string, page: number = 1, limit: number = 10): Promise<{ payouts: IPayoutRequest[], total: number, totalPages: number }> {
+    return await this.payoutRepo.findByInstructorId(instructorId, page, limit);
   }
 
   async getAllPayouts(): Promise<IPayoutRequest[]> {

@@ -18,8 +18,22 @@ export class PayoutRepository implements IPayoutRepository {
     return await PayoutRequest.find().sort({ createdAt: -1 }).populate("instructorId", "name email");
   }
 
-  async findByInstructorId(instructorId: string): Promise<IPayoutRequest[]> {
-    return await PayoutRequest.find({ instructorId }).sort({ requestedAt: -1 });
+  async findByInstructorId(instructorId: string, page: number = 1, limit: number = 10): Promise<{ payouts: IPayoutRequest[], total: number, totalPages: number }> {
+    const skip = (page - 1) * limit;
+  
+  const [payouts, total] = await Promise.all([
+    PayoutRequest.find({ instructorId })
+      .sort({ requestedAt: -1 })
+      .skip(skip)
+      .limit(limit),
+    PayoutRequest.countDocuments({ instructorId })
+  ]);
+  
+  return {
+    payouts,
+    total,
+    totalPages: Math.ceil(total / limit)
+  };
   }
 
   async updateStatus(
