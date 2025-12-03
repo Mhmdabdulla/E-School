@@ -77,7 +77,6 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
     ]);
         
 
-    console.log('from user.repository',result)
   
 
     return {

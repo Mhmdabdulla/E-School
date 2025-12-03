@@ -33,4 +33,10 @@ export class OrderService implements IOrderService {
   async getRecentOrders(limit: number): Promise<IOrder[]> {
     return await this.orderRepository.getRecentOrders(limit);
   }
+
+  async getTotalRevenue(): Promise<number> {
+  return await this.orderRepository.getTotalRevenue();
+}
+
+
 }

@@ -8,17 +8,25 @@ import { IUserRepository } from "../repositories/interfaces/IUserRepository";
 import { AdminDashboardStats } from "../types/userTypes";
 import { AppError } from "../utils/AppError";
 import { STATUS_CODES } from "../utils/constants";
+import { IOrderService } from "./interfaces/IOrderService";
 
 @injectable()
 export class AdminService implements IAdminService {
     constructor(
     @inject(TYPES.AdminRepository) private adminRepository:IAdminRepository,
     @inject(TYPES.InstructorRepository) private instructorRepository: IInstructorRepository,
-    @inject(TYPES.UserRepository) private userRepository : IUserRepository
+    @inject(TYPES.UserRepository) private userRepository : IUserRepository,
+    @inject(TYPES.OrderService) private orderService : IOrderService,
 ){}
 
   getDashboardDetails = async() :Promise<AdminDashboardStats>=>{
-    return await this.userRepository.getAdminDashboardData()
+    const dashboardData = await this.userRepository.getAdminDashboardData();
+    const totalRevenue = await this.orderService.getTotalRevenue();
+
+    return {
+      ...dashboardData,
+      totalRevenue
+    };
   }
 
     getUsers = async():Promise<IUser[]> =>{

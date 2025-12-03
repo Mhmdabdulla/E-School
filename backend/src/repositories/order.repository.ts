@@ -28,4 +28,14 @@ export class OrderRepository extends BaseRepository<IOrder> implements IOrderRep
      async getRecentOrders(limit: number): Promise<IOrder[]> {
       return await Order.find().sort({ createdAt: -1 }).limit(limit).populate("userId")
     }
+
+    async getTotalRevenue(): Promise<number> {
+      const result = await Order.aggregate([
+      { $match: { status: "Paid" } },      // Only paid orders count as revenue
+      { $group: { _id: null, total: { $sum: "$totalAmount" } } }
+     ]);
+
+  return result.length > 0 ? result[0].total : 0;
+}
+
 }
