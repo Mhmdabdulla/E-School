@@ -7,4 +7,5 @@ export interface IOrderService {
     getAllOrder(page: number, limit: number): Promise<PaginatedOrdersResponse | null>
     getRecentOrders(limit: number): Promise<IOrder[]>;
     getTotalRevenue(): Promise<number>;
+    getMonthlyRevenue(year: number): Promise<{ month: number; revenue: number }[]>;
   }

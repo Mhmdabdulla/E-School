@@ -10,5 +10,6 @@ const router = express.Router();
 const adminController = container.get<IAdminController>(TYPES.AdminController)
 
 router.get("/dashboard", authMiddleware([UserRole.ADMIN]), adminController.getDashboard)
+router.get("/monthly-revenue", authMiddleware([UserRole.ADMIN]), adminController.getMonthlyRevenue)
 
 export default router;

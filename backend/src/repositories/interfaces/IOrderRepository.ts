@@ -6,5 +6,7 @@ export interface IOrderRepository extends IBaseRepository<IOrder> {
     getOrdersByUser(userId: string): Promise<IOrder[]>;
     findAllOrders(skip: number, limit: number): Promise<IOrder[] | null>
     getRecentOrders(limit: number): Promise<IOrder[]>;
-    getTotalRevenue(): Promise<number>
+    getTotalRevenue(): Promise<number>;
+    getMonthlyRevenue(year: number): Promise<{ month: number; revenue: number }[]>;
+
 }

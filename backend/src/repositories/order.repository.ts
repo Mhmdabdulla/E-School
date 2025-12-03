@@ -38,4 +38,33 @@ export class OrderRepository extends BaseRepository<IOrder> implements IOrderRep
   return result.length > 0 ? result[0].total : 0;
 }
 
+async getMonthlyRevenue(year: number): Promise<{ month: number; revenue: number }[]> {
+  return await Order.aggregate([
+    { 
+      $match: { 
+        status: "Paid",
+        createdAt: {
+          $gte: new Date(year, 0, 1),
+          $lte: new Date(year, 11, 31)
+        }
+      }
+    },
+    {
+      $group: {
+        _id: { month: { $month: "$createdAt" } },
+        revenue: { $sum: "$totalAmount" }
+      }
+    },
+    { 
+      $project: {
+        _id: 0,
+        month: "$_id.month",
+        revenue: 1
+      }
+    },
+    { $sort: { month: 1 } }
+  ]);
+}
+
+
 }
