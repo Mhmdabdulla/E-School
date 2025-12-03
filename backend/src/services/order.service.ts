@@ -38,5 +38,10 @@ export class OrderService implements IOrderService {
   return await this.orderRepository.getTotalRevenue();
 }
 
+async getMonthlyRevenue(year: number): Promise<{ month: number; revenue: number }[]>{
+  return this.orderRepository.getMonthlyRevenue(year);
+}
+
+
 
 }
