@@ -71,11 +71,7 @@ export class AuthController implements IAuthController{
     res.status(STATUS_CODES.OK).json({ accessToken, user });
   };
   logout = async (req: Request, res: Response): Promise<void> => {
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    res.clearCookie("refreshToken", cookieOptions);
     res.status(STATUS_CODES.OK).json({ message: "Logged out successfully" });
   };
 
