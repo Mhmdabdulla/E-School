@@ -32,7 +32,8 @@ export class AuthController implements IAuthController{
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
+      path: "/api/auth/refresh"
     });
     res.status(STATUS_CODES.OK).json(user);
 
@@ -51,7 +52,8 @@ export class AuthController implements IAuthController{
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
+      path: "/api/auth/refresh"
     });
     res.status(STATUS_CODES.OK).json(user);
   };
@@ -127,7 +129,7 @@ export class AuthController implements IAuthController{
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
     });
 
     res.redirect(process.env.CLIENT_URL!);
