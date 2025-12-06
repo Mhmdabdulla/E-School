@@ -9,6 +9,16 @@ import { inject, injectable } from "inversify";
 import TYPES from "../di/types";
 import logger from "../config/logger";
 
+const isProd = process.env.NODE_ENV === "production";
+
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProd,
+  sameSite: (isProd ? "none" : "lax") as "none" | "lax",
+  path: "/",
+};
+
+
 
 @injectable()
 export class AuthController implements IAuthController{
@@ -29,12 +39,7 @@ export class AuthController implements IAuthController{
 
     const { refreshToken, ...user } = await this.authService.verifyOtp(req.body.email, req.body.otp);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      path: "/api/auth/refresh"
-    });
+    res.cookie("refreshToken", refreshToken, cookieOptions);
     res.status(STATUS_CODES.OK).json(user);
 
   }
@@ -49,12 +54,7 @@ export class AuthController implements IAuthController{
     const { email,password } = req.body 
     const { refreshToken, ...user } = await this.authService.login(email, password);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-      path: "/api/auth/refresh"
-    });
+    res.cookie("refreshToken", refreshToken, cookieOptions);
     res.status(STATUS_CODES.OK).json(user);
   };
   
@@ -94,11 +94,7 @@ export class AuthController implements IAuthController{
     const { email, password } = req.body;
     const { refreshToken, ...user } = await this.authService.adminLogin(email, password);
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-    });
+    res.cookie("refreshToken", refreshToken, cookieOptions);
     res.status(STATUS_CODES.OK).json(user);
   };
 
@@ -126,11 +122,7 @@ export class AuthController implements IAuthController{
 
     console.log(user.id, user)
     const refreshToken = generateRefreshToken(user.id, "user");
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
-    });
+    res.cookie("refreshToken", refreshToken, cookieOptions);
 
     res.redirect(process.env.CLIENT_URL!);
   };
