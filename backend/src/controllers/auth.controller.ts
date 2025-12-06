@@ -15,6 +15,7 @@ const cookieOptions = {
   httpOnly: true,
   secure: isProd,
   sameSite: (isProd ? "none" : "lax") as "none" | "lax",
+  domain: "mohammedabdulla.shop",
   path: "/",
 };
 
