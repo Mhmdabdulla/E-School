@@ -42,6 +42,8 @@ app.use(
   })
 );
 
+app.set('trust proxy', 1);
+
 app.use("/api/webhook", webhookRoutes);
 
 app.use(express.json());
