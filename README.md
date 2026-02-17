@@ -1,4 +1,4 @@
-# 🚀 E-School Backend: Enterprise-Grade LMS Architecture
+#  E-School Backend: Enterprise-Grade LMS Architecture
 
 ### **The Engineering Mission**
 Building a scalable, media-heavy learning platform requires more than just API endpoints. This backend was designed with **Clean Architecture** and **SOLID principles** to ensure the code remains maintainable as the business scales.
